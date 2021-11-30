@@ -3,7 +3,7 @@ import tempfile
 
 import pytest
 
-from app import create_app
+from SmartSleep import create_app
 from SmartSleep.db import get_db
 from SmartSleep.db import init_db
 

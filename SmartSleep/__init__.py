@@ -1,8 +1,6 @@
 import os
 
 from flask import Flask
-from SmartSleep import db
-from SmartSleep import auth, blog
 
 
 def create_app(test_config=None):
@@ -33,6 +31,7 @@ def create_app(test_config=None):
         return "Hello, World!"
 
     # register the database commands
+    from SmartSleep import db, auth, blog
     db.init_app(app)
 
     # apply the blueprints to the app
