@@ -1,11 +1,12 @@
 import functools
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, url_for
 from flask import g
 from flask import request
 from flask import session
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
+from werkzeug.utils import redirect
 
 from SmartSleep.db import get_db
 
@@ -37,46 +38,43 @@ def load_logged_in_user():
         g.user = get_db().execute("SELECT * FROM user WHERE id = ?", (user_id,)).fetchone()
 
 
-@bp.route("/register", methods=["POST"])
+@bp.route("/register", methods=["GET", "POST"])
 def register():
     """Register a new user.
 
     Validates that the username is not already taken. Hashes the
     password for security.
     """
-    username = request.form["username"]
-    password = request.form["password"]
-    db = get_db()
-    error = None
+    if request.method == "POST":
+        username = request.args.get("username")
+        password = request.args.get("password")
+        db = get_db()
 
-    if not username:
-        error = "Username is required."
-    elif not password:
-        error = "Password is required."
+        if not username:
+            return jsonify({'status': "Username is required"}), 403
+        elif not password:
+            return jsonify({'status': "Password is required"}), 403
 
-    if error is None:
         try:
             db.execute(
                 "INSERT INTO user (username, password) VALUES (?, ?)",
-                (username, generate_password_hash(password)),
-            )
+                (username, generate_password_hash(password)))
             db.commit()
         except db.IntegrityError:
             # The username was already taken, which caused the
             # commit to fail. Show a validation error.
-            error = f"User {username} is already registered."
-        else:
-            # Success, go to the login page.
-            return jsonify({'status': "User registered successfully"}), 200
-
-        return jsonify({'status': error}), 403
+            return jsonify({'status': f"User {username} is already registered."}), 403
+        # Success, go to the login page.
+        return jsonify({'status': "User registered successfully"}), 200
+    else:
+        return redirect(url_for('register'))
 
 
 @bp.route("/login", methods=["POST"])
 def login():
     """Log in a registered user by adding the user id to the session."""
-    username = request.form["username"]
-    password = request.form["password"]
+    username = request.args.get("username")
+    password = request.args.get("password")
     db = get_db()
     error = None
     user = db.execute(
