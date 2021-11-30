@@ -6,9 +6,12 @@
 * [planning poker & MoSCoW Prioritization](https://github.com/SmartSleepIoT/SmartSleepCoding/projects/1)
 
 
-To run: 
-pip install -e .
-set FLASK_APP = SmartSleep
-(Daca nu merge asa incearca cu absolute path)
-flask init-db
-flask run
+To run:
+
+    > pip install -e .
+    > set FLASK_APP= SmartSleep
+    > set FLASK_ENV = development
+    > flask init-db
+    > flask run
+
+Open http://127.0.0.1:5000 in a browser.
