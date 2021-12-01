@@ -4,3 +4,14 @@
 ### Interpretarea si prioritizatrea cerintelor:
 * [labels si grupare](https://github.com/SmartSleepIoT/SmartSleepCoding/issues)
 * [planning poker & MoSCoW Prioritization](https://github.com/SmartSleepIoT/SmartSleepCoding/projects/1)
+
+
+To run:
+
+    > pip install -e .
+    > set FLASK_APP= SmartSleep
+    > set FLASK_ENV = development
+    > flask init-db
+    > flask run
+
+Open http://127.0.0.1:5000 in a browser.
