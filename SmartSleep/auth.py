@@ -66,8 +66,6 @@ def register():
             return jsonify({'status': f"User {username} is already registered."}), 403
         # Success, go to the login page.
         return jsonify({'status': "User registered successfully"}), 200
-    else:
-        return redirect(url_for('register'))
 
 
 @bp.route("/login", methods=["POST"])
