@@ -1,4 +1,5 @@
 import functools
+import json
 
 from flask import Blueprint, jsonify, url_for
 from flask import g
@@ -9,6 +10,7 @@ from werkzeug.security import generate_password_hash
 from werkzeug.utils import redirect
 
 from SmartSleep.db import get_db
+from SmartSleep import pubMQTT
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -97,4 +99,6 @@ def login():
 def logout():
     """Clear the current session, including the stored user id."""
     session.clear()
-    return jsonify({'status': "User logged out successfully"}), 200
+    msg = {'status': "User logged out successfully"}, 200
+    pubMQTT.publish(json.dumps(msg))
+    return msg

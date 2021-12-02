@@ -1,6 +1,8 @@
 import os
+from threading import Thread
 
 from flask import Flask
+from SmartSleep import pubMQTT
 
 
 def create_app(test_config=None):
@@ -43,5 +45,7 @@ def create_app(test_config=None):
     # app.route, while giving the blog blueprint a url_prefix, but for
     # the tutorial the blog will be the main index
     app.add_url_rule("/", endpoint="index")
-
+    thread = Thread(target=pubMQTT.run)
+    thread.daemon = True
+    thread.start()
     return app
