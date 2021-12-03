@@ -9,7 +9,7 @@
 To run:
 
     > pip install -e .
-    > set FLASK_APP= SmartSleep
+    > cd SmartSleep
     > set FLASK_ENV = development
     > flask init-db
     > flask run
