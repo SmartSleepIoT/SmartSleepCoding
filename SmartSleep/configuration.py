@@ -50,7 +50,7 @@ def current_config():
 @bp.route("/temp", methods=["GET", "POST", "DELETE"])
 @login_required
 def temp():
-    """Get / Set waking_mode"""
+    """Get / Set / Delete waking_mode"""
     table_name = "temperature"
     arg_name = "temperature"
     if request.method == "POST":
@@ -152,6 +152,58 @@ def waking_mode():
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
 
+@bp.route("/pillow_angle", methods=["GET", "POST", "DELETE"])
+@login_required
+def pillow_angle():
+    """Get / Set / Delete pillow angle"""
+    table_name = "pillow_angle"
+    arg_name = "pillow_angle"
+    if request.method == "POST":
+        value = request.args.get(arg_name)
+        db = get_db()
+        waking_modes = ['L', 'V', 'S', 'LVS', 'LV', 'LS', 'VS']
+        if not value:
+            return jsonify({'status': f"{arg_name} is required"}), 403
+        if value not in waking_modes:
+            return jsonify({'status': f"{arg_name} must be one of the following {waking_modes}"}), 403
+        try:
+            db.execute(
+                f"INSERT INTO {table_name} (value) VALUES (?)",
+                (value,)
+            )
+            db.commit()
+        except Exception as e:
+            return jsonify({'status': f"Operation failed: {e}"}), 403
+        committed_value = db.execute('SELECT *'
+                                     f' FROM {table_name}'
+                                     ' ORDER BY timestamp DESC').fetchone()
+        return jsonify({
+            'status': f'{arg_name} successfully set',
+            'data': {
+                'id': committed_value['id'],
+                'value': committed_value['value'],
+                'timestamp': committed_value['timestamp']
+            }
+        }), 200
+    if request.method == "GET":
+        current_value = get_db().execute('SELECT *'
+                                         f' FROM {table_name}'
+                                         ' ORDER BY timestamp DESC').fetchone()
+        if current_value is None:
+            return jsonify({'status': f'No {arg_name} ever set'}), 200
+        return jsonify({
+            'status': f'{arg_name} successfully retrieved',
+            'data': {
+                'id': current_value['id'],
+                'value': current_value['value'],
+                'timestamp': current_value['timestamp']
+            }
+        }), 200
+    if request.method == "DELETE":
+        db = get_db()
+        db.execute(f'DELETE FROM {table_name}')
+        db.commit()
+        return jsonify({'status': f'All values successfully deleted'}), 200
 
 @bp.route("/wake_up_hour", methods=["GET", "POST", "DELETE"])
 @login_required
