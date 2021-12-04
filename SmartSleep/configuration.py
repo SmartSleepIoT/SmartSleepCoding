@@ -9,6 +9,7 @@ from werkzeug.exceptions import abort
 
 from SmartSleep.auth import login_required
 from SmartSleep.db import get_db
+from SmartSleep.wakeUpUser import schedule_wake_up, delete_wake_up_schedule
 
 bp = Blueprint("config", __name__, url_prefix="/config")
 
@@ -124,6 +125,10 @@ def waking_mode():
         committed_value = db.execute('SELECT *'
                                      f' FROM {table_name}'
                                      ' ORDER BY timestamp DESC').fetchone()
+
+
+
+
         return jsonify({
             'status': f'{arg_name} successfully set',
             'data': {
@@ -153,6 +158,7 @@ def waking_mode():
         return jsonify({'status': f'All values successfully deleted'}), 200
 
 
+
 @bp.route("/wake_up_hour", methods=["GET", "POST", "DELETE"])
 @login_required
 def waking_hour():
@@ -176,6 +182,16 @@ def waking_hour():
         committed_value = db.execute('SELECT *'
                                      f' FROM {table_name}'
                                      ' ORDER BY timestamp DESC').fetchone()
+
+        # schedule wake up
+        #get he mode from db if not mode is set use default mode LS
+        mode = get_db().execute("SELECT value FROM waking_mode ORDER BY TIMESTAMP").fetchone()
+        if mode is None:
+            mode = 'LS'
+
+        time = value.split(":")
+        schedule_wake_up(time[0], time[1], mode)
+
         return jsonify({
             'status': f'{arg_name} successfully set',
             'data': {
@@ -202,6 +218,9 @@ def waking_hour():
         db = get_db()
         db.execute(f'DELETE FROM {table_name}')
         db.commit()
+        # delete scheduled wake up
+        delete_wake_up_schedule()
+
         return jsonify({'status': f'All values successfully deleted'}), 200
 
 
