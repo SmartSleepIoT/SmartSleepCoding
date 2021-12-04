@@ -1,4 +1,4 @@
-# python3.6
+ # python3.6
 
 import random
 import json
@@ -8,6 +8,7 @@ from paho.mqtt import client as mqtt_client
 broker = 'broker.emqx.io'
 port = 1883
 topic = "SmartSleepMQTT"
+topic2 = "SmartSleep/WakeUp"
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 username = 'emqx'
@@ -33,6 +34,7 @@ def subscribe(client: mqtt_client):
         print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}` topic")
 
     client.subscribe(topic)
+    client.subscribe(topic2)
     client.on_message = on_message
 
 
