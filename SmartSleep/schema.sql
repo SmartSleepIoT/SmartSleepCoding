@@ -44,6 +44,6 @@ CREATE TABLE pillow_angle(
 );
 CREATE TABLE waking_mode(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  value TEXT CHECK( value IN ('L','V','S', 'LVS', 'LV', 'LS', 'VS') )   NOT NULL, -- L = Lights, V = Vibrations, S = Sounds, rest represent the possible combinations
+  value TEXT CHECK( value IN ('L','V','S', 'LVS', 'LV', 'LS', 'VS') )   NOT NULL DEFAULT 'LS', -- L = Lights, V = Vibrations, S = Sounds, rest represent the possible combinations
   timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 )

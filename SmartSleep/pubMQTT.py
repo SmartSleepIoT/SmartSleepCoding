@@ -8,7 +8,6 @@ from paho.mqtt import client as mqtt_client
 
 broker = 'broker.emqx.io'
 port = 1883
-topic = "SmartSleepMQTT"
 # generate client ID with pub prefix randomly
 client_id = f'SMARTSLEEP-{random.randint(0, 1000)}'
 username = 'emqx'
@@ -29,7 +28,7 @@ def connect_mqtt():
     return client
 
 
-def publish(msg): #Function that sends the message
+def publish(msg, topic="SmartSleepMQTT"): #Function that sends the message
     time.sleep(1)
     result = client.publish(topic, msg)
     # result: [0, 1]
