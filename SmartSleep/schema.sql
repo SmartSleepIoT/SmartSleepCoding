@@ -42,4 +42,11 @@ CREATE TABLE waking_mode(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   value TEXT CHECK( value IN ('L','V','S', 'LVS', 'LV', 'LS', 'VS') )   NOT NULL DEFAULT 'LS', -- L = Lights, V = Vibrations, S = Sounds, rest represent the possible combinations
   timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-)
+);
+
+
+CREATE TABLE start_to_sleep(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    value INTEGER NOT NULL CHECK(value IN (0,1)),
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
