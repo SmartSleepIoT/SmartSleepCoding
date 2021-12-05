@@ -1,4 +1,4 @@
-def wake_up_time_validation(time):
+def time_validation(time):
     if ":" not in time:
         return False, "incorrect time format try hour:min"
     hour = time.split(":")[0]
@@ -20,3 +20,11 @@ def password_validation(password):
         return False, "password must contain at least one digit"
 
     return True, ""
+
+
+def boolean_validation(val):
+    if val.lower() in ['true', '1']:
+        return True, "true"
+    if val.lower() in ['0', 'false']:
+        return False, "false"
+    return False, "wrong value must be one of: true, false, 0, 1"

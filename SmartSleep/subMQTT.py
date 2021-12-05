@@ -9,11 +9,13 @@ broker = 'broker.emqx.io'
 port = 1883
 topic = "SmartSleepMQTT"
 topic2 = "SmartSleep/WakeUp"
+topic3 = "SmartSleep/SoundSensor"
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 username = 'emqx'
 password = 'public'
 
+soundSensor = []
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
@@ -45,4 +47,8 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    try:
+        run()
+    except KeyboardInterrupt:
+        print('"interrupted')
+        sys.exit(0)
