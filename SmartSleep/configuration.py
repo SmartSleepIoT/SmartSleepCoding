@@ -9,7 +9,8 @@ from werkzeug.exceptions import abort
 
 from SmartSleep.auth import login_required
 from SmartSleep.db import get_db
-from SmartSleep.wakeUpUser import schedule_wake_up, delete_wake_up_schedule
+from SmartSleep.wakeUpUser import WakeUpScheduler #schedule_wake_up, delete_wake_up_schedule
+from SmartSleep.validation import wake_up_time_validation
 
 bp = Blueprint("config", __name__, url_prefix="/config")
 
@@ -165,12 +166,18 @@ def waking_hour():
     """Get / Set wake_up_hour"""
     table_name = "wake_up_hour"
     arg_name = "wake_up_hour"
+    wake_up_user = WakeUpScheduler()
     if request.method == "POST":
         value = request.args.get(arg_name)
         db = get_db()
 
         if not value:
             return jsonify({'status': f"{arg_name} is required"}), 403
+        else:
+            val, msg = wake_up_time_validation(value)
+            if not val:
+                return jsonify({'status': f"{msg}"}), 422
+
         try:
             db.execute(
                 f"INSERT INTO {table_name} (value) VALUES (?)",
@@ -190,7 +197,8 @@ def waking_hour():
             mode = 'LS'
 
         time = value.split(":")
-        schedule_wake_up(time[0], time[1], mode)
+        wake_up_user.schedule_wake_up(time[0], time[1], mode)
+        #schedule_wake_up(time[0], time[1], mode)
 
         return jsonify({
             'status': f'{arg_name} successfully set',
@@ -219,7 +227,7 @@ def waking_hour():
         db.execute(f'DELETE FROM {table_name}')
         db.commit()
         # delete scheduled wake up
-        delete_wake_up_schedule()
+        wake_up_user.delete_wake_up_schedule()
 
         return jsonify({'status': f'All values successfully deleted'}), 200
 

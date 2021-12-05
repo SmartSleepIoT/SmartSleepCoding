@@ -4,12 +4,9 @@ from threading import Thread
 from flask import Flask
 from SmartSleep import pubMQTT
 
-app = None
-
 
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
-    global app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         # a default secret that should be overridden by instance config
