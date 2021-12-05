@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, jsonify
 from flask import flash
 from flask import g
@@ -9,8 +11,9 @@ from werkzeug.exceptions import abort
 
 from SmartSleep.auth import login_required
 from SmartSleep.db import get_db
-from SmartSleep.wakeUpUser import WakeUpScheduler #schedule_wake_up, delete_wake_up_schedule
+from SmartSleep.wakeUpUser import WakeUpScheduler
 from SmartSleep.validation import time_validation, boolean_validation
+from SmartSleep import pubMQTT
 
 bp = Blueprint("config", __name__, url_prefix="/config")
 
@@ -295,6 +298,47 @@ def start_to_sleep():
         db.execute(f'DELETE FROM {table_name}')
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
+
+
+@bp.route("/sound", methods=["POST"])
+@login_required
+def sound():
+    """Get / Set sounds in Db record by sound sensor"""
+    table_name = "sounds_recorded"
+    arg_name = "sensor"
+
+    if request.method == "POST":
+        value = request.args.get(arg_name)
+        db = get_db()
+
+        if not value:
+            return jsonify({'status': f"{arg_name} is required"}), 403
+        elif not float(value):
+            return jsonify({'status': "wrong value for a db sound expected a float number"}), 422
+
+        try:
+            db.execute(
+                f"INSERT INTO {table_name} (value) VALUES (?)",
+                (value,)
+            )
+            db.commit()
+        except Exception as e:
+            return jsonify({'status': f"Operation failed: {e}"}), 403
+        committed_value = db.execute('SELECT *'
+                                     f' FROM {table_name}'
+                                     ' ORDER BY timestamp DESC').fetchone()
+
+        msg = {'db': f"{value}"}
+        pubMQTT.publish(json.dumps(msg), "SmartSleep/SoundSensor")
+
+        return jsonify({
+            'status': f'{arg_name} successfully set',
+            'data': {
+                'id': committed_value['id'],
+                'value': committed_value['value'],
+                'timestamp': committed_value['timestamp']
+            }
+        }), 200
 
 
 def get_post(id, check_author=True):
