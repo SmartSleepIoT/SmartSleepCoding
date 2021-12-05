@@ -9,3 +9,14 @@ def wake_up_time_validation(time):
         return False, "incorrect min format, hour minutes be between 00-61"
 
     return True, ""
+
+
+def password_validation(password):
+    if len(password) < 6:
+        return False, "password too small, must be at least 6 characters long"
+    if not any(c.isupper() for c in password):
+        return False, "password must contain at least one upper letter"
+    if not any(c.isdigit() for c in password):
+        return False, "password must contain at least one digit"
+
+    return True, ""

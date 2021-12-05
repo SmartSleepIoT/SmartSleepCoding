@@ -11,6 +11,7 @@ from werkzeug.utils import redirect
 
 from SmartSleep.db import get_db
 from SmartSleep import pubMQTT
+from SmartSleep.validation import password_validation
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -56,6 +57,10 @@ def register():
             return jsonify({'status': "Username is required"}), 403
         elif not password:
             return jsonify({'status': "Password is required"}), 403
+
+        val, msg = password_validation(password)
+        if not val:
+            return jsonify({'status': f"{msg}"}), 422
 
         try:
             db.execute(
