@@ -32,7 +32,11 @@ CREATE TABLE wake_up_hour(
     value TIME,
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
+CREATE TABLE pillow_angle(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    value FLOAT CHECK(value < 90 and value >=0),
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 CREATE TABLE waking_mode(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   value TEXT CHECK( value IN ('L','V','S', 'LVS', 'LV', 'LS', 'VS') )   NOT NULL DEFAULT 'LS', -- L = Lights, V = Vibrations, S = Sounds, rest represent the possible combinations
