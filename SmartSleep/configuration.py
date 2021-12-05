@@ -1,5 +1,6 @@
 import json
 
+import requests
 from flask import Blueprint, jsonify
 from flask import flash
 from flask import g
@@ -16,6 +17,7 @@ from SmartSleep.validation import time_validation, boolean_validation
 from SmartSleep import pubMQTT
 
 bp = Blueprint("config", __name__, url_prefix="/config")
+bp2 = Blueprint("snoring", __name__, url_prefix="/snoring")
 
 
 @bp.route("/", methods=["GET"])
@@ -170,11 +172,10 @@ def pillow_angle():
     if request.method == "POST":
         value = request.args.get(arg_name)
         db = get_db()
-        waking_modes = ['L', 'V', 'S', 'LVS', 'LV', 'LS', 'VS']
         if not value:
             return jsonify({'status': f"{arg_name} is required"}), 403
-        if value not in waking_modes:
-            return jsonify({'status': f"{arg_name} must be one of the following {waking_modes}"}), 403
+        if not float(value):
+            return jsonify({'status': "wrong angle format must be flat number "}), 422
         try:
             db.execute(
                 f"INSERT INTO {table_name} (value) VALUES (?)",
@@ -491,3 +492,29 @@ def delete(id):
     db.execute("DELETE FROM post WHERE id = ?", (id,))
     db.commit()
     return redirect(url_for("blog.index"))
+
+
+@bp2.route("/pillow-angle", methods=["GET"])
+def liftPillow():
+    msg = {'status': "lifting up-pillow position"}
+    pubMQTT.publish(json.dumps(msg), "SmartSleep/SoundSensor")
+    # see if user is sleeping
+    db = get_db()
+    sleep = db.execute('SELECT value'
+                               ' FROM start_to_sleep'
+                               ' ORDER BY timestamp DESC').fetchone()
+
+    if sleep is None or sleep is False:
+        return
+
+    # get current angle + 10
+    angle = 10
+    current_angle = db.execute('SELECT value'
+                                       ' FROM pillow_angle'
+                                       ' ORDER BY timestamp DESC').fetchone()
+    if current_angle is not None:
+        angle = float(current_angle) + 10
+
+    requests.post(f"http://127.0.0.1:5000/config/pillow_angle?pillow_angle={angle}")
+    msg = {'status': "lifting up-pillow position"}
+    pubMQTT.publish(json.dumps(msg), "SmartSleep/SoundSensor")
