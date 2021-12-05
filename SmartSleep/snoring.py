@@ -10,9 +10,7 @@ from SmartSleep.configuration import liftPillow
 
 broker = 'broker.emqx.io'
 port = 1883
-topic = "SmartSleepMQTT"
-topic2 = "SmartSleep/WakeUp"
-topic3 = "SmartSleep/SoundSensor"
+topics = ["SmartSleepMQTT", "SmartSleep/WakeUp", "SmartSleep/SoundSensor"]
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 username = 'emqx'
@@ -21,6 +19,7 @@ password = 'public'
 snoringSounds = []
 lastTime = None
 snoring = False
+
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
@@ -40,7 +39,7 @@ def subscribe2(client: mqtt_client):
     def on_message(client, userdata, msg):
         global snoringSounds, lastTime, snoring
         print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}` topic")
-        if "db" in  json.loads(msg.payload):
+        if "db" in json.loads(msg.payload):
             db_sensor_value = json.loads(msg.payload)["db"]
             if 40 <= float(db_sensor_value) <= 61:
                 snoringSounds.append(json.loads(msg.payload))
@@ -50,21 +49,22 @@ def subscribe2(client: mqtt_client):
                     lastTime = current_time
                 else:
                     # verify if it is snoring
-                    time_between_sounds = datetime.strptime(current_time, "%H:%M:%S") - datetime.strptime(lastTime, "%H:%M:%S")
+                    time_between_sounds = datetime.strptime(current_time, "%H:%M:%S") - datetime.strptime(lastTime,
+                                                                                                          "%H:%M:%S")
                     seconds = time_between_sounds.total_seconds()
                     # print(lastTime, current_time, len(snoringSounds))
-                    if 3 <= seconds <= 10:
+                    if 0 <= seconds <= 10:
                         lastTime = current_time
                         if len(snoringSounds) >= 4:
                             print("*user snores*")
                             snoring = True
-                            requests.get("http://127.0.0.1:5000/snoring/pillow-angle")
+                            r = requests.get("http://127.0.0.1:5000/snoring/pillow-angle")
+                            print(r)
                             snoring = False
                             lastTime = None
                             snoringSounds = []
                     else:
                         snoring = False
-
 
     client.subscribe("SmartSleep/SoundSensor")
     client.on_message = on_message
