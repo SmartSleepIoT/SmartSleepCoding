@@ -59,7 +59,7 @@ def subscribe2(client: mqtt_client):
                             print("*user snores*")
                             snoring = True
                             r = requests.get("http://127.0.0.1:5000/snoring/pillow-angle")
-                            print(r)
+                            #print(r)
                             snoring = False
                             lastTime = None
                             snoringSounds = []
