@@ -8,6 +8,7 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
+from datetime import datetime
 
 from SmartSleep.auth import login_required
 from SmartSleep.db import get_db
@@ -56,7 +57,7 @@ def current_config():
 @bp.route("/temp", methods=["GET", "POST", "DELETE"])
 @login_required
 def temp():
-    """Get / Set / Delete waking_mode"""
+    """Get / Set / Delete temp"""
     table_name = "temperature"
     arg_name = "temperature"
     if request.method == "POST":
@@ -258,7 +259,9 @@ def waking_hour():
             mode = 'LS'
 
         time = value.split(":")
-        wake_up_user.schedule_wake_up(time[0], time[1], mode)
+        now = datetime.now()
+        current_time = now.strftime("%H:%M")
+        wake_up_user.schedule_wake_up(time[0], time[1], mode, current_time)
         # schedule_wake_up(time[0], time[1], mode)
 
         return jsonify({
@@ -296,7 +299,7 @@ def waking_hour():
 @bp.route("/start_to_sleep", methods=["GET", "POST", "DELETE"])
 @login_required
 def start_to_sleep():
-    """Get / Set wake_up_hour"""
+    """Get / Set start_to_sleep"""
     table_name = "start_to_sleep"
     arg_name = "sleep_now"
 
@@ -397,6 +400,74 @@ def sound():
                 'timestamp': committed_value['timestamp']
             }
         }), 200
+
+
+@bp.route("/time_slept", methods=["GET", "POST", "DELETE"])
+def hours_slept():
+    """Get / Set / Delete hours_slept"""
+    table_name = "time_slept"
+    arg_name = "time"
+    if request.method == "POST":
+        value = request.args.get(arg_name)
+        return post_hours_slept(value)
+
+    if request.method == "GET":
+        current_value = get_db().execute('SELECT *'
+                                         f' FROM {table_name}'
+                                         ' ORDER BY timestamp DESC').fetchone()
+        if current_value is None:
+            return jsonify({'status': f'No {arg_name} ever set'}), 200
+        return jsonify({
+            'status': f'{arg_name} successfully retrieved',
+            'data': {
+                'id': current_value['id'],
+                'hours slept': current_value['hours'],
+                'minutes slept': current_value['minutes'],
+                'timestamp': current_value['timestamp']
+            }
+        }), 200
+
+    if request.method == "DELETE":
+        db = get_db()
+        db.execute(f'DELETE FROM {table_name}')
+        db.commit()
+        return jsonify({'status': f'All values successfully deleted'}), 200
+
+
+def post_hours_slept(value):
+    arg_name = "time"
+    table_name = "time_slept"
+    if not value:
+        return jsonify({'status': f"{arg_name} is required"}), 403
+
+    val, msg = time_validation(value)
+    if not val:
+        return jsonify({'status': f"{msg}"}), 422
+
+    db = get_db()
+    hours = int(value.split(":")[0])
+    minutes = int(value.split(":")[1])
+
+    try:
+        db.execute(
+            f"INSERT INTO {table_name} (hours, minutes) VALUES (?, ?)",
+            (hours, minutes)
+        )
+        db.commit()
+    except Exception as e:
+        return jsonify({'status': f"Operation failed: {e}"}), 403
+    committed_value = db.execute('SELECT *'
+                                 f' FROM {table_name}'
+                                 ' ORDER BY timestamp DESC').fetchone()
+    return jsonify({
+        'status': f'{arg_name} successfully set',
+        'data': {
+            'id': committed_value['id'],
+            'hours slept': committed_value['hours'],
+            'minutes slept': committed_value['minutes'],
+            'timestamp': committed_value['timestamp']
+        }
+    }), 200
 
 
 def get_post(id, check_author=True):
