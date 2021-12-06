@@ -1,64 +1,71 @@
 import pytest
 from flask import g
 from flask import session
+from flask import json
 
 from SmartSleep.db import get_db
 
 
 def test_register(client, app):
-    # test that viewing the page renders without template errors
-    assert client.get("/auth/register").status_code == 200
-
-    # test that successful registration redirects to the login page
-    response = client.post("/auth/register", data={"username": "a", "password": "a"})
-    assert "http://localhost/auth/login" == response.headers["Location"]
+    # test that reistration works
+    username = "Radu3"
+    password = "123456A"
+    response = client.post(f"/auth/register?username={username}&password={password}")
+    assert response.status_code == 200
 
     # test that the user was inserted into the database
     with app.app_context():
         assert (
-            get_db().execute("SELECT * FROM user WHERE username = 'a'").fetchone()
-            is not None
+                get_db().execute(f"SELECT * FROM user WHERE username = '{username}'").fetchone()
+                is not None
         )
 
 
 @pytest.mark.parametrize(
     ("username", "password", "message"),
     (
-        ("", "", b"Username is required."),
-        ("a", "", b"Password is required."),
-        ("test", "test", b"already registered"),
+            ("test1", "1a", "Password too small, must be at least 6 characters long"),
+            ("test2", "1234567", "Password must contain at least one upper letter"),
+            ("test3", "Atestaaaa", "Password must contain at least one digit"),
     ),
 )
-def test_register_validate_input(client, username, password, message):
+def test_register_password_validation(client, username, password, message):
     response = client.post(
-        "/auth/register", data={"username": username, "password": password}
+        f"/auth/register?username={username}&password={password}"
     )
-    assert message in response.data
-
-
-def test_login(client, auth):
-    # test that viewing the page renders without template errors
-    assert client.get("/auth/login").status_code == 200
-
-    # test that successful login redirects to the index page
-    response = auth.login()
-    assert response.headers["Location"] == "http://localhost/"
-
-    # login request set the user_id in the session
-    # check that the user is loaded from the session
-    with client:
-        client.get("/")
-        assert session["user_id"] == 1
-        assert g.user["username"] == "test"
+    assert message in json.loads(response.data)['status']
 
 
 @pytest.mark.parametrize(
     ("username", "password", "message"),
-    (("a", "test", b"Incorrect username."), ("test", "a", b"Incorrect password.")),
+    (
+            ("", "", "Username is required."),
+            ("a", "", "Password is required."),
+            ("Radu", "12341241241A", "User Radu is already registered."),
+    ),
+)
+def test_register_duplicated_user(client, username, password, message):
+    response = client.post(f"/auth/register?username={username}&password={password}")
+    assert message in json.loads(response.data)['status']
+
+
+def test_login(client, auth):
+    auth.login()
+    # login request set the user_id in the session
+    # check that the user is loaded from the session
+    with client:
+        client.get('/auth/login')
+        assert session["user_id"] == 2
+        assert g.user["username"] == "Radu"
+
+
+@pytest.mark.parametrize(
+    ("username", "password", "message"),
+    (("Radu2", "test",  "Incorrect username."), ("Radu", "12341241241A", "Incorrect password.")),
 )
 def test_login_validate_input(auth, username, password, message):
     response = auth.login(username, password)
-    assert message in response.data
+    assert message in json.loads(response.data)['status']
 
 
 def test_logout(client, auth):

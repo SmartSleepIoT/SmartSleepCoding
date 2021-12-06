@@ -3,7 +3,7 @@ import tempfile
 
 import pytest
 
-from SmartSleep import create_app
+from SmartSleep.app import create_app
 from SmartSleep.db import get_db
 from SmartSleep.db import init_db
 
@@ -48,10 +48,8 @@ class AuthActions:
     def __init__(self, client):
         self._client = client
 
-    def login(self, username="test", password="test"):
-        return self._client.post(
-            "/auth/login", data={"username": username, "password": password}
-        )
+    def login(self, username="Radu", password="123456A"):
+        return self._client.post(f"/auth/login?username={username}&password={password}")
 
     def logout(self):
         return self._client.get("/auth/logout")

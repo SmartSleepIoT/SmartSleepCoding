@@ -1,21 +1,18 @@
- # python3.6
-
 import random
 import json
+import sys
 from paho.mqtt import client as mqtt_client
 
-
+"""
+Test app listening to all SmartSleep topics
+"""
 broker = 'broker.emqx.io'
 port = 1883
-topic = "SmartSleepMQTT"
-topic2 = "SmartSleep/WakeUp"
-topic3 = "SmartSleep/SoundSensor"
+topic = "SmartSleep/#" # '#' is a special character, meaning all topics starting with SmartSleep will be covered
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 username = 'emqx'
 password = 'public'
-
-soundSensor = []
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
@@ -33,10 +30,10 @@ def connect_mqtt() -> mqtt_client:
 
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
-        print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}` topic")
+        try: print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}` topic")
+        except json.JSONDecodeError: print(f"Received `{msg.payload}` from `{msg.topic}` topic")
 
     client.subscribe(topic)
-    client.subscribe(topic2)
     client.on_message = on_message
 
 

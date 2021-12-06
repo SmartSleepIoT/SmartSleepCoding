@@ -1,23 +1,23 @@
 def time_validation(time):
     if ":" not in time:
-        return False, "incorrect time format try hour:min"
+        return False, "Incorrect time format try hour:min"
     hour = time.split(":")[0]
     min = time.split(":")[1]
     if int(hour) not in range(0, 24):
-        return False, "incorrect hour format, hour must be between 0-23"
+        return False, "Incorrect hour format, hour must be between 0-23"
     if int(min) not in range(0, 60):
-        return False, "incorrect min format, hour minutes be between 00-59"
+        return False, "Incorrect min format, hour minutes be between 00-59"
 
     return True, ""
 
 
 def password_validation(password):
     if len(password) < 6:
-        return False, "password too small, must be at least 6 characters long"
+        return False, "Password too small, must be at least 6 characters long"
     if not any(c.isupper() for c in password):
-        return False, "password must contain at least one upper letter"
+        return False, "Password must contain at least one upper letter"
     if not any(c.isdigit() for c in password):
-        return False, "password must contain at least one digit"
+        return False, "Password must contain at least one digit"
 
     return True, ""
 
