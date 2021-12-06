@@ -16,6 +16,7 @@ from SmartSleep.validation import time_validation, boolean_validation
 from SmartSleep import pubMQTT
 
 bp = Blueprint("config", __name__, url_prefix="/config")
+bp2 = Blueprint("snoring", __name__, url_prefix="/snoring")
 
 
 @bp.route("/", methods=["GET"])
@@ -130,9 +131,6 @@ def waking_mode():
                                      f' FROM {table_name}'
                                      ' ORDER BY timestamp DESC').fetchone()
 
-
-
-
         return jsonify({
             'status': f'{arg_name} successfully set',
             'data': {
@@ -161,6 +159,38 @@ def waking_mode():
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
 
+
+def post_pillow_angle(value):
+    arg_name = "pillow_angle"
+    table_name = "pillow_angle"
+    if not value:
+        return jsonify({'status': f"{arg_name} is required"}), 403
+    if not float(value):
+        return jsonify({'status': "Wrong angle format, must be float number "}), 422
+
+    db = get_db()
+
+    try:
+        db.execute(
+            f"INSERT INTO {table_name} (value) VALUES (?)",
+            (value,)
+        )
+        db.commit()
+    except Exception as e:
+        return jsonify({'status': f"Operation failed: {e}"}), 403
+    committed_value = db.execute('SELECT *'
+                                 f' FROM {table_name}'
+                                 ' ORDER BY timestamp DESC').fetchone()
+    return jsonify({
+        'status': f'{arg_name} successfully set',
+        'data': {
+            'id': committed_value['id'],
+            'value': committed_value['value'],
+            'timestamp': committed_value['timestamp']
+        }
+    }), 200
+
+
 @bp.route("/pillow_angle", methods=["GET", "POST", "DELETE"])
 @login_required
 def pillow_angle():
@@ -169,31 +199,7 @@ def pillow_angle():
     arg_name = "pillow_angle"
     if request.method == "POST":
         value = request.args.get(arg_name)
-        db = get_db()
-        waking_modes = ['L', 'V', 'S', 'LVS', 'LV', 'LS', 'VS']
-        if not value:
-            return jsonify({'status': f"{arg_name} is required"}), 403
-        if value not in waking_modes:
-            return jsonify({'status': f"{arg_name} must be one of the following {waking_modes}"}), 403
-        try:
-            db.execute(
-                f"INSERT INTO {table_name} (value) VALUES (?)",
-                (value,)
-            )
-            db.commit()
-        except Exception as e:
-            return jsonify({'status': f"Operation failed: {e}"}), 403
-        committed_value = db.execute('SELECT *'
-                                     f' FROM {table_name}'
-                                     ' ORDER BY timestamp DESC').fetchone()
-        return jsonify({
-            'status': f'{arg_name} successfully set',
-            'data': {
-                'id': committed_value['id'],
-                'value': committed_value['value'],
-                'timestamp': committed_value['timestamp']
-            }
-        }), 200
+        return post_pillow_angle(value)
     if request.method == "GET":
         current_value = get_db().execute('SELECT *'
                                          f' FROM {table_name}'
@@ -246,14 +252,14 @@ def waking_hour():
                                      ' ORDER BY timestamp DESC').fetchone()
 
         # schedule wake up
-        #get he mode from db if not mode is set use default mode LS
+        # get he mode from db if not mode is set use default mode LS
         mode = get_db().execute("SELECT value FROM waking_mode ORDER BY TIMESTAMP").fetchone()
         if mode is None:
             mode = 'LS'
 
         time = value.split(":")
         wake_up_user.schedule_wake_up(time[0], time[1], mode)
-        #schedule_wake_up(time[0], time[1], mode)
+        # schedule_wake_up(time[0], time[1], mode)
 
         return jsonify({
             'status': f'{arg_name} successfully set',
@@ -491,3 +497,37 @@ def delete(id):
     db.execute("DELETE FROM post WHERE id = ?", (id,))
     db.commit()
     return redirect(url_for("blog.index"))
+
+
+@bp2.route("/pillow-angle", methods=["GET"])
+def liftPillow():
+    # see if user is sleeping
+    db = get_db()
+    sleep = db.execute('SELECT value'
+                       ' FROM start_to_sleep'
+                       ' ORDER BY timestamp DESC').fetchone()
+
+    if sleep is None or sleep is False:
+        return
+
+    # get current angle + 10
+    angle = 10
+    current_angle = db.execute('SELECT value'
+                               ' FROM pillow_angle'
+                               ' ORDER BY timestamp DESC').fetchone()
+    if current_angle is not None:
+        angle = float(current_angle['value']) + 10
+
+    # Try to lift up the pillow
+    msg = {'status': f"Lifting up pillow position to {angle}"}
+    pubMQTT.publish(json.dumps(msg), "SmartSleep/SoundSensor")
+    status = 0
+    # If it fails, try again till succeeding
+    while status != 200:
+        status = post_pillow_angle(angle)[-1]
+
+    # Pillow lifted, broadcast msg to the topic
+    msg = {'status': f"Lifted up pillow position to {angle}"}
+    pubMQTT.publish(json.dumps(msg), "SmartSleep/SoundSensor")
+
+    return jsonify(msg), 200
