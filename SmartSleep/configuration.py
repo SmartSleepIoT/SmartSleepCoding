@@ -17,7 +17,6 @@ from SmartSleep.validation import time_validation, boolean_validation
 from SmartSleep import pubMQTT
 
 bp = Blueprint("config", __name__, url_prefix="/config")
-bp2 = Blueprint("snoring", __name__, url_prefix="/snoring")
 
 
 @bp.route("/", methods=["GET"])
@@ -39,11 +38,11 @@ def current_config():
         " ORDER BY timestamp DESC"
     ).fetchone()
     if temp is None:
-        temp = "Not set"
+        temp = {"value": "Not set"}
     if waking_mode is None:
-        waking_mode = "Not set"
+        waking_mode = {"value": "Not set"}
     if wake_up_hour is None:
-        wake_up_hour = "Not set"
+        wake_up_hour = {"value": "Not set"}
     return jsonify({
         'status': 'Configuration successfully retrieved',
         'data': {
@@ -568,34 +567,3 @@ def delete(id):
     db.execute("DELETE FROM post WHERE id = ?", (id,))
     db.commit()
     return redirect(url_for("blog.index"))
-
-
-@bp2.route("/pillow-angle", methods=["GET"])
-def liftPillow():
-    # see if user is sleeping
-    db = get_db()
-    sleep = db.execute('SELECT value'
-                       ' FROM start_to_sleep'
-                       ' ORDER BY timestamp DESC').fetchone()
-
-    if sleep is None or sleep is False:
-        return
-
-    # get current angle + 10
-    angle = 10
-    current_angle = db.execute('SELECT value'
-                               ' FROM pillow_angle'
-                               ' ORDER BY timestamp DESC').fetchone()
-    if current_angle is not None:
-        angle = float(current_angle['value']) + 10
-
-    # Try to lift up the pillow
-    msg = {'status': f"Lifting up pillow position to {angle}"}
-    pubMQTT.publish(json.dumps(msg), "SmartSleep/SoundSensor")
-    post_pillow_angle(angle)
-
-    # Pillow lifted, broadcast msg to the topic
-    msg = {'status': f"Lifted up pillow position to {angle}"}
-    pubMQTT.publish(json.dumps(msg), "SmartSleep/SoundSensor")
-
-    return jsonify(msg), 200

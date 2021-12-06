@@ -28,7 +28,7 @@ def connect_mqtt():
     return client
 
 
-def publish(msg, topic="SmartSleepMQTT"): #Function that sends the message
+def publish(msg, topic="SmartSleep/MQTT"): #Function that sends the message
     result = client.publish(topic, msg)
     # result: [0, 1]
     status = result[0]

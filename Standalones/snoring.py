@@ -6,11 +6,9 @@ import requests
 from paho.mqtt import client as mqtt_client
 import sys
 
-from SmartSleep.configuration import liftPillow
 
 broker = 'broker.emqx.io'
 port = 1883
-topics = ["SmartSleepMQTT", "SmartSleep/WakeUp", "SmartSleep/SoundSensor"]
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 username = 'emqx'
