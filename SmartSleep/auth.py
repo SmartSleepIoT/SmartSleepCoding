@@ -1,14 +1,12 @@
 import functools
 import json
 
-from flask import Blueprint, jsonify, url_for
+from flask import Blueprint, jsonify
 from flask import g
 from flask import request
 from flask import session
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from werkzeug.utils import redirect
-
 from SmartSleep.db import get_db
 from SmartSleep import pubMQTT
 from SmartSleep.validation import password_validation
@@ -41,7 +39,7 @@ def load_logged_in_user():
         g.user = get_db().execute("SELECT * FROM user WHERE id = ?", (user_id,)).fetchone()
 
 
-@bp.route("/register", methods=["GET", "POST"])
+@bp.route("/register", methods=["POST"])
 def register():
     """Register a new user.
 
@@ -54,25 +52,27 @@ def register():
         db = get_db()
 
         if not username:
-            return jsonify({'status': "Username is required"}), 403
+            return jsonify({'status': "Username is required."}), 403
         elif not password:
-            return jsonify({'status': "Password is required"}), 403
+            return jsonify({'status': "Password is required."}), 403
 
         val, msg = password_validation(password)
         if not val:
             return jsonify({'status': f"{msg}"}), 422
 
         try:
+            hash = generate_password_hash(password)
             db.execute(
                 "INSERT INTO user (username, password) VALUES (?, ?)",
-                (username, generate_password_hash(password)))
+                (username, hash))
+            print(hash)
             db.commit()
         except db.IntegrityError:
             # The username was already taken, which caused the
             # commit to fail. Show a validation error.
             return jsonify({'status': f"User {username} is already registered."}), 403
         # Success, go to the login page.
-        return jsonify({'status': "User registered successfully"}), 200
+        return jsonify({'status': "User registered successfully."}), 200
 
 
 @bp.route("/login", methods=["POST"])
