@@ -12,7 +12,7 @@ class WakeUpScheduler:
     hours = "00"
     minutes = "00"
     waking_mode = "LS"
-    scheduler = BackgroundScheduler()
+    scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Bucharest'})
 
     def setter(self, hours, minutes, mode, started_to_sleep_time):
         self.hours = hours
