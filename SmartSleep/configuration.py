@@ -521,10 +521,7 @@ def liftPillow():
     # Try to lift up the pillow
     msg = {'status': f"Lifting up pillow position to {angle}"}
     pubMQTT.publish(json.dumps(msg), "SmartSleep/SoundSensor")
-    status = 0
-    # If it fails, try again till succeeding
-    while status != 200:
-        status = post_pillow_angle(angle)[-1]
+    post_pillow_angle(angle)
 
     # Pillow lifted, broadcast msg to the topic
     msg = {'status': f"Lifted up pillow position to {angle}"}
