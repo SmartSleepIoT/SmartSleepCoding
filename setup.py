@@ -1,3 +1,3 @@
 from setuptools import setup
 
-setup(install_requires=['werkzeug', 'flask', 'click', 'paho-mqtt'])
+setup(install_requires=['werkzeug', 'flask', 'click', 'paho-mqtt', 'requests'])
