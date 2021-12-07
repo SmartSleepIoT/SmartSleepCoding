@@ -165,7 +165,7 @@ def post_pillow_angle(value):
     table_name = "pillow_angle"
     if not value:
         return jsonify({'status': f"{arg_name} is required"}), 403
-    if not float(value):
+    if value != "0" and not float(value):
         return jsonify({'status': "Wrong angle format, must be float number "}), 422
 
     db = get_db()
