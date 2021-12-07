@@ -5,7 +5,6 @@ import time
 
 from paho.mqtt import client as mqtt_client
 
-
 broker = 'broker.emqx.io'
 port = 1883
 # generate client ID with pub prefix randomly
@@ -13,8 +12,11 @@ client_id = f'SMARTSLEEP-{random.randint(0, 1000)}'
 username = 'emqx'
 password = 'public'
 global client
+
+
 def connect_mqtt():
     global client
+
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
@@ -28,13 +30,14 @@ def connect_mqtt():
     return client
 
 
-def publish(msg, topic="SmartSleep/MQTT"): #Function that sends the message
+def publish(msg, topic="SmartSleep/MQTT"):  # Function that sends the message
     result = client.publish(topic, msg)
     # result: [0, 1]
     status = result[0]
     if status == 0:
         print(f"Send `{msg}` to topic `{topic}`")
     else:
+        print(result)
         print(f"Failed to send message to topic {topic}")
 
 

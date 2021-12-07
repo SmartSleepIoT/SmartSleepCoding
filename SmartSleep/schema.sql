@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS waking_mode;
 DROP TABLE IF EXISTS start_to_sleep;
 DROP TABLE IF EXISTS sounds_recorded;
 DROP TABLE IF EXISTS pillow_angle;
+DROP TABLE IF EXISTS time_slept;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
