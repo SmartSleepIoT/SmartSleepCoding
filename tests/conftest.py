@@ -6,6 +6,7 @@ import pytest
 from SmartSleep.app import create_app
 from SmartSleep.db import get_db
 from SmartSleep.db import init_db
+from Standalones import subMQTT
 
 # read in SQL for populating test data
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
@@ -36,6 +37,13 @@ def app():
 def client(app):
     """A test client for the app."""
     return app.test_client()
+
+
+@pytest.fixture
+def subscriber():
+    """ Create the subscriber to check MQTT messages"""
+    sub = subMQTT.connect_mqtt()
+    yield sub
 
 
 @pytest.fixture

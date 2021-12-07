@@ -26,5 +26,5 @@ def boolean_validation(val):
     if val.lower() in ['true', '1']:
         return True, "true"
     if val.lower() in ['0', 'false']:
-        return False, "false"
+        return True, "false"
     return False, "wrong value must be one of: true, false, 0, 1"
