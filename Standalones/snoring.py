@@ -51,7 +51,7 @@ def subscribe2(client: mqtt_client):
                                                                                                           "%H:%M:%S")
                     seconds = time_between_sounds.total_seconds()
                     # print(lastTime, current_time, len(snoringSounds))
-                    if 3 <= seconds <= 10:
+                    if 1 <= seconds <= 10:
                         lastTime = current_time
                         if len(snoringSounds) >= 4:
                             print("*user snores*")
