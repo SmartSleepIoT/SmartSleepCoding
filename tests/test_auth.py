@@ -67,18 +67,19 @@ def test_login_validate_input(auth, username, password, message):
     response = auth.login(username, password)
     assert message in json.loads(response.data)['status']
 
-def test_logout_endpoint(client,auth,subscriber: mqtt_client):
-    def on_message(client, userdata, expectedMsg, msg):
-        assert expectedMsg == msg.payload
-        try:
-            print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}` topic")
-        except:
-            print(f"Received `{msg.payload}` from `{msg.topic}` topic")
 
-    auth.login()
-    subscriber.subscribe("SmartSleep/#")
-    subscriber.on_message = on_message(expectedMsg= "Ana")
-    client.get('/auth/logout')
+# def test_logout_endpoint(client,auth,subscriber: mqtt_client):
+#     def on_message(client, userdata, expectedMsg, msg):
+#         assert expectedMsg == msg.payload
+#         try:
+#             print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}` topic")
+#         except:
+#             print(f"Received `{msg.payload}` from `{msg.topic}` topic")
+#
+#     auth.login()
+#     subscriber.subscribe("SmartSleep/#")
+#     subscriber.on_message = on_message(expectedMsg= "Ana")
+#     client.get('/auth/logout')
 
 
 
