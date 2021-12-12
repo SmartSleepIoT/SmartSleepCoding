@@ -132,7 +132,8 @@ def test_set(client, auth, app, path, table_name, arg_name, value):  # tests POS
             ("/wake_up_hour", "wake_up_hour", "wake_up_hour"),
             ("/waking_mode", "waking_mode", "waking_mode"),
             ("/pillow_angle", "pillow_angle", "pillow_angle"),
-            ("/time_slept", "time_slept", "time")
+            ("/time_slept", "time_slept", "time"),
+            ("/sound", "sounds_recorded", "sensor")
     ),
 )
 def test_set_required_param(client, auth, path, table_name, arg_name):  # tests POST with missing required params
@@ -141,6 +142,83 @@ def test_set_required_param(client, auth, path, table_name, arg_name):  # tests 
     assert response.status_code == 403
     rDict = json.loads(response.data)
     assert f'{arg_name} is required' in rDict['status']
+
+
+@pytest.mark.parametrize(
+    ("path", "table_name", "arg_name", "value"),
+    (
+            ("/waking_mode", "waking_mode", "waking_mode", "X"),
+            ("/waking_mode", "waking_mode", "waking_mode", "VM"),
+     )
+)
+def test_set_waking_mode_validations(client, auth, path, table_name, arg_name, value):  # tests POST with wrong values for waking_mode
+    auth.login()
+    response = client.post(f"/config{path}?{arg_name}={value}")
+    assert response.status_code == 422
+    rDict = json.loads(response.data)
+    assert f"{arg_name} must be one of the following ['L', 'V', 'S', 'LVS', 'LV', 'LS', 'VS']" in rDict['status']
+
+
+@pytest.mark.parametrize(
+    ("path", "table_name", "arg_name", "value"),
+    (
+            ("/pillow_angle", "pillow_angle", "pillow_angle", False),
+            ("/pillow_angle", "pillow_angle", "pillow_angle", "ana"),
+            ("/pillow_angle", "pillow_angle", "pillow_angle", [0, 1, 2]),
+            ("/sound", "sounds_recorded", "sensor", False),
+            ("/sound", "sounds_recorded", "sensor", "ana"),
+            ("/sound", "sounds_recorded", "sensor", [0, 1, 2]),
+    )
+)
+def test_set_float_validations(client, auth, path, table_name, arg_name, value):  # tests POST with wrong values for pillow_angle and sound
+    auth.login()
+    response = client.post(f"/config{path}?{arg_name}={value}")
+    assert response.status_code == 422
+    rDict = json.loads(response.data)
+    assert "Wrong angle format, must be float number " in rDict['status']
+
+
+@pytest.mark.parametrize(
+    ("path", "table_name", "arg_name", "value"),
+    (
+            ("/wake_up_hour", "wake_up_hour", "wake_up_hour", "24:00"),
+            ("/wake_up_hour", "wake_up_hour", "wake_up_hour", 10),
+            ("/wake_up_hour", "wake_up_hour", "wake_up_hour", "10"),
+            ("/wake_up_hour", "wake_up_hour", "wake_up_hour", "12:63"),
+            ("/time_slept", "time_slept", "time", "24:00"),
+            ("/time_slept", "time_slept", "time", 10),
+            ("/time_slept", "time_slept", "time", "10"),
+            ("/time_slept", "time_slept", "time", "12:63"),
+    )
+)
+def test_set_time_validations(client, auth, path, table_name, arg_name, value):  # tests POST with wrong values for waking hour/ time slept
+    auth.login()
+    response = client.post(f"/config{path}?{arg_name}={value}")
+    assert response.status_code == 422
+    rDict = json.loads(response.data)
+
+    if value == "24:00":
+        assert "Incorrect hour format, hour must be between 0-23" in rDict['status']
+    elif value == 10 or value == "10":
+        assert "Incorrect time format try hour:min" in rDict["status"]
+    elif value == "12:61":
+        assert "Incorrect min format, hour minutes be between 00-59" in rDict["status"]
+
+
+@pytest.mark.parametrize(
+    ("path", "table_name", "arg_name", "value"),
+    (
+            ("/start_to_sleep", "start_to_sleep", "sleep_now", 10),
+            ("/start_to_sleep", "start_to_sleep", "sleep_now", "ana"),
+            ("/start_to_sleep", "start_to_sleep", "sleep_now", "da"),
+    )
+)
+def test_set_start_to_sleep_validations(client, auth, path, table_name, arg_name, value):  # tests POST with wrong values for start to sleep
+    auth.login()
+    response = client.post(f"/config{path}?{arg_name}={value}")
+    assert response.status_code == 422
+    rDict = json.loads(response.data)
+    assert "wrong value must be one of: true, false, 0, 1" in rDict['status']
 
 
 @pytest.mark.parametrize(

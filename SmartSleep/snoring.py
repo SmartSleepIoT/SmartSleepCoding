@@ -17,7 +17,8 @@ def liftPillow():
                        ' ORDER BY timestamp DESC').fetchone()
 
     if sleep is None or sleep is False:
-        return
+        msg = {'status': "user is not sleeping"}
+        return jsonify(msg), 404
 
     # get current angle + 10
     angle = 10

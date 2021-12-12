@@ -118,7 +118,7 @@ def waking_mode():
         if not value:
             return jsonify({'status': f"{arg_name} is required"}), 403
         if value not in waking_modes:
-            return jsonify({'status': f"{arg_name} must be one of the following {waking_modes}"}), 403
+            return jsonify({'status': f"{arg_name} must be one of the following {waking_modes}"}), 422
         try:
             db.execute(
                 f"INSERT INTO {table_name} (value) VALUES (?)",
@@ -165,8 +165,13 @@ def post_pillow_angle(value):
     table_name = "pillow_angle"
     if not value:
         return jsonify({'status': f"{arg_name} is required"}), 403
-    if value != "0" and not float(value):
+    try:
+        if value != "0" and not float(value):
+            return jsonify({'status': "Wrong angle format, must be float number "}), 422
+    except ValueError:
         return jsonify({'status': "Wrong angle format, must be float number "}), 422
+
+
 
     db = get_db()
 
@@ -373,8 +378,11 @@ def sound():
 
         if not value:
             return jsonify({'status': f"{arg_name} is required"}), 403
-        elif not float(value):
-            return jsonify({'status': "wrong value for a db sound expected a float number"}), 422
+        try:
+            if not float(value):
+                return jsonify({'status': "wrong value for a db sound expected a float number"}), 422
+        except ValueError:
+            return jsonify({'status': "Wrong angle format, must be float number "}), 422
 
         try:
             db.execute(
