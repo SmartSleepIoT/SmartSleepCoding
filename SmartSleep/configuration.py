@@ -328,9 +328,39 @@ def start_to_sleep():
                 f"INSERT INTO {table_name} (value) VALUES (?)",
                 (value,)
             )
+
+            # if user sets start_to_sleep to 0 -> he woke up
+            # so automatically set time_slept
+            if value == 0:
+                # get the last timestamp when user went to sleep
+                last_started_sleeping = db.execute('SELECT *'
+                                                   f' FROM {table_name}'
+                                                   ' WHERE value = 1'
+                                                   ' ORDER BY timestamp DESC').fetchone()
+
+                # get the current timestamp when user woke up
+                last_wake_up = db.execute('SELECT *'
+                                          f' FROM {table_name}'
+                                          ' WHERE value = 0'
+                                          ' ORDER BY timestamp DESC').fetchone()
+
+                last_started_sleeping = last_started_sleeping['timestamp']
+                last_wake_up = last_wake_up['timestamp']
+
+                # calculate the time slept
+                time_slept = last_wake_up - last_started_sleeping
+                hours = time_slept.seconds // 3600 + time_slept.days * 24
+                minutes = time_slept.seconds // 60 % 60
+
+                db.execute(
+                    f"INSERT INTO time_slept (hours, minutes) VALUES (?, ?)",
+                    (hours, minutes)
+                )
+
             db.commit()
         except Exception as e:
             return jsonify({'status': f"Operation failed: {e}"}), 403
+
         committed_value = db.execute('SELECT *'
                                      f' FROM {table_name}'
                                      ' ORDER BY timestamp DESC').fetchone()
@@ -350,6 +380,7 @@ def start_to_sleep():
                                          ' ORDER BY timestamp DESC').fetchone()
         if current_value is None:
             return jsonify({'status': f'No {arg_name} ever set'}), 200
+
         return jsonify({
             'status': f'{arg_name} successfully retrieved',
             'data': {
@@ -358,6 +389,7 @@ def start_to_sleep():
                 'timestamp': current_value['timestamp']
             }
         }), 200
+
     if request.method == "DELETE":
         db = get_db()
         db.execute(f'DELETE FROM {table_name}')
