@@ -9,6 +9,7 @@ class ReadSensorsData:
         self.path = str(Path("../").resolve()) + "\\SensorsData\\"
         self.temp_end_point = "http://127.0.0.1:5000/config/temp?"
         self.sound_end_point = "http://127.0.0.1:5000/config/sound?"
+        self.sleep_end_point = "http://127.0.0.1:5000/config/start_to_sleep?"
         self.heartb_end_point = ""
 
         self.user = "admin"
@@ -19,7 +20,7 @@ class ReadSensorsData:
         try:
             self.sound = open(self.path + soundfilename, "r")
             self.temp = open(self.path + temperaturefilename, "r")
-            #self.heartb = open(self.path + heartbeatfilename, "r")
+            # self.heartb = open(self.path + heartbeatfilename, "r")
 
         except FileNotFoundError as err:
             print(err)
@@ -33,6 +34,11 @@ class ReadSensorsData:
     def post_sound_data(self):
         fails = 0
         totals = 0
+
+        r = self.session.post(self.sleep_end_point + f"sleep_now=True")
+        if r.status_code != 200:
+            print('Couldn\'t set start_to_sleep')
+
         print("Posting sound sensor data to endpoint")
         for line in self.sound:
             if line != "\n":
@@ -65,12 +71,8 @@ class ReadSensorsData:
         print(f"Posted data: total {totals} sent; {fails} fails")
 
 
-
-
-
-
 # files have the following format: on each line is the sensor data/unit  time (between it and the next sensor detected)
-data = ReadSensorsData("SoundSensorData.txt" , "TemperatureSensorData.txt", "HeartBeatSensorData.txt")
+data = ReadSensorsData("SoundSensorData.txt", "TemperatureSensorData.txt", "HeartBeatSensorData.txt")
 data.register_login()
 data.post_sound_data()
 data.post_temperature_data()
