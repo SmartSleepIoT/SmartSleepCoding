@@ -171,8 +171,6 @@ def post_pillow_angle(value):
     except ValueError:
         return jsonify({'status': "Wrong angle format, must be float number "}), 422
 
-
-
     db = get_db()
 
     try:
@@ -324,6 +322,18 @@ def start_to_sleep():
                 value = 0
 
         try:
+            # cannot set sleep value if the last value set was the same
+            last_value = db.execute('SELECT *'
+                                    f' FROM {table_name}'
+                                    f' ORDER BY timestamp DESC').fetchone()
+            if last_value is not None:
+                last_value = last_value['value']
+
+                if last_value == value:
+                    raise Exception('Already set this value')
+            elif value == 0:
+                raise Exception('Cannot wake up if you didn\'t sleep before')
+
             db.execute(
                 f"INSERT INTO {table_name} (value) VALUES (?)",
                 (value,)
@@ -607,3 +617,63 @@ def delete(id):
     db.execute("DELETE FROM post WHERE id = ?", (id,))
     db.commit()
     return redirect(url_for("blog.index"))
+
+
+@bp.route('/snoring', methods=('GET', 'POST'))
+def snoring():
+    table_name = 'snore'
+    arg_name = 'snore_now'
+    db = get_db()
+
+    if request.method == 'GET':
+        current_value = db.execute('SELECT *'
+                                   f' FROM {table_name}'
+                                   ' ORDER BY timestamp DESC').fetchone()
+        if current_value is None:
+            return jsonify({'status': f'No {arg_name} ever set'}), 200
+
+        return jsonify({
+            'status': f'{arg_name} successfully retrieved',
+            'data': {
+                'id': current_value['id'],
+                'value': current_value['value'],
+                'timestamp': current_value['timestamp']
+            }
+        }), 200
+
+    if request.method == 'POST':
+        value = request.args.get(arg_name)
+
+        if not value:
+            return jsonify({'status': f"{arg_name} is required"}), 403
+        else:
+            val, msg = boolean_validation(value)
+            if not val:
+                return jsonify({'status': f"{msg}"}), 422
+
+            elif msg == "true":
+                value = 1
+            else:
+                value = 0
+
+        try:
+            db.execute(
+                f"INSERT INTO {table_name} (value) VALUES (?)",
+                (value,)
+            )
+            db.commit()
+        except Exception as e:
+            return jsonify({'status': f"Operation failed: {e}"}), 403
+
+        committed_value = db.execute('SELECT *'
+                                     f' FROM {table_name}'
+                                     ' ORDER BY timestamp DESC').fetchone()
+
+        return jsonify({
+            'status': f'{arg_name} successfully set',
+            'data': {
+                'id': committed_value['id'],
+                'value': committed_value['value'],
+                'timestamp': committed_value['timestamp']
+            }
+        }), 200
