@@ -85,43 +85,63 @@ def test_get(client, auth, path):  # tests SET
     ),
 )
 def test_set(client, auth, app, path, table_name, arg_name, value):  # tests POST with correct values
-    auth.login()
-    response = client.post(f"/config{path}?{arg_name}={value}")
-    rDict = json.loads(response.data)
-    assert f'{arg_name} successfully set' in rDict['status']
-    if table_name == "time_slept":
-        h = value.split(":")[0]
-        min = value.split(":")[1]
-        assert rDict['data']['hours slept'] == int(h)
-        assert rDict['data']['minutes slept'] == int(min)
-    elif table_name == "start_to_sleep":
-        val = str(value)
-        if val.lower() in ["true", "1"]:
-            assert rDict['data']['value'] == 1
-        else:
-            assert rDict['data']['value'] == 0
-    else:
-        assert rDict['data']['value'] == value
-
-    # Check that the value was inserted correctly
     with app.app_context():
         db = get_db()
-        db_value = db.execute(f"SELECT * FROM {table_name}").fetchone()
-        if path == "/start_to_sleep":
-            val = str(value)
-            if val.lower() in ["true", "1"]:
-                assert db_value['value'] == 1
-            else:
-                assert db_value['value'] == 0
+        auth.login()
+        inserted = False
 
-        elif path == "/time_slept":
+        # get the last inserted value, if exists
+        # used for start_to_sleep
+        # 1. user cannot wake up if he didn't sleep
+        # 2. user cannot set the same value 2 times consecutively
+        db_value = db.execute('SELECT *'
+                              f' FROM {table_name}'
+                              ' ORDER BY timestamp DESC').fetchone()
+
+        response = client.post(f"/config{path}?{arg_name}={value}")
+        rDict = json.loads(response.data)
+
+        if table_name == "time_slept":
             h = value.split(":")[0]
             min = value.split(":")[1]
-            assert db_value['hours'] == int(h)
-            assert db_value['minutes'] == int(min)
-
+            assert rDict['data']['hours slept'] == int(h)
+            assert rDict['data']['minutes slept'] == int(min)
+        elif table_name == "start_to_sleep":
+            # if the very first insert is False/0 (user wakes up)
+            if db_value is None and str(value).lower() in ['0', 'false']:
+                assert "Operation failed: Cannot wake up if you didn't sleep before" == rDict['status']
+            # if the very first insert is True/1 (user goes to sleep)
+            elif db_value is None:
+                assert f'{arg_name} successfully set' in rDict['status']
+            # if the user sets a new sleep state
+            else:
+                # cannot set the same value as the previous one
+                if db_value['value'] == value:
+                    assert "Operation failed: Already set this value" == rDict['status']
+                else:
+                    assert f'{arg_name} successfully set' in rDict['status']
+                    inserted = True
         else:
-            assert db_value['value'] == value
+            assert rDict['data']['value'] == value
+
+        # Check that the value was inserted correctly
+        if inserted:
+            db_value = db.execute(f"SELECT * FROM {table_name}").fetchone()
+            if path == "/start_to_sleep":
+                val = str(value)
+                if val.lower() in ["true", "1"]:
+                    assert db_value['value'] == 1
+                else:
+                    assert db_value['value'] == 0
+
+            elif path == "/time_slept":
+                h = value.split(":")[0]
+                min = value.split(":")[1]
+                assert db_value['hours'] == int(h)
+                assert db_value['minutes'] == int(min)
+
+            else:
+                assert db_value['value'] == value
 
 
 @pytest.mark.parametrize(

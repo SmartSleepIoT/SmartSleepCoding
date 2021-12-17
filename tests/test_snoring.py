@@ -83,7 +83,7 @@ def test_snoring_user_not_sleeping(client, auth):
     client_mqtt.loop_start()
     client_mqtt.subscribe("SmartSleep/SoundSensor")
     auth.login()
-    response = client.post(f"/config/start_to_sleep?sleep_now={False}")
+    response = client.post(f"/config/start_to_sleep?sleep_now={True}")
     assert response.status_code == 200
     response = client.post("/config/sound?sensor=45.05")
     assert response.status_code == 200
