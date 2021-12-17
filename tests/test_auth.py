@@ -2,7 +2,6 @@ import pytest
 from flask import g
 from flask import session
 from flask import json
-from paho.mqtt import client as mqtt_client
 from SmartSleep.db import get_db
 
 
@@ -80,7 +79,6 @@ def test_login_validate_input(auth, username, password, message):
 #     subscriber.subscribe("SmartSleep/#")
 #     subscriber.on_message = on_message(expectedMsg= "Ana")
 #     client.get('/auth/logout')
-
 
 
 def test_logout(client, auth):

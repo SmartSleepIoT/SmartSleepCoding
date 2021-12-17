@@ -9,9 +9,9 @@ def test_current_config_empty(client, auth):
     response = client.get("http://127.0.0.1:5000/config/")
     assert response.status_code == 200
 
-    rDict = json.loads(response.data)
-    assert "Configuration successfully retrieved" in rDict['status']
-    for inner_dict in rDict['data'].values():
+    r_dict = json.loads(response.data)
+    assert "Configuration successfully retrieved" in r_dict['status']
+    for inner_dict in r_dict['data'].values():
         for value in inner_dict.values():
             assert value == "Not set"
 
@@ -27,10 +27,10 @@ def test_current_config_after_insert(client, auth):
     # Get config
     response = client.get("http://127.0.0.1:5000/config/")
     assert response.status_code == 200
-    rDict = json.loads(response.data)
+    r_dict = json.loads(response.data)
 
-    assert "Configuration successfully retrieved" in rDict['status']
-    for inner_dict in rDict['data'].items():
+    assert "Configuration successfully retrieved" in r_dict['status']
+    for inner_dict in r_dict['data'].items():
         print(inner_dict)
         if "temperature" == inner_dict[0]:
             assert inner_dict[1]['value'] == sent_value
@@ -39,7 +39,15 @@ def test_current_config_after_insert(client, auth):
 
 
 # Test endpoints can be accessed
-@pytest.mark.parametrize("path", ("/temp", "/waking_mode", "/pillow_angle", "/wake_up_hour", "/start_to_sleep", "/time_slept"))
+@pytest.mark.parametrize(
+    "path",
+    ("/temp",
+     "/waking_mode",
+     "/pillow_angle",
+     "/wake_up_hour",
+     "/start_to_sleep",
+     "/time_slept")
+)
 def test_get(client, auth, path):  # tests SET
     auth.login()
     response = client.get("config" + path)
@@ -99,30 +107,30 @@ def test_set(client, auth, app, path, table_name, arg_name, value):  # tests POS
                               ' ORDER BY timestamp DESC').fetchone()
 
         response = client.post(f"/config{path}?{arg_name}={value}")
-        rDict = json.loads(response.data)
+        r_dict = json.loads(response.data)
 
         if table_name == "time_slept":
             h = value.split(":")[0]
-            min = value.split(":")[1]
-            assert rDict['data']['hours slept'] == int(h)
-            assert rDict['data']['minutes slept'] == int(min)
+            mins = value.split(":")[1]
+            assert r_dict['data']['hours slept'] == int(h)
+            assert r_dict['data']['minutes slept'] == int(mins)
         elif table_name == "start_to_sleep":
             # if the very first insert is False/0 (user wakes up)
             if db_value is None and str(value).lower() in ['0', 'false']:
-                assert "Operation failed: Cannot wake up if you didn't sleep before" == rDict['status']
+                assert "Operation failed: Cannot wake up if you didn't sleep before" == r_dict['status']
             # if the very first insert is True/1 (user goes to sleep)
             elif db_value is None:
-                assert f'{arg_name} successfully set' in rDict['status']
+                assert f'{arg_name} successfully set' in r_dict['status']
             # if the user sets a new sleep state
             else:
                 # cannot set the same value as the previous one
                 if db_value['value'] == value:
-                    assert "Operation failed: Already set this value" == rDict['status']
+                    assert "Operation failed: Already set this value" == r_dict['status']
                 else:
-                    assert f'{arg_name} successfully set' in rDict['status']
+                    assert f'{arg_name} successfully set' in r_dict['status']
                     inserted = True
         else:
-            assert rDict['data']['value'] == value
+            assert r_dict['data']['value'] == value
 
         # Check that the value was inserted correctly
         if inserted:
@@ -136,9 +144,9 @@ def test_set(client, auth, app, path, table_name, arg_name, value):  # tests POS
 
             elif path == "/time_slept":
                 h = value.split(":")[0]
-                min = value.split(":")[1]
+                mins = value.split(":")[1]
                 assert db_value['hours'] == int(h)
-                assert db_value['minutes'] == int(min)
+                assert db_value['minutes'] == int(mins)
 
             else:
                 assert db_value['value'] == value
@@ -160,8 +168,8 @@ def test_set_required_param(client, auth, path, table_name, arg_name):  # tests 
     auth.login()
     response = client.post(f"/config{path}?{arg_name}=")
     assert response.status_code == 403
-    rDict = json.loads(response.data)
-    assert f'{arg_name} is required' in rDict['status']
+    r_dict = json.loads(response.data)
+    assert f'{arg_name} is required' in r_dict['status']
 
 
 @pytest.mark.parametrize(
@@ -171,12 +179,13 @@ def test_set_required_param(client, auth, path, table_name, arg_name):  # tests 
             ("/waking_mode", "waking_mode", "waking_mode", "VM"),
      )
 )
-def test_set_waking_mode_validations(client, auth, path, table_name, arg_name, value):  # tests POST with wrong values for waking_mode
+# tests POST with wrong values for waking_mode
+def test_set_waking_mode_validations(client, auth, path, table_name, arg_name, value):
     auth.login()
     response = client.post(f"/config{path}?{arg_name}={value}")
     assert response.status_code == 422
-    rDict = json.loads(response.data)
-    assert f"{arg_name} must be one of the following ['L', 'V', 'S', 'LVS', 'LV', 'LS', 'VS']" in rDict['status']
+    r_dict = json.loads(response.data)
+    assert f"{arg_name} must be one of the following ['L', 'V', 'S', 'LVS', 'LV', 'LS', 'VS']" in r_dict['status']
 
 
 @pytest.mark.parametrize(
@@ -190,12 +199,13 @@ def test_set_waking_mode_validations(client, auth, path, table_name, arg_name, v
             ("/sound", "sounds_recorded", "sensor", [0, 1, 2]),
     )
 )
-def test_set_float_validations(client, auth, path, table_name, arg_name, value):  # tests POST with wrong values for pillow_angle and sound
+# tests POST with wrong values for pillow_angle and sound
+def test_set_float_validations(client, auth, path, table_name, arg_name, value):
     auth.login()
     response = client.post(f"/config{path}?{arg_name}={value}")
     assert response.status_code == 422
-    rDict = json.loads(response.data)
-    assert "Wrong angle format, must be float number " in rDict['status']
+    r_dict = json.loads(response.data)
+    assert "Wrong angle format, must be float number " in r_dict['status']
 
 
 @pytest.mark.parametrize(
@@ -211,18 +221,19 @@ def test_set_float_validations(client, auth, path, table_name, arg_name, value):
             ("/time_slept", "time_slept", "time", "12:63"),
     )
 )
-def test_set_time_validations(client, auth, path, table_name, arg_name, value):  # tests POST with wrong values for waking hour/ time slept
+# tests POST with wrong values for waking hour/ time slept
+def test_set_time_validations(client, auth, path, table_name, arg_name, value):
     auth.login()
     response = client.post(f"/config{path}?{arg_name}={value}")
     assert response.status_code == 422
-    rDict = json.loads(response.data)
+    r_dict = json.loads(response.data)
 
     if value == "24:00":
-        assert "Incorrect hour format, hour must be between 0-23" in rDict['status']
+        assert "Incorrect hour format, hour must be between 0-23" in r_dict['status']
     elif value == 10 or value == "10":
-        assert "Incorrect time format try hour:min" in rDict["status"]
+        assert "Incorrect time format try hour:min" in r_dict["status"]
     elif value == "12:61":
-        assert "Incorrect min format, hour minutes be between 00-59" in rDict["status"]
+        assert "Incorrect min format, hour minutes be between 00-59" in r_dict["status"]
 
 
 @pytest.mark.parametrize(
@@ -233,12 +244,13 @@ def test_set_time_validations(client, auth, path, table_name, arg_name, value): 
             ("/start_to_sleep", "start_to_sleep", "sleep_now", "da"),
     )
 )
-def test_set_start_to_sleep_validations(client, auth, path, table_name, arg_name, value):  # tests POST with wrong values for start to sleep
+# tests POST with wrong values for start to sleep
+def test_set_start_to_sleep_validations(client, auth, path, table_name, arg_name, value):
     auth.login()
     response = client.post(f"/config{path}?{arg_name}={value}")
     assert response.status_code == 422
-    rDict = json.loads(response.data)
-    assert "wrong value must be one of: true, false, 0, 1" in rDict['status']
+    r_dict = json.loads(response.data)
+    assert "wrong value must be one of: true, false, 0, 1" in r_dict['status']
 
 
 @pytest.mark.parametrize(
