@@ -7,6 +7,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+import requests
 from werkzeug.exceptions import abort
 from datetime import datetime
 
@@ -226,8 +227,36 @@ def pillow_angle():
         return jsonify({'status': f'All values successfully deleted'}), 200
 
 
+@bp.route("/wake_up_interval", methods=["POST"])
+def waking_interval():
+    """
+    Set wake up interval
+    """
+    start = request.args.get('interval_start')
+    end = request.args.get('interval_end')
+    if not start:
+        return jsonify({'status': "interval_start is required"}), 403
+    if not end:
+        return jsonify({'status': "interval_end is required"}), 403
+    start_time, msg = time_validation(start)
+    if not start_time:
+                return jsonify({'status': f"{msg}"}), 422
+    end_time, msg = time_validation(end)
+    if not end_time:
+                return jsonify({'status': f"{msg}"}), 422
+    
+    wake_up_user = WakeUpScheduler()
+    db = get_db()
+    start_to_sleep = db.execute(' SELECT *'
+                                ' FROM start_to_sleep'
+                                ' ORDER BY timestamp DESC').fetchone()
+    
+    wake_up_user.schedule_wake_up([start, end], 'LS', str(start_to_sleep['timestamp']), optimal = True)
+    return jsonify({
+            'status': f'wake up interval successfully set',
+        }), 200
+
 @bp.route("/wake_up_hour", methods=["GET", "POST", "DELETE"])
-@login_required
 def waking_hour():
     """Get / Set wake_up_hour"""
     table_name = "wake_up_hour"
@@ -265,7 +294,7 @@ def waking_hour():
         time = value.split(":")
         now = datetime.now()
         current_time = now.strftime("%H:%M")
-        wake_up_user.schedule_wake_up(time[0], time[1], mode, current_time)
+        wake_up_user.schedule_wake_up([(time[0], time[1])], mode, current_time)
         # schedule_wake_up(time[0], time[1], mode)
 
         return jsonify({
