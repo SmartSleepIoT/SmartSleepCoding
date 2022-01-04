@@ -105,6 +105,52 @@ def temp():
         return jsonify({'status': f'All values successfully deleted'}), 200
 
 
+@bp.route("/current_temp", methods=["POST"])
+@login_required
+def current_temp():
+    print("here")
+    """Get / Set sounds in Db record by sound sensor"""
+    table_name = "temperatures_recorded"
+    arg_name = "sensor"
+
+    if request.method == "POST":
+        print("here")
+        value = request.args.get(arg_name)
+        db = get_db()
+
+        if not value:
+            return jsonify({'status': f"{arg_name} is required"}), 403
+        try:
+            if value != "0" and not float(value):
+                return jsonify({'status': "wrong value for a C temperature expected a float number"}), 422
+        except ValueError:
+            return jsonify({'status': "Wrong angle format, must be float number "}), 422
+
+        try:
+            db.execute(
+                f"INSERT INTO {table_name} (value) VALUES (?)",
+                (value,)
+            )
+            db.commit()
+        except Exception as e:
+            return jsonify({'status': f"Operation failed: {e}"}), 403
+        committed_value = db.execute('SELECT *'
+                                     f' FROM {table_name}'
+                                     ' ORDER BY timestamp DESC').fetchone()
+
+        msg = {'db': f"{value}"}
+        pubMQTT.publish(json.dumps(msg), "SmartSleep/TemperatureSensor")
+
+        return jsonify({
+            'status': f'{arg_name} successfully set',
+            'data': {
+                'id': committed_value['id'],
+                'value': committed_value['value'],
+                'timestamp': committed_value['timestamp']
+            }
+        }), 200
+
+
 @bp.route("/waking_mode", methods=["GET", "POST", "DELETE"])
 @login_required
 def waking_mode():
