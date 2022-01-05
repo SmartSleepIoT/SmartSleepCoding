@@ -36,12 +36,12 @@ def connect_mqtt() -> mqtt_client:
     return client
 
 def check_if_user_has_apenea(current_time):
-    global recording_started, currently_not_breathing, breathing_stops_intervals
+    global recording_started, currently_not_breathing, breathing_stops_intervals, normal_breathing_intervals, apnea, last_normal_breathing_time
     time_recorded = datetime.strptime(current_time, "%H:%M:%S") - datetime.strptime(recording_started, "%H:%M:%S")
     time_recorded = time_recorded.total_seconds()
 
     # we test this in 1 hour intervals
-    if 3500 <= time_recorded <= 3600:
+    if 3600 <= time_recorded <= 3700:
         breathing_stops = len(breathing_stops_intervals)
         if currently_not_breathing == True:
             breathing_stops += 1
@@ -51,16 +51,32 @@ def check_if_user_has_apenea(current_time):
             normal_breathing += 1
 
         if normal_breathing >= breathing_stops:
+            session = requests.Session()
+
+            username = "Radu3"
+            password = "123456A"
+            response = session.post(f"http://127.0.0.1:5000/auth/register?username={username}&password={password}")
+            response = session.post(f"http://127.0.0.1:5000/auth/login?username={username}&password={password}")
             if 5 <= breathing_stops <= 14:
                 print("*mild apnea*")
                 apnea = "mild"
+                r = session.post("http://127.0.0.1:5000/config/apnea?apnea=mild")
             elif 15 <= breathing_stops <= 30 :
                 print("*moderate apnea*")
-                apnea = "moderate"
+                r = session.post("http://127.0.0.1:5000/config/apnea?apnea=moderate")
             elif breathing_stops >= 30:
                 print("*severe apnea*")
-                apnea = "severe"
+                r = session.post("http://127.0.0.1:5000/config/apnea?apnea=severe")
+            else:
+                print("*no apnea*")
+                r = session.post("http://127.0.0.1:5000/config/apnea?apnea=none")
 
+            breathing_stops_intervals = []
+            normal_breathing_intervals = []
+            apnea = None
+            currently_not_breathing = False
+            recording_started = None
+            last_normal_breathing_time = None
 
 
 

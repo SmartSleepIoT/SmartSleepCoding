@@ -204,6 +204,7 @@ def waking_mode():
         return jsonify({'status': f'All values successfully deleted'}), 200
 
 @bp.route("/temperature_system_level", methods=["GET", "POST"])
+@login_required
 def temperature_system_level():
     table_name = "temperature_system_levels"
     arg_name = "temperature_system_level"
@@ -251,6 +252,53 @@ def temperature_system_level():
             }
         }), 200
 
+@bp.route("/apnea", methods=["GET", "POST"])
+@login_required
+def apnea():
+    table_name = "apnea"
+    arg_name = "apnea"
+    if request.method == "GET":
+        current_value = get_db().execute('SELECT *'
+                                         f' FROM {table_name}'
+                                         ' ORDER BY timestamp DESC').fetchone()
+        if current_value is None:
+            return jsonify({'status': f'The user has not been tested for apnea.'}), 200
+        return jsonify({
+            'status': f'{arg_name} successfully retrieved',
+            'data': {
+                'id': current_value['id'],
+                'value': current_value['value'],
+                'timestamp': current_value['timestamp']
+            }
+        }), 200
+    elif request.method == "POST":
+        value = request.args.get(arg_name)
+        db = get_db()
+        possible_values = ["none", "mild", "moderate", "severe"]
+        if not value:
+            return jsonify({'status': f"{arg_name} is required"}), 403
+        if value not in possible_values:
+            return jsonify({'status': f"{arg_name} must be one of the following {possible_values}"}), 422
+        try:
+            db.execute(
+                f"INSERT INTO {table_name} (value) VALUES (?)",
+                (value,)
+            )
+            db.commit()
+        except Exception as e:
+            return jsonify({'status': f"Operation failed: {e}"}), 403
+        committed_value = db.execute('SELECT *'
+                                     f' FROM {table_name}'
+                                     ' ORDER BY timestamp DESC').fetchone()
+
+        return jsonify({
+            'status': f'{arg_name} successfully set',
+            'data': {
+                'id': committed_value['id'],
+                'value': committed_value['value'],
+                'timestamp': committed_value['timestamp']
+            }
+        }), 200
 
 
 def post_pillow_angle(value):
