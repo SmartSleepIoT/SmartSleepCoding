@@ -29,17 +29,26 @@ def connect_mqtt() -> mqtt_client:
     client.connect(broker, port)
     return client
 
-def subscribe2(client: mqtt_client, app):
+def subscribe2(client: mqtt_client):
     def on_message(client, userdata, msg):
-        print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}` topic")
+        if "C" in json.loads(msg.payload):
+            print(f"Received `{json.loads(msg.payload)}` from `{msg.topic}` topic")
+            current_temperature = int(json.loads(msg.payload)['C'])
 
-        with app.app_context():
-            db = get_db()
-        temp = db.execute('SELECT value'
-                          ' FROM temperature'
-                          ' ORDER BY timestamp DESC').fetchone()
-        print(temp)
+            session = requests.Session()
 
+            username = "Radu3"
+            password = "123456A"
+            response = session.post(f"http://127.0.0.1:5000/auth/register?username={username}&password={password}")
+            response = session.post(f"http://127.0.0.1:5000/auth/login?username={username}&password={password}")
+            response = session.get(f"http://127.0.0.1:5000/config/temp")
+
+            desired_temperature = int(response.json()['data']['value'])
+
+            if current_temperature > desired_temperature:
+                r = requests.get("http://127.0.0.1:5000/temperature/cool-temperature")
+            elif current_temperature < desired_temperature:
+                r = requests.get("http://127.0.0.1:5000/temperature/warm-temperature")
 
 
 
@@ -47,15 +56,15 @@ def subscribe2(client: mqtt_client, app):
     client.on_message = on_message
 
 
-def run(app):
+def run():
     client = connect_mqtt()
-    subscribe2(client, app)
+    subscribe2(client)
     client.loop_forever()
 
 
 if __name__ == '__main__':
     try:
-        run(app)
+        run()
     except KeyboardInterrupt:
         print('interrupted')
         sys.exit(0)

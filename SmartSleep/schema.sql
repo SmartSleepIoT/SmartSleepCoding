@@ -11,6 +11,8 @@ DROP TABLE IF EXISTS sounds_recorded;
 DROP TABLE IF EXISTS pillow_angle;
 DROP TABLE IF EXISTS time_slept;
 DROP TABLE IF EXISTS temperatures_recorded;
+DROP TABLE IF EXISTS temperature_system_levels;
+
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,5 +65,11 @@ CREATE TABLE start_to_sleep(
 CREATE TABLE sounds_recorded(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     value REAL NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE temperature_system_levels(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    value INTEGER NOT NULL,
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
