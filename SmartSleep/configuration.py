@@ -104,6 +104,51 @@ def temp():
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
 
+@bp.route("/sleep_stage", methods=["POST"])
+@login_required
+def set_sleep_stage():
+    """Set sleep stage"""
+    arg_name = "stage"
+    if request.method == "POST":
+        value = request.args.get(arg_name)
+        #if not value:
+         #   return jsonify({'status': f"{arg_name} is required"}), 403
+        return jsonify({
+            'status': f'{arg_name} successfully retrieved'
+        }), 200
+    #     try:
+    #         db.execute(
+    #             f"INSERT INTO {table_name} (value) VALUES (?)",
+    #             (value,)
+    #         )
+    #         db.commit()
+    #     except Exception as e:
+    #         return jsonify({'status': f"Operation failed: {e}"}), 403
+    #     committed_value = db.execute('SELECT *'
+    #                                  f' FROM {table_name}'
+    #                                  ' ORDER BY timestamp DESC').fetchone()
+    #     return jsonify({
+    #         'status': f'{arg_name} successfully set',
+    #         'data': {
+    #             'id': committed_value['id'],
+    #             'value': committed_value['value'],
+    #             'timestamp': committed_value['timestamp']
+    #         }
+    #     }), 200
+    # if request.method == "GET":
+    #     current_value = get_db().execute('SELECT *'
+    #                                      f' FROM {table_name}'
+    #                                      ' ORDER BY timestamp DESC').fetchone()
+    #     if current_value is None:
+    #         return jsonify({'status': f'No {arg_name} ever set'}), 200
+    #     return jsonify({
+    #         'status': f'{arg_name} successfully retrieved',
+    #         'data': {
+    #             'id': current_value['id'],
+    #             'value': current_value['value'],
+    #             'timestamp': current_value['timestamp']
+    #         }
+    #     }), 200
 
 @bp.route("/waking_mode", methods=["GET", "POST", "DELETE"])
 @login_required
@@ -334,6 +379,9 @@ def start_to_sleep():
         committed_value = db.execute('SELECT *'
                                      f' FROM {table_name}'
                                      ' ORDER BY timestamp DESC').fetchone()
+        
+        msg = {'time': str(committed_value['timestamp'])}
+        pubMQTT.publish(json.dumps(msg), "SmartSleep/StartSleeping")
 
         return jsonify({
             'status': f'{arg_name} successfully set',
