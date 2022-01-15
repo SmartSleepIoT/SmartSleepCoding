@@ -37,7 +37,6 @@ def test_snoring(client, auth):
     messages = ['45.05', '45.05', '45.05', '45.05', 'Lifting up pillow position to 10',
                 'Lifted up pillow position to 10', '46.00']
 
-    runpy.run_path('../Standalones/snoring.py')  # TO DO: remove this when script to load standalones when  app starts is made
     time.sleep(2)
 
     client_mqtt = paho.Client("client-test-snoring")
@@ -74,7 +73,6 @@ def test_snoring_user_not_sleeping(client, auth):
     global messages
     messages = ['45.05', '45.05', '45.05', '45.05', '46.00']
 
-    runpy.run_path('../Standalones/snoring.py')  # TO DO: remove this when script to load standalones when  app starts is made
     time.sleep(2)
 
     client_mqtt = paho.Client("client-test-snoring")
