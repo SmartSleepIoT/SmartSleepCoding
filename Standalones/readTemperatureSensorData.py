@@ -17,7 +17,6 @@ class ReadSensorsData:
 
         try:
             self.temp = open(self.path + temperaturefilename, "r")
-            # self.heartb = open(self.path + heartbeatfilename, "r")
 
         except FileNotFoundError as err:
             print(err)
