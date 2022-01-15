@@ -34,6 +34,4 @@ def test_breathing(client, auth):
     global msg_nr
     msg_nr = 0
 
-    runpy.run_path(
-        '../Standalones/breathing.py')  # TO DO: remove this when script to load standalones when  app starts is made
 

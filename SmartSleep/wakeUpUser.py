@@ -49,7 +49,7 @@ class WakeUpScheduler:
             self.scheduler.reschedule_job(trigger="cron", hour=h, minute=min, job_id='wake_up_user')
             msg = {'message': "Enabling wake up mode"}, 200
             pubMQTT.publish(json.dumps(msg), "SmartSleep/WakeUp")
-
+                
     def delete_wake_up_schedule(self):
         try:
             self.scheduler.remove_job('wake_up_user')

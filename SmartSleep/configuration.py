@@ -576,7 +576,6 @@ def start_to_sleep():
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
 
-
 @bp.route("/sound", methods=["POST"])
 @login_required
 def sound():

@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS start_to_sleep;
 DROP TABLE IF EXISTS sounds_recorded;
 DROP TABLE IF EXISTS pillow_angle;
 DROP TABLE IF EXISTS time_slept;
+DROP TABLE IF EXISTS heartrate;
 DROP TABLE IF EXISTS temperatures_recorded;
 DROP TABLE IF EXISTS temperature_system_levels;
 DROP TABLE IF EXISTS apnea;
@@ -38,7 +39,6 @@ CREATE TABLE time_slept(
     minutes INTEGER NOT NULL,
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE wake_up_hour(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     value TIME,
@@ -60,6 +60,14 @@ CREATE TABLE start_to_sleep(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     value INTEGER NOT NULL CHECK(value IN (0,1)),
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE heartrate (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    heartrate INTEGER NOT NULL,
+    sleep INTEGER,
+    time TEXT,
+    FOREIGN KEY(sleep) REFERENCES start_to_sleep(id)
 );
 
 CREATE TABLE sounds_recorded(
