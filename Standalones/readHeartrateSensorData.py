@@ -3,9 +3,17 @@ import sys
 import time
 import requests
 import csv
-
+import random
+from paho.mqtt import client as mqtt_client
+from util.constants import TOPIC
 
 class ReadSensorsData:
+    broker = 'broker.emqx.io'
+    port = 1883
+    # generate client ID with pub prefix randomly
+    client_id = f'python-mqtt-{random.randint(0, 100)}'
+    username = 'emqx'
+    password = 'public'
     def __init__(self, heartbeatfilename):
         self.path = str(Path("../").resolve()) + "\\SensorsData\\"
         self.heartb_end_point = "http://127.0.0.1:5000/activity/heartrate?"
@@ -27,6 +35,19 @@ class ReadSensorsData:
         self.session.post(f"http://127.0.0.1:5000/auth/register?username={self.user}&password={self.password}")
         self.session.post(f"http://127.0.0.1:5000/auth/login?username={self.user}&password={self.password}")    
     
+    def connect_mqtt(self) -> mqtt_client:
+        def on_connect(client, userdata, flags, rc):
+            if rc == 0:
+                print("Connected to MQTT Broker!")
+            else:
+                print("Failed to connect, return code %d\n", rc)
+
+        client = mqtt_client.Client(self.client_id)
+        client.username_pw_set(self.username, self.password)
+        client.on_connect = on_connect
+        client.connect(self.broker, self.port)
+        return client
+    
     def post_heartbeat_data(self):
         fails = 0
         totals = 0
@@ -44,7 +65,19 @@ class ReadSensorsData:
             time.sleep(float(delay))
             
         print(f"Posted data: total {totals} sent; {fails} fails")
-
-data = ReadSensorsData("Heartrate.csv")
-data.register_login()
-data.post_heartbeat_data()
+        
+    def handle_connection(self, client: mqtt_client):
+        def on_message(client, userdata, msg):
+                self.post_heartbeat_data()
+    
+        client.subscribe(TOPIC['START_TO_SLEEP'])
+        client.on_message = on_message
+        
+    def run(self):
+        self.register_login()
+        client = self.connect_mqtt()
+        self.handle_connection(client)
+        client.loop_forever()
+        
+sensor = ReadSensorsData("Heartrate.csv")
+sensor.run()

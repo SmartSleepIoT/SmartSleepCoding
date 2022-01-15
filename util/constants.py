@@ -3,9 +3,8 @@
 An array for enumering all stages of sleep
 """
 SLEEP_STAGES = {
-    'NREM1': 'NREM1',
-    'NREM2': 'NREM2',
-    'NREM3': 'NREM3',
+    'LIGHT': 'NREM1 and NREM2',
+    'DEEP': 'NREM3',
     'REM': 'REM'
 }
 

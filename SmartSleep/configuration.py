@@ -563,9 +563,11 @@ def start_to_sleep():
     """Get / Set start_to_sleep"""
     table_name = "start_to_sleep"
     arg_name = "sleep_now"
+    time_arg_name = "time"
 
     if request.method == "POST":
         value = request.args.get(arg_name)
+        time = request.args.get(time_arg_name)
         db = get_db()
 
         if not value:
@@ -592,7 +594,7 @@ def start_to_sleep():
                                      f' FROM {table_name}'
                                      ' ORDER BY timestamp DESC').fetchone()
         
-        msg = {'time': str(committed_value['timestamp'])}
+        msg = {'time': time}
         pubMQTT.publish(json.dumps(msg), "SmartSleep/StartSleeping")
 
         return jsonify({
