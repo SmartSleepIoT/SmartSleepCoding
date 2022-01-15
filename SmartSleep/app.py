@@ -33,7 +33,7 @@ def create_app(test_config=None):
         return "Hello, World!"
 
     # register the database commands
-    from SmartSleep import db, auth, blog, configuration, snoring, activity
+    from SmartSleep import db, auth, blog, configuration, snoring, activity, temperature
     db.init_app(app)
     # apply the blueprints to the app
     app.register_blueprint(auth.bp)
@@ -41,6 +41,7 @@ def create_app(test_config=None):
     app.register_blueprint(configuration.bp)
     app.register_blueprint(snoring.bp)
     app.register_blueprint(activity.bp)
+    app.register_blueprint(temperature.bp)
     # make url_for('index') == url_for('blog.index')
     # in another app, you might define a separate main index here with
     # app.route, while giving the blog blueprint a url_prefix, but for
