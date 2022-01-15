@@ -1,9 +1,11 @@
+import json
 from flask import (
     Blueprint, request, jsonify
 )
 from SmartSleep.auth import login_required
+from SmartSleep import pubMQTT
 
-from db import get_db
+from SmartSleep.db import get_db
 
 bp = Blueprint('activity', __name__, url_prefix="/activity")
 
@@ -43,6 +45,11 @@ def set_heartrate():
         ' FROM heartrate'
         ' ORDER BY id DESC'
     ).fetchone()
+    
+    msg = {'heartrate': commited_value['heartrate'],
+           'time': commited_value['time']}
+    pubMQTT.publish(json.dumps(msg), "SmartSleep/Heartrate")
+
     return jsonify({
         'status': 'Heartrate succesfully recorded',
         'data': {
