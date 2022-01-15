@@ -48,8 +48,6 @@ def test_cooling_system(client, auth):
                 "18"
                 ]
 
-    runpy.run_path(
-        '../Standalones/snoring.py')  # TO DO: remove this when script to load standalones when  app starts is made
     time.sleep(2)
 
     client_mqtt = paho.Client("client-test-snoring")
