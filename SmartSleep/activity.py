@@ -3,7 +3,7 @@ from flask import (
 )
 from SmartSleep.auth import login_required
 
-from db import get_db
+from SmartSleep.db import get_db
 
 bp = Blueprint('activity', __name__, url_prefix="/activity")
 
