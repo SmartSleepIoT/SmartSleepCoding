@@ -105,6 +105,50 @@ def temp():
         return jsonify({'status': f'All values successfully deleted'}), 200
 
 
+@bp.route("/current_temp", methods=["POST"])
+@login_required
+def current_temp():
+    """Get / Set sounds in Db record by sound sensor"""
+    table_name = "temperatures_recorded"
+    arg_name = "sensor"
+
+    if request.method == "POST":
+        value = request.args.get(arg_name)
+        db = get_db()
+
+        if not value:
+            return jsonify({'status': f"{arg_name} is required"}), 403
+        try:
+            if value != "0" and not float(value):
+                return jsonify({'status': "wrong value for a C temperature expected a float number"}), 422
+        except ValueError:
+            return jsonify({'status': "Wrong angle format, must be float number "}), 422
+
+        try:
+            db.execute(
+                f"INSERT INTO {table_name} (value) VALUES (?)",
+                (value,)
+            )
+            db.commit()
+        except Exception as e:
+            return jsonify({'status': f"Operation failed: {e}"}), 403
+        committed_value = db.execute('SELECT *'
+                                     f' FROM {table_name}'
+                                     ' ORDER BY timestamp DESC').fetchone()
+
+        msg = {'C': f"{value}"}
+        pubMQTT.publish(json.dumps(msg), "SmartSleep/TemperatureSensor")
+
+        return jsonify({
+            'status': f'{arg_name} successfully set',
+            'data': {
+                'id': committed_value['id'],
+                'value': committed_value['value'],
+                'timestamp': committed_value['timestamp']
+            }
+        }), 200
+
+
 @bp.route("/waking_mode", methods=["GET", "POST", "DELETE"])
 @login_required
 def waking_mode():
@@ -159,6 +203,103 @@ def waking_mode():
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
 
+@bp.route("/temperature_system_level", methods=["GET", "POST"])
+@login_required
+def temperature_system_level():
+    table_name = "temperature_system_levels"
+    arg_name = "temperature_system_level"
+    if request.method == "GET":
+        current_value = get_db().execute('SELECT *'
+                                         f' FROM {table_name}'
+                                         ' ORDER BY timestamp DESC').fetchone()
+        if current_value is None:
+            return jsonify({'status': f'The temperature system is currently turned off'}), 200
+        return jsonify({
+            'status': f'{arg_name} successfully retrieved',
+            'data': {
+                'id': current_value['id'],
+                'value': current_value['value'],
+                'timestamp': current_value['timestamp']
+            }
+        }), 200
+    elif request.method == "POST":
+        value = request.args.get(arg_name)
+        db = get_db()
+        possible_values = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+        if not value:
+            return jsonify({'status': f"{arg_name} is required"}), 403
+        if int(value) not in possible_values:
+            return jsonify({'status': f"{arg_name} must be one of the following {possible_values}"}), 422
+        try:
+            value = int(value)
+            db.execute(
+                f"INSERT INTO {table_name} (value) VALUES (?)",
+                (value,)
+            )
+            db.commit()
+        except Exception as e:
+            return jsonify({'status': f"Operation failed: {e}"}), 403
+        committed_value = db.execute('SELECT *'
+                                     f' FROM {table_name}'
+                                     ' ORDER BY timestamp DESC').fetchone()
+
+        return jsonify({
+            'status': f'{arg_name} successfully set',
+            'data': {
+                'id': committed_value['id'],
+                'value': committed_value['value'],
+                'timestamp': committed_value['timestamp']
+            }
+        }), 200
+
+@bp.route("/apnea", methods=["GET", "POST"])
+@login_required
+def apnea():
+    table_name = "apnea"
+    arg_name = "apnea"
+    if request.method == "GET":
+        current_value = get_db().execute('SELECT *'
+                                         f' FROM {table_name}'
+                                         ' ORDER BY timestamp DESC').fetchone()
+        if current_value is None:
+            return jsonify({'status': f'The user has not been tested for apnea.'}), 200
+        return jsonify({
+            'status': f'{arg_name} successfully retrieved',
+            'data': {
+                'id': current_value['id'],
+                'value': current_value['value'],
+                'timestamp': current_value['timestamp']
+            }
+        }), 200
+    elif request.method == "POST":
+        value = request.args.get(arg_name)
+        db = get_db()
+        possible_values = ["none", "mild", "moderate", "severe"]
+        if not value:
+            return jsonify({'status': f"{arg_name} is required"}), 403
+        if value not in possible_values:
+            return jsonify({'status': f"{arg_name} must be one of the following {possible_values}"}), 422
+        try:
+            db.execute(
+                f"INSERT INTO {table_name} (value) VALUES (?)",
+                (value,)
+            )
+            db.commit()
+        except Exception as e:
+            return jsonify({'status': f"Operation failed: {e}"}), 403
+        committed_value = db.execute('SELECT *'
+                                     f' FROM {table_name}'
+                                     ' ORDER BY timestamp DESC').fetchone()
+
+        return jsonify({
+            'status': f'{arg_name} successfully set',
+            'data': {
+                'id': committed_value['id'],
+                'value': committed_value['value'],
+                'timestamp': committed_value['timestamp']
+            }
+        }), 200
+
 
 def post_pillow_angle(value):
     arg_name = "pillow_angle"
@@ -170,6 +311,77 @@ def post_pillow_angle(value):
             return jsonify({'status': "Wrong angle format, must be float number "}), 422
     except ValueError:
         return jsonify({'status': "Wrong angle format, must be float number "}), 422
+
+    db = get_db()
+
+    try:
+        db.execute(
+            f"INSERT INTO {table_name} (value) VALUES (?)",
+            (value,)
+        )
+        db.commit()
+    except Exception as e:
+        return jsonify({'status': f"Operation failed: {e}"}), 403
+    committed_value = db.execute('SELECT *'
+                                 f' FROM {table_name}'
+                                 ' ORDER BY timestamp DESC').fetchone()
+    return jsonify({
+        'status': f'{arg_name} successfully set',
+        'data': {
+            'id': committed_value['id'],
+            'value': committed_value['value'],
+            'timestamp': committed_value['timestamp']
+        }
+    }), 200
+
+def post_temperature_system_level(value):
+    arg_name = "temperature_system_level"
+    table_name = "temperature_system_levels"
+    possible_values = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+    if not value:
+        return jsonify({'status': f"{arg_name} is required"}), 403
+    try:
+        if value != "0" and int(value) not in possible_values:
+            return jsonify({'status': f"Wrong angle format, must be an int number in {possible_values}"}), 422
+    except ValueError:
+        return jsonify({'status': "Wrong angle format, must be int number "}), 422
+
+    value = int(value)
+    db = get_db()
+
+    try:
+        db.execute(
+            f"INSERT INTO {table_name} (value) VALUES (?)",
+            (value,)
+        )
+        db.commit()
+    except Exception as e:
+        return jsonify({'status': f"Operation failed: {e}"}), 403
+    committed_value = db.execute('SELECT *'
+                                 f' FROM {table_name}'
+                                 ' ORDER BY timestamp DESC').fetchone()
+    return jsonify({
+        'status': f'{arg_name} successfully set',
+        'data': {
+            'id': committed_value['id'],
+            'value': committed_value['value'],
+            'timestamp': committed_value['timestamp']
+        }
+    }), 200
+
+
+def post(value):
+    arg_name = "pillow_angle"
+    table_name = "pillow_angle"
+    if not value:
+        return jsonify({'status': f"{arg_name} is required"}), 403
+    try:
+        if value != "0" and not float(value):
+            return jsonify({'status': "Wrong angle format, must be float number "}), 422
+    except ValueError:
+        return jsonify({'status': "Wrong angle format, must be float number "}), 422
+
+
 
     db = get_db()
 
@@ -405,7 +617,6 @@ def start_to_sleep():
         db.execute(f'DELETE FROM {table_name}')
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
-
 
 @bp.route("/sound", methods=["POST"])
 @login_required
