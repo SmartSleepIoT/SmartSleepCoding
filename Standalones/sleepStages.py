@@ -119,8 +119,8 @@ class SleepStagesManager:
                 else:
                    self.on_stage_REM(time_elapsed, datetime.strptime(json.loads(msg.payload)['time'], "%H:%M:%S"))
                 
-        # Keep this commented until #52 is solved
-        # client.subscribe(TOPIC['START_TO_SLEEP'])
+        # Keep this commented until #52 is solved - theoretically solved
+        client.subscribe(TOPIC['START_TO_SLEEP'])
         client.subscribe(TOPIC['HEARTRATE'])
         client.on_message = on_message
 
