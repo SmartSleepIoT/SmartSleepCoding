@@ -1,4 +1,3 @@
-import requests
 from SmartSleep.db import get_db
 from flask import jsonify, Blueprint
 
@@ -59,9 +58,57 @@ def get_sleep_intervals():
             max_i = max_i - 1
 
         for i in range(0, max_i, 2):
-            intervals.append((all_time_slept[i]['timestamp'], all_time_slept[i + 1]['timestamp']))
+            intervals.append(
+                (all_time_slept[i]['timestamp'],
+                 all_time_slept[i + 1]['timestamp'],
+                 all_time_slept[i]['id'])
+            )
 
         return jsonify({'status': intervals}), 200
 
     except Exception as e:
         return jsonify({'status': f"Operation failed: {e}"}), 403
+
+
+@bp.route('/all-heartrates', methods=("GET",))
+def get_heartrates():
+    db = get_db()
+    heartrates = []
+
+    try:
+        all_heartrates = db.execute('SELECT *'
+                                    ' FROM heartrate'
+                                    ' ORDER BY sleep, time').fetchall()
+
+        for i in range(len(all_heartrates)):
+            heartrates.append(
+                (all_heartrates[i]['heartrate'],
+                 all_heartrates[i]['sleep'])
+            )
+
+        return jsonify({'status': heartrates}), 200
+
+    except Exception as e:
+        return jsonify({'status': f'Operation failed: {e}'}), 403
+
+
+@bp.route('/all-apneas', methods=("GET",))
+def get_apneas():
+    db = get_db()
+    apneas = []
+
+    try:
+        all_apneas = db.execute('SELECT *'
+                                ' FROM apnea'
+                                ' ORDER BY timestamp').fetchall()
+
+        for i in range(len(all_apneas)):
+            apneas.append(
+                (all_apneas[i]['value'],
+                 all_apneas[i]['timestamp'])
+            )
+
+        return jsonify({'status': apneas}), 200
+
+    except Exception as e:
+        return jsonify({'status': f'Operation failed: {e}'}), 403

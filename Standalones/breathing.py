@@ -35,6 +35,7 @@ def connect_mqtt() -> mqtt_client:
     client.connect(broker, port)
     return client
 
+
 def check_if_user_has_apenea(current_time):
     global recording_started, currently_not_breathing, breathing_stops_intervals, normal_breathing_intervals, apnea, last_normal_breathing_time
     time_recorded = datetime.strptime(current_time, "%H:%M:%S") - datetime.strptime(recording_started, "%H:%M:%S")
@@ -43,11 +44,11 @@ def check_if_user_has_apenea(current_time):
     # we test this in 1 hour intervals
     if 3600 <= time_recorded <= 3700:
         breathing_stops = len(breathing_stops_intervals)
-        if currently_not_breathing == True:
+        if currently_not_breathing:
             breathing_stops += 1
 
         normal_breathing = len(normal_breathing_intervals)
-        if currently_not_breathing == False:
+        if not currently_not_breathing:
             normal_breathing += 1
 
         if normal_breathing >= breathing_stops:
@@ -77,7 +78,6 @@ def check_if_user_has_apenea(current_time):
             currently_not_breathing = False
             recording_started = None
             last_normal_breathing_time = None
-
 
 
 def subscribe2(client: mqtt_client):

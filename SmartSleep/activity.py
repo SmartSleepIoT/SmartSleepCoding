@@ -7,6 +7,7 @@ from SmartSleep.db import get_db
 
 bp = Blueprint('activity', __name__, url_prefix="/activity")
 
+
 @bp.route('/heartrate', methods=['POST'])
 @login_required
 def set_heartrate():
@@ -24,9 +25,9 @@ def set_heartrate():
     db = get_db()
     try:
         current_sleep = db.execute(
-        'SELECT *'
-        ' FROM start_to_sleep'
-        ' ORDER BY id DESC'
+            'SELECT *'
+            ' FROM start_to_sleep'
+            ' ORDER BY id DESC'
         ).fetchone()['id']
         
         db.execute(
