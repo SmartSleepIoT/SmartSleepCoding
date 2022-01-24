@@ -4,16 +4,23 @@ import time
 import requests
 import csv
 import random
+import json
 from paho.mqtt import client as mqtt_client
 from util.constants import TOPIC
+from threading import Thread
+from datetime import datetime
+
+from util.functions import set_hour_and_minute
 
 class ReadSensorsData:
     broker = 'broker.emqx.io'
     port = 1883
     # generate client ID with pub prefix randomly
     client_id = f'python-mqtt-{random.randint(0, 100)}'
+    thread = 0 
     username = 'emqx'
     password = 'public'
+    status = False
     def __init__(self, heartbeatfilename):
         self.path = str(Path("../").resolve()) + "\\SensorsData\\"
         self.heartb_end_point = "http://127.0.0.1:5000/activity/heartrate?"
@@ -59,17 +66,26 @@ class ReadSensorsData:
            print(line['heartrate'], line['time'])
            if line != "\n":
             totals += 1
-            response = self.session.post(self.heartb_end_point + f"heartrate={line['heartrate']}&time={line['time']}")
+            response = self.session.post(self.heartb_end_point + f"heartrate={line['heartrate']}&time={set_hour_and_minute(line['time'])}")
             if response.status_code != 200:
                 fails += 1
             time.sleep(float(delay))
+            if not self.status: 
+                break
             
         print(f"Posted data: total {totals} sent; {fails} fails")
         
     def handle_connection(self, client: mqtt_client):
         def on_message(client, userdata, msg):
-                self.post_heartbeat_data()
-    
+            if msg.topic == TOPIC['START_TO_SLEEP']:
+                status = json.loads(msg.payload)['status']
+                print("the status is", status)
+                self.status = status
+                if status:
+                    self.thread = Thread(target = self.post_heartbeat_data)
+                    self.thread.start()
+                
+
         client.subscribe(TOPIC['START_TO_SLEEP'])
         client.on_message = on_message
         

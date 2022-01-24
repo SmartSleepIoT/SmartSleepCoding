@@ -4,9 +4,8 @@ from datetime import datetime, timedelta
 import requests
 from paho.mqtt import client as mqtt_client
 import sys
-from util.constants import SLEEP_STAGES, TOPIC
-from util.functions import datetime_to_pair
-from SmartSleep.secrets import ADMIN_CREDENTIALS
+from util.constants import MIN_STAGE_DURATION, SLEEP_STAGES, TOPIC
+from util.functions import str_to_datetime
 
 class SleepStagesManager:
     broker = 'broker.emqx.io'
@@ -18,13 +17,27 @@ class SleepStagesManager:
     patience = 3
     rem_patience = 2
     nr_of_cycles = 0
-    start_hour = 0
-    time_slept = 0
     session = requests.Session()
     user = "admin"
     password = "1234Admin"
+    sleepInitialized = False
+    start_hour = 0
+    REM_INCREASE_FACTOR = 6
     
-    def init_sleep_cycle(self, time):
+    """
+    Initialize sleep
+    """
+    def init_sleep(self):
+        self.sleepInitialized = True
+        self.time_slept = 0
+        self.rem_number = 0
+        self.total_time_elapsed = timedelta(0)
+        self.init_sleep_cycle()
+    
+    """
+    Initialize sleep cycle
+    """
+    def init_sleep_cycle(self):
         self.nr_of_cycles += 1 
         self.stage = SLEEP_STAGES['LIGHT']
         self.SLEEP_DURATION = {
@@ -35,7 +48,8 @@ class SleepStagesManager:
         self.heartbeats = []
         self.earlyDropStopping = 0
         self.earlyIncreaseStopping = 0
-        self.start_cycle_time = time
+        self.start_cycle_time = self.start_hour + self.total_time_elapsed
+        self.cycle_time_elapsed = timedelta(0)
 
     def connect_mqtt(self) -> mqtt_client:
         def on_connect(client, userdata, flags, rc):
@@ -51,79 +65,83 @@ class SleepStagesManager:
         return client
 
 
-    def on_stage_light(self, minutes, current_heartbeat):
+    def on_stage_light(self,current_heartbeat):
         self.heartbeats.append(current_heartbeat)
-        if minutes > 5 and len(self.heartbeats) - 1 and current_heartbeat <= self.heartbeats[len(self.heartbeats) - 2]:
+        stage_time = self.cycle_time_elapsed.seconds // 60
+        if stage_time > MIN_STAGE_DURATION['LIGHT'] and len(self.heartbeats) - 1 and current_heartbeat <= self.heartbeats[len(self.heartbeats) - 2]:
             self.earlyDropStopping += 1
             
             if self.earlyDropStopping == self.patience:
-                response = self.session.post(f"http://127.0.0.1:5000/config/sleep_stage?stage={SLEEP_STAGES['DEEP']}")
+                current_time = self.start_hour + self.total_time_elapsed
+                response = self.session.post(f"http://127.0.0.1:5000/activity/sleep_stage?stage={SLEEP_STAGES['DEEP']}&time={str(current_time)}")
                 if response.status_code  == 200:
                         print("We succesfully changed the stage!")
-                self.SLEEP_DURATION['LIGHT'] = minutes
+                self.SLEEP_DURATION['LIGHT'] = stage_time
                 self.stage = SLEEP_STAGES['DEEP']
                 self.earlyDropStopping = 0
                 self.heartbeats = []
                     
-    def on_stage_deep(self, cycle_time_elapsed, current_hearbeat):
-        if cycle_time_elapsed.seconds // 60 > 80:
+    def on_stage_deep(self, current_hearbeat):
+        stage_time = self.cycle_time_elapsed.seconds // 60 - self.SLEEP_DURATION['LIGHT']
+        if stage_time > MIN_STAGE_DURATION['DEEP']:
             self.heartbeats.append(current_hearbeat)
             if len(self.heartbeats) - 1 and self.heartbeats[len(self.heartbeats) - 2] < current_hearbeat:
                 self.earlyIncreaseStopping += 1
                 if self.earlyIncreaseStopping == self.patience:
                     # TO DO: we also have to check the breathing rate is increasing
                     self.stage = SLEEP_STAGES['REM']
-                    response = self.session.post(f"http://127.0.0.1:5000/config/sleep_stage?stage={self.stage}")
+                    current_time = self.start_hour + self.total_time_elapsed
+                    response = self.session.post(f"http://127.0.0.1:5000/activity/sleep_stage?stage={SLEEP_STAGES['REM']}&time={str(current_time)}")
                     if response.status_code  == 200:
                         print("We succesfully changed the stage!")
                    
-                    self.SLEEP_DURATION['DEEP'] = cycle_time_elapsed.seconds // 60 - self.SLEEP_DURATION['LIGHT']
+                    self.SLEEP_DURATION['DEEP'] = stage_time
                     print("DEEP duration: " + str(self.SLEEP_DURATION['DEEP']))
                     
                     self.earlyIncreaseStopping = 0
                     self.heartbeats = []
     
-    def on_stage_rem(self, cycle_time_elapsed, restart_time, current_heartbeat):
+    def on_stage_rem(self, current_heartbeat):
         # TO DO: we have to check the breathing rate is decreasing
-        print("A trecut" + str(cycle_time_elapsed.seconds // 60))
         self.heartbeats.append(current_heartbeat)
-        stage_time =  cycle_time_elapsed.seconds // 60 - self.SLEEP_DURATION['DEEP'] - self.SLEEP_DURATION['LIGHT'] 
-        if stage_time > 10 and len(self.heartbeats) - 2 >= 0 and current_heartbeat >= self.heartbeats[len(self.heartbeats) - 2]:
+        stage_time =  self.cycle_time_elapsed.seconds // 60 - self.SLEEP_DURATION['DEEP'] - self.SLEEP_DURATION['LIGHT'] 
+        if stage_time > MIN_STAGE_DURATION['REM'] + self.rem_number * self.REM_INCREASE_FACTOR and len(self.heartbeats) - 2 >= 0  \
+            and current_heartbeat >= self.heartbeats[len(self.heartbeats) - 2]:
+                
             self.earlyDropStopping += 1
+            print("Early dropping increased!")
             if self.earlyDropStopping == self.rem_patience:
-                response = self.session.post(f"http://127.0.0.1:5000/config/sleep_stage?stage={SLEEP_STAGES['LIGHT']}")
+                current_time = self.start_hour + self.total_time_elapsed
+                response = self.session.post(f"http://127.0.0.1:5000/activity/sleep_stage?stage={SLEEP_STAGES['LIGHT']}&time={str(current_time)}")
                 if response.status_code  == 200:
                         print("We succesfully changed the stage!")
-                self.init_sleep_cycle(restart_time)
+                self.init_sleep_cycle()
+                self.rem_number += 1
                 self.earlyDropStopping = 0
                 self.heartbeats = []
 
     def handle_connection(self, client: mqtt_client):
         def on_message(client, userdata, msg):
+            print("TOPIC", msg.topic)
             if msg.topic == TOPIC['START_TO_SLEEP']:
-                self.start_hour = datetime.strptime(json.loads(msg.payload)['time'], "%H:%M:%S")
-                self.init_sleep_cycle(self.start_hour)
+                self.start_hour = str_to_datetime(json.loads(msg.payload)['time'])
+                self.init_sleep()
                 
-            if msg.topic == TOPIC['HEARTRATE']:
+            if msg.topic == TOPIC['HEARTRATE'] and self.sleepInitialized:
                 # we get the time elapsed and hearbeat as the next decision of changing stages depends on them
-                current_time = json.loads(msg.payload)['time']
-                current_heartbeat = json.loads(msg.payload)['heartrate']
+                current_time = str_to_datetime(json.loads(msg.payload)['time'])
+                current_heartbeat = json.loads(msg.payload)['heartrate']    
+                self.total_time_elapsed = current_time - self.start_hour
+                self.cycle_time_elapsed = current_time - self.start_cycle_time
                 
-                hours, minutes = datetime_to_pair(current_time, self.start_hour)
-                total_time_elapsed = timedelta(hours = hours, minutes = minutes)
-                hours, minutes = datetime_to_pair(current_time, self.start_cycle_time)
-                cycle_time_elapsed = timedelta(hours = hours, minutes = minutes)
-               
-                
-                print("Time slept: " + str(total_time_elapsed) + " Stage: " + self.stage)
-                
+                print("Time slept: " + str(self.total_time_elapsed) + " Stage: " + self.stage) 
                 # we call a handler based on the current stage
                 if self.stage == SLEEP_STAGES['LIGHT']:
-                   self.on_stage_light(minutes, current_heartbeat)
+                   self.on_stage_light(current_heartbeat)
                 elif self.stage == SLEEP_STAGES['DEEP']:
-                   self.on_stage_deep(cycle_time_elapsed, current_heartbeat)
-                else:
-                   self.on_stage_rem(cycle_time_elapsed, datetime.strptime(current_time, "%H:%M:%S"), current_heartbeat)
+                   self.on_stage_deep(current_heartbeat)
+                elif self.stage == SLEEP_STAGES['REM']:
+                   self.on_stage_rem(current_heartbeat)
                 
         client.subscribe(TOPIC['START_TO_SLEEP'])
         client.subscribe(TOPIC['HEARTRATE'])
