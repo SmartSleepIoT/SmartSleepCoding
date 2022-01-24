@@ -47,6 +47,7 @@ class WakeUpScheduler:
                        'end': end, 
                        'start_to_sleep': started_to_sleep_time}
                 pubMQTT.publish(json.dumps(msg), "SmartSleep/OptimalWakeup")
+                
             else:
                 (h, min) = interval[0]
                 self.setter(h, min, mode, started_to_sleep_time)

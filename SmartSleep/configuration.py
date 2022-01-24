@@ -16,6 +16,8 @@ from SmartSleep.db import get_db
 from SmartSleep.wakeUpUser import WakeUpScheduler
 from SmartSleep.validation import time_validation, boolean_validation
 from SmartSleep import pubMQTT
+from util.constants import TOPIC
+from util.functions import set_hour_and_minute
 
 bp = Blueprint("config", __name__, url_prefix="/config")
 
@@ -104,52 +106,6 @@ def temp():
         db.execute(f'DELETE FROM {table_name}')
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
-
-@bp.route("/sleep_stage", methods=["POST"])
-@login_required
-def set_sleep_stage():
-    """Set sleep stage"""
-    arg_name = "stage"
-    if request.method == "POST":
-        value = request.args.get(arg_name)
-        #if not value:
-         #   return jsonify({'status': f"{arg_name} is required"}), 403
-        return jsonify({
-            'status': f'{arg_name} successfully retrieved'
-        }), 200
-    #     try:
-    #         db.execute(
-    #             f"INSERT INTO {table_name} (value) VALUES (?)",
-    #             (value,)
-    #         )
-    #         db.commit()
-    #     except Exception as e:
-    #         return jsonify({'status': f"Operation failed: {e}"}), 403
-    #     committed_value = db.execute('SELECT *'
-    #                                  f' FROM {table_name}'
-    #                                  ' ORDER BY timestamp DESC').fetchone()
-    #     return jsonify({
-    #         'status': f'{arg_name} successfully set',
-    #         'data': {
-    #             'id': committed_value['id'],
-    #             'value': committed_value['value'],
-    #             'timestamp': committed_value['timestamp']
-    #         }
-    #     }), 200
-    # if request.method == "GET":
-    #     current_value = get_db().execute('SELECT *'
-    #                                      f' FROM {table_name}'
-    #                                      ' ORDER BY timestamp DESC').fetchone()
-    #     if current_value is None:
-    #         return jsonify({'status': f'No {arg_name} ever set'}), 200
-    #     return jsonify({
-    #         'status': f'{arg_name} successfully retrieved',
-    #         'data': {
-    #             'id': current_value['id'],
-    #             'value': current_value['value'],
-    #             'timestamp': current_value['timestamp']
-    #         }
-    #     }), 200
 
 @bp.route("/current_temp", methods=["POST"])
 @login_required
@@ -508,7 +464,10 @@ def waking_interval():
                                 ' FROM start_to_sleep'
                                 ' ORDER BY timestamp DESC').fetchone()
     
-    wake_up_user.schedule_wake_up([start, end], 'LS', str(start_to_sleep['timestamp']), optimal = True)
+    wake_up_user.schedule_wake_up([set_hour_and_minute(start), set_hour_and_minute(end)], 
+                                  'LS', 
+                                  str(start_to_sleep['timestamp']), 
+                                  optimal = True)
     return jsonify({
             'status': f'wake up interval successfully set',
         }), 200
@@ -592,9 +551,11 @@ def start_to_sleep():
     """Get / Set start_to_sleep"""
     table_name = "start_to_sleep"
     arg_name = "sleep_now"
+    time_arg ="time"
 
     if request.method == "POST":
         value = request.args.get(arg_name)
+        time = request.args.get(time_arg)
         db = get_db()
 
         if not value:
@@ -610,10 +571,16 @@ def start_to_sleep():
                 value = 0
 
         try:
-            db.execute(
-                f"INSERT INTO {table_name} (value) VALUES (?)",
-                (value,)
-            )
+            if time: 
+                db.execute(
+                    f"INSERT INTO {table_name} (value, timestamp) VALUES (?, ?)",
+                    (value, set_hour_and_minute(time),)
+                )
+            else: 
+                db.execute(
+                    f"INSERT INTO {table_name} (value) VALUES (?)",
+                    (value,)
+                )
             db.commit()
         except Exception as e:
             return jsonify({'status': f"Operation failed: {e}"}), 403
@@ -621,9 +588,9 @@ def start_to_sleep():
                                      f' FROM {table_name}'
                                      ' ORDER BY timestamp DESC').fetchone()
         
-        msg = {'time': str(committed_value['timestamp'])}
-        pubMQTT.publish(json.dumps(msg), "SmartSleep/StartSleeping")
-
+        msg = {'time': str(committed_value['timestamp']), 'status': bool(committed_value['value'])}
+        pubMQTT.publish(json.dumps(msg), TOPIC['START_TO_SLEEP'])
+            
         return jsonify({
             'status': f'{arg_name} successfully set',
             'data': {
