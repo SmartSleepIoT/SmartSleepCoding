@@ -45,6 +45,8 @@ def get_list_time_slept():
     times = all_time_slept.json()['status']
     for i in range(get_nr_nights()):
         times[i] = get_nr_hours_slept_night(i)
+        # convert hours to minutes
+        times[i] = times[i] * 60
 
     return times
 
@@ -54,7 +56,7 @@ def get_nr_snores_interval(start_time, end_time):
 
     if all_snores.status_code != 200:
         print('Couldn\'t get snores')
-        return -1
+        return 0
 
     start_time = datetime.strptime(start_time, '%a, %d %b %Y %H:%M:%S %Z')
     end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
@@ -88,10 +90,12 @@ def get_list_snores():
 
 def get_list_snores_small_interval(start_time, end_time):
     global time_interval
-    start_time = datetime.strptime(start_time, '%a, %d %b %Y %H:%M:%S %Z')
-    end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
 
     snores = [0]
+    timestamps = [start_time]
+
+    start_time = datetime.strptime(start_time, '%a, %d %b %Y %H:%M:%S %Z')
+    end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
 
     # get the nr of snores between moment X - time_interval and moment X
     start_timestamp = start_time
@@ -109,11 +113,12 @@ def get_list_snores_small_interval(start_time, end_time):
 
         snore = get_nr_snores_interval(str_start_timestamp, str_end_timestamp)
         snores.append(snore)
+        timestamps.append(str_end_timestamp)
 
         start_timestamp = end_timestamp
         end_timestamp += timedelta(minutes=time_interval)
 
-    return snores
+    return snores, timestamps
 
 
 def get_list_snore_for_night(i):
@@ -129,8 +134,8 @@ def get_list_snore_for_night(i):
         return []
 
     night = data[i]
-    snores = get_list_snores_small_interval(night[0], night[1])
-    return snores
+    snores, timestamps = get_list_snores_small_interval(night[0], night[1])
+    return snores, timestamps
 
 
 def get_heartrate_mean_for_night(i):
@@ -143,16 +148,16 @@ def get_heartrate_mean_for_night(i):
 
     if all_sleep_intervals.status_code != 200:
         print('Error at getting sleep intervals:', all_sleep_intervals.text)
-        return -1
+        return 0
     if all_heartrates.status_code != 200:
         print('Error at getting heartrates:', all_heartrates.text)
-        return -1
+        return 0
 
     sleep_data = all_sleep_intervals.json()['status']
     heartrate_data = all_heartrates.json()['status']
 
     if i >= len(sleep_data) or i < 0:
-        return -1
+        return 0
 
     night = sleep_data[i]
     night_id = night[2]
@@ -168,7 +173,7 @@ def get_heartrate_mean_for_night(i):
     if hrates:
         average = mean(hrates)
     else:
-        average = -1
+        average = 0
 
     return average
 
@@ -189,7 +194,7 @@ def get_heartrate_interval(start_time, end_time):
 
     if all_heartrates.status_code != 200:
         print('Error at getting heartrates:', all_heartrates.text)
-        return -1
+        return 0
 
     start_time = datetime.strptime(start_time, '%a, %d %b %Y %H:%M:%S %Z')
     end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
@@ -208,8 +213,8 @@ def get_list_heartrates_mean_small_interval(start_time, end_time):
     start_time = datetime.strptime(start_time, '%a, %d %b %Y %H:%M:%S %Z')
     end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
 
+    # heartrate == 0   means unknown heartrate
     heartrates = [0]
-    old_average = 0
 
     # get the heartrates between moment X - time_interval and moment X
     start_timestamp = start_time
@@ -226,7 +231,7 @@ def get_list_heartrates_mean_small_interval(start_time, end_time):
             str_end_timestamp += " GMT"
 
         heartrate_values = get_heartrate_interval(str_start_timestamp, str_end_timestamp)
-        average_heartrate = old_average
+        average_heartrate = 0
         if heartrate_values:
             average_heartrate = mean(heartrate_values)
 
@@ -234,7 +239,6 @@ def get_list_heartrates_mean_small_interval(start_time, end_time):
 
         start_timestamp = end_timestamp
         end_timestamp += timedelta(minutes=time_interval)
-        old_average = average_heartrate
 
     return heartrates
 
@@ -310,9 +314,9 @@ def get_list_apnea_scores():
 
     apnea_scores = []
     for i in range(get_nr_nights()):
-        apnea_scores.append(0)
+        apnea_scores.append([0, len(apneas[i])])
         for j in range(len(apneas[i])):
-            apnea_scores[i] += apnea_score(apneas[i][j])
+            apnea_scores[i][0] += apnea_score(apneas[i][j])
 
     return apnea_scores
 
@@ -330,7 +334,7 @@ def get_list_apnea_scores_small_interval(start_time, end_time):
     start_time = datetime.strptime(start_time, '%a, %d %b %Y %H:%M:%S %Z')
     end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
 
-    apnea_scores = [0]
+    apnea_scores = [[0, 1]]
 
     # get the nr of snores between moment X - time_interval and moment X
     start_timestamp = start_time
@@ -348,7 +352,10 @@ def get_list_apnea_scores_small_interval(start_time, end_time):
 
         apneas = get_apnea_interval(str_start_timestamp, str_end_timestamp)
         score = get_apnea_score_for_list(apneas)
-        apnea_scores.append(score)
+        if len(apneas) == 0:
+            apnea_scores.append([score, 1])
+        else:
+            apnea_scores.append([score, len(apneas)])
 
         start_timestamp = end_timestamp
         end_timestamp += timedelta(minutes=time_interval)
@@ -373,32 +380,114 @@ def get_list_apnea_score_for_night(i):
     return apneas
 
 
-print('-------------- PARAMETER INFORMATION FOR ONE NIGHT, SPLIT INTO SMALL INTERVALS --------------')
-print('SNORES')
-print(get_list_snore_for_night(2))
+def get_apnea_score_for_night(i):
+    apnea_lst = get_list_apnea_score_for_night(i)
+    apnea_lst = [x for (x, _) in apnea_lst]
+    return sum(apnea_lst)
 
-print('HEARTRATE')
-print(get_list_heartrates_mean_for_night(2))
 
-print('APNEA')
-print(get_list_apnea_score_for_night(2))
+def apnea_score_normalized(score):
+    param_scr = 51 / 3
+    # intervals:
+    # 0 - 1
+    # 1 - 3.5
+    # 3.5 - 8
+    # 8 - inf
 
-print()
+    if 0 <= score <= 1:
+        # no apnea
+        return param_scr, 'none'
+    elif 1 < score <= 3.5:
+        # mild apnea
+        return 2 * param_scr / 3, 'mild'
+    elif 3.5 < score <= 8:
+        # moderate apnea
+        return param_scr / 3, 'moderate'
+    elif 8 < score:
+        # severe apnea
+        return 0, 'severe'
 
-print('-------------- PARAMETER INFORMATION FOR EACH NIGHT, MULTIPLE NIGHTS --------------')
 
-print('TIMES SLEPT')
-times_slept_list = get_list_time_slept()
-print(times_slept_list)
+# sleep quality score for a specified night
+def sleepQualityScore(i):
+    # get nr of hours slept
+    nr_hours_slept = get_nr_hours_slept_night(i)
 
-print('SNORES')
-snores_list = get_list_snores()
-print(snores_list)
+    # get nr of snores
+    snores = get_list_snores()
+    if snores:
+        nr_snores = snores[i]
+    else:
+        nr_snores = 0
 
-print('HEARTRATES')
-heartrates_list = get_list_heartrates()
-print(heartrates_list)
+    # get average heartrate
+    avg_heartrate = get_heartrate_mean_for_night(i)
 
-print('APNEA')
-apnea_list = get_list_apnea_scores()
-print(apnea_list)
+    # get apnea score
+    apnea_scr = get_apnea_score_for_night(i)
+
+    # sleep quality ->  a number between 0 and 100 (0 = bad quality, 100 = best quality)
+    # time slept -> lowers the sleep quality if its not between 7.5 and 8.5
+    # severe apnea  -> lowers the sleep quality
+    # heartrate  -> lowers the sleep quality if bigger than 76
+    # snores     -> lower the sleep quality if bigger than 10
+
+    sleepQuality = 0
+
+    # sleep contribution
+    sleep_score = 49
+    if nr_hours_slept < 7.5:
+        score = nr_hours_slept * sleep_score / 7.5
+    elif nr_hours_slept > 8.5:
+        score = 8.5 * sleep_score / nr_hours_slept
+    else:
+        score = sleep_score
+    sleepQuality += score
+    print('Time slept score:', score)
+
+    # other params contribution
+    param_score = 51 / 3
+
+    # apnea contribution
+    apnea_episodes = get_apnea_list()
+    if apnea_episodes:
+        nr_apnea_episodes = len(apnea_episodes[i])
+    else:
+        nr_apnea_episodes = 0
+
+    avg_apnea_score = apnea_scr / nr_apnea_episodes
+    score, apnea_type = apnea_score_normalized(avg_apnea_score)
+    sleepQuality += score
+    print('Apnea score:', score, apnea_type)
+
+    # heartrate contribution
+    if avg_heartrate < 55:
+        score = avg_heartrate * param_score / 55
+    elif avg_heartrate > 75:
+        score = 75 * param_score / avg_heartrate
+    else:
+        score = param_score
+    sleepQuality += score
+    print('Heartrate score:', score)
+
+    # snoring contribution
+    max_snores = 10
+    if nr_snores <= max_snores:
+        score = param_score
+    else:
+        score = max([0, param_score - (5 / 100 * nr_snores)])
+    sleepQuality += score
+    print('Snoring score:', score)
+
+    print()
+
+    return sleepQuality
+
+
+def sleepQualityEachNight():
+    sleep_quality_scores = []
+    for i in range(get_nr_nights()):
+        score = sleepQualityScore(i)
+        sleep_quality_scores.append(score)
+
+    return sleep_quality_scores
