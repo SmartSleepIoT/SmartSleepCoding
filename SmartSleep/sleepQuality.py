@@ -1,5 +1,7 @@
 from SmartSleep.db import get_db
 from flask import jsonify, Blueprint
+from datetime import datetime
+from datetime import timedelta
 
 bp = Blueprint("sleepQuality", __name__, url_prefix="/sleep")
 
@@ -81,9 +83,20 @@ def get_heartrates():
                                     ' ORDER BY sleep, time').fetchall()
 
         for i in range(len(all_heartrates)):
+            start_sleep_time = db.execute(f"SELECT timestamp"
+                                          " FROM start_to_sleep"
+                                          " WHERE id = ?", (all_heartrates[i]['sleep'],)
+                                          ).fetchone()
+
+            heartrate_time = datetime.strptime(all_heartrates[i]['time'], '%M:%S:00')
+
+            timestamp = start_sleep_time['timestamp'] + timedelta(minutes=heartrate_time.minute, seconds=heartrate_time.second)
+
             heartrates.append(
                 (all_heartrates[i]['heartrate'],
-                 all_heartrates[i]['sleep'])
+                 all_heartrates[i]['sleep'],
+                 timestamp
+                 ),
             )
 
         return jsonify({'status': heartrates}), 200

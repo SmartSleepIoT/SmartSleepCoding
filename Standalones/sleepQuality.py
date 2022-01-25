@@ -164,7 +164,7 @@ def get_heartrate_mean_for_night(i):
         heartrate_data
     ))
 
-    hrates = [x for (x, y) in filtered_heartrate_data]
+    hrates = [x for (x, y, z) in filtered_heartrate_data]
     if hrates:
         average = mean(hrates)
     else:
@@ -178,6 +178,81 @@ def get_list_heartrates():
     for i in range(get_nr_nights()):
         heartrates.append(get_heartrate_mean_for_night(i))
 
+    return heartrates
+
+
+def get_heartrate_interval(start_time, end_time):
+    def filter_heartrates(element):      # element = (heartrate, timestamp)
+        return True if start_time <= element[1] <= end_time else False
+
+    all_heartrates = requests.get('http://127.0.0.1:5000/sleep/all-heartrates')
+
+    if all_heartrates.status_code != 200:
+        print('Error at getting heartrates:', all_heartrates.text)
+        return -1
+
+    start_time = datetime.strptime(start_time, '%a, %d %b %Y %H:%M:%S %Z')
+    end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
+
+    data = all_heartrates.json()['status']
+    heartrates = [(value, datetime.strptime(timestamp, '%a, %d %b %Y %H:%M:%S %Z'))
+                  for (value, sleep_id, timestamp) in data]
+
+    heartrates_filtered = list(filter(filter_heartrates, heartrates))
+    heartrates = [value for (value, timestamp) in heartrates_filtered]
+    return heartrates
+
+
+def get_list_heartrates_mean_small_interval(start_time, end_time):
+    global time_interval
+    start_time = datetime.strptime(start_time, '%a, %d %b %Y %H:%M:%S %Z')
+    end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
+
+    heartrates = [0]
+    old_average = 0
+
+    # get the heartrates between moment X - time_interval and moment X
+    start_timestamp = start_time
+    end_timestamp = start_time + timedelta(minutes=time_interval)
+
+    while start_timestamp <= end_time:
+        str_start_timestamp = start_timestamp.strftime('%a, %d %b %Y %H:%M:%S %Z')
+        str_end_timestamp = end_timestamp.strftime('%a, %d %b %Y %H:%M:%S %Z')
+
+        # add the GMT if it doesnt exist
+        if str_start_timestamp.find("GMT") == -1:
+            str_start_timestamp += " GMT"
+        if str_end_timestamp.find("GMT") == -1:
+            str_end_timestamp += " GMT"
+
+        heartrate_values = get_heartrate_interval(str_start_timestamp, str_end_timestamp)
+        average_heartrate = old_average
+        if heartrate_values:
+            average_heartrate = mean(heartrate_values)
+
+        heartrates.append(average_heartrate)
+
+        start_timestamp = end_timestamp
+        end_timestamp += timedelta(minutes=time_interval)
+        old_average = average_heartrate
+
+    return heartrates
+
+
+def get_list_heartrates_mean_for_night(i):
+    all_sleep_intervals = requests.get('http://127.0.0.1:5000/sleep/all-sleep-intervals')
+
+    if all_sleep_intervals.status_code != 200:
+        print('Error:', all_sleep_intervals.text)
+        return []
+
+    data = all_sleep_intervals.json()['status']
+    if i >= len(data) or i < 0:
+        print('Error: night index not found')
+        return []
+
+    night = data[i]
+    heartrates = get_list_heartrates_mean_small_interval(night[0], night[1])
     return heartrates
 
 
@@ -242,14 +317,73 @@ def get_list_apnea_scores():
     return apnea_scores
 
 
+def get_apnea_score_for_list(lst):
+    score = 0
+    for apnea in lst:
+        score += apnea_score(apnea)
+
+    return score
+
+
+def get_list_apnea_scores_small_interval(start_time, end_time):
+    global time_interval
+    start_time = datetime.strptime(start_time, '%a, %d %b %Y %H:%M:%S %Z')
+    end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
+
+    apnea_scores = [0]
+
+    # get the nr of snores between moment X - time_interval and moment X
+    start_timestamp = start_time
+    end_timestamp = start_time + timedelta(minutes=time_interval)
+
+    while start_timestamp <= end_time:
+        str_start_timestamp = start_timestamp.strftime('%a, %d %b %Y %H:%M:%S %Z')
+        str_end_timestamp = end_timestamp.strftime('%a, %d %b %Y %H:%M:%S %Z')
+
+        # add the GMT if it doesnt exist
+        if str_start_timestamp.find("GMT") == -1:
+            str_start_timestamp += " GMT"
+        if str_end_timestamp.find("GMT") == -1:
+            str_end_timestamp += " GMT"
+
+        apneas = get_apnea_interval(str_start_timestamp, str_end_timestamp)
+        score = get_apnea_score_for_list(apneas)
+        apnea_scores.append(score)
+
+        start_timestamp = end_timestamp
+        end_timestamp += timedelta(minutes=time_interval)
+
+    return apnea_scores
+
+
+def get_list_apnea_score_for_night(i):
+    all_sleep_intervals = requests.get('http://127.0.0.1:5000/sleep/all-sleep-intervals')
+
+    if all_sleep_intervals.status_code != 200:
+        print('Error:', all_sleep_intervals.text)
+        return []
+
+    data = all_sleep_intervals.json()['status']
+    if i >= len(data) or i < 0:
+        print('Error: night index not found')
+        return []
+
+    night = data[i]
+    apneas = get_list_apnea_scores_small_interval(night[0], night[1])
+    return apneas
+
+
 print('-------------- PARAMETER INFORMATION FOR ONE NIGHT, SPLIT INTO SMALL INTERVALS --------------')
 print('SNORES')
 print(get_list_snore_for_night(2))
 
 print('HEARTRATE')
+print(get_list_heartrates_mean_for_night(2))
 
 print('APNEA')
+print(get_list_apnea_score_for_night(2))
 
+print()
 
 print('-------------- PARAMETER INFORMATION FOR EACH NIGHT, MULTIPLE NIGHTS --------------')
 

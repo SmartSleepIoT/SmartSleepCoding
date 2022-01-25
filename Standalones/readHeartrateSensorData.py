@@ -35,15 +35,16 @@ class ReadSensorsData:
         csv_reader = csv.DictReader(self.heartb)
         next(csv_reader)
         for line in csv_reader:
-           print(line['heartrate'], line['time'])
-           if line != "\n":
-            totals += 1
-            response = self.session.post(self.heartb_end_point + f"heartrate={line['heartrate']}&time={line['time']}")
-            if response.status_code != 200:
-                fails += 1
-            time.sleep(float(delay))
+            print(line['heartrate'], line['time'])
+            if line != "\n":
+                totals += 1
+                response = self.session.post(self.heartb_end_point + f"heartrate={line['heartrate']}&time={line['time']}")
+                if response.status_code != 200:
+                    fails += 1
+                time.sleep(float(delay))
             
         print(f"Posted data: total {totals} sent; {fails} fails")
+
 
 data = ReadSensorsData("Heartrate.csv")
 data.register_login()
