@@ -40,6 +40,6 @@ def test_snoring(client, auth):
     response = client.post(f"/config/wake_up_hour?wake_up_hour={wake_up_time}")
     assert response.status_code == 200
 
-    time.sleep(61)
+    time.sleep(6)
     client_mqtt.disconnect()
     client_mqtt.loop_stop()

@@ -88,7 +88,7 @@ def get_heartrates():
                                           " WHERE id = ?", (all_heartrates[i]['sleep'],)
                                           ).fetchone()
 
-            heartrate_time = datetime.strptime(all_heartrates[i]['time'], '%M:%S:00')
+            heartrate_time = datetime.strptime(all_heartrates[i]['time'], '%M:%S:%y')
 
             timestamp = start_sleep_time['timestamp'] + timedelta(minutes=heartrate_time.minute, seconds=heartrate_time.second)
 
