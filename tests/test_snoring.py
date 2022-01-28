@@ -2,7 +2,6 @@ import time
 
 import paho.mqtt.client as paho
 from flask import json
-import runpy
 
 
 msg_nr = 0
@@ -101,3 +100,18 @@ def test_snoring_user_not_sleeping(client, auth):
 
     client_mqtt.disconnect()
     client_mqtt.loop_stop()
+
+
+def test_lift_pillow(client, auth):
+    auth.login()
+
+    response = client.get("/snoring/pillow-angle")
+    r_dict = json.loads(response.data)
+
+    if "user is not sleeping" in r_dict['status']:
+        assert response.status_code == 404
+
+    response = client.post("/config/start_to_sleep?sleep_now=True")
+    if response.status_code == 200:
+        response = client.get("/snoring/pillow-angle")
+        assert response.status_code == 200

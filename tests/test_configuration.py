@@ -1,5 +1,9 @@
+import time
+
+import flask
 import pytest
 from flask import json
+from unittest.mock import Mock, patch
 
 from SmartSleep.db import get_db
 
@@ -46,9 +50,10 @@ def test_current_config_after_insert(client, auth):
      "/pillow_angle",
      "/wake_up_hour",
      "/start_to_sleep",
-     "/time_slept")
+     "/time_slept",
+     "/snoring")
 )
-def test_get(client, auth, path):  # tests SET
+def test_get(client, auth, path):  # tests GET
     auth.login()
     response = client.get("config" + path)
     assert response.status_code == 200
@@ -89,7 +94,16 @@ def test_get(client, auth, path):  # tests SET
 
             ("/time_slept", "time_slept", "time", "10:20"),
             ("/time_slept", "time_slept", "time", "01:00"),
-            ("/time_slept", "time_slept", "time", "0:35")
+            ("/time_slept", "time_slept", "time", "0:35"),
+
+            ("/snoring", "snore", "snore_now", "True"),
+            ("/snoring", "snore", "snore_now", "False"),
+            ("/snoring", "snore", "snore_now", "true"),
+            ("/snoring", "snore", "snore_now", "false"),
+            ("/snoring", "snore", "snore_now", 1),
+            ("/snoring", "snore", "snore_now", 0),
+            ("/snoring", "snore", "snore_now", ''),
+            ("/snoring", "snore", "snore_now", 'abc')
     ),
 )
 def test_set(client, auth, app, path, table_name, arg_name, value):  # tests POST with correct values
@@ -129,6 +143,18 @@ def test_set(client, auth, app, path, table_name, arg_name, value):  # tests POS
                 else:
                     assert f'{arg_name} successfully set' in r_dict['status']
                     inserted = True
+        elif table_name == 'snore':
+            if value == '' or value is None:
+                assert response.status_code == 403
+                assert r_dict['status'] == 'snore_now is required'
+            elif str(value).lower() in ['true', '1']:
+                value = 1
+                assert r_dict['data']['value'] == value
+            elif str(value).lower() in ['false', '0']:
+                value = 0
+                assert r_dict['data']['value'] == value
+            else:
+                assert response.status_code == 422
         else:
             assert r_dict['data']['value'] == value
 
@@ -161,7 +187,8 @@ def test_set(client, auth, app, path, table_name, arg_name, value):  # tests POS
             ("/waking_mode", "waking_mode", "waking_mode"),
             ("/pillow_angle", "pillow_angle", "pillow_angle"),
             ("/time_slept", "time_slept", "time"),
-            ("/sound", "sounds_recorded", "sensor")
+            ("/sound", "sounds_recorded", "sensor"),
+            ("/snoring", "snore", "snore_now")
     ),
 )
 def test_set_required_param(client, auth, path, table_name, arg_name):  # tests POST with missing required params
@@ -177,7 +204,7 @@ def test_set_required_param(client, auth, path, table_name, arg_name):  # tests 
     (
             ("/waking_mode", "waking_mode", "waking_mode", "X"),
             ("/waking_mode", "waking_mode", "waking_mode", "VM"),
-     )
+    )
 )
 # tests POST with wrong values for waking_mode
 def test_set_waking_mode_validations(client, auth, path, table_name, arg_name, value):
@@ -254,6 +281,37 @@ def test_set_start_to_sleep_validations(client, auth, path, table_name, arg_name
 
 
 @pytest.mark.parametrize(
+    ("path", "table_name", "arg_name", "value"),
+    (
+            ("/start_to_sleep", "start_to_sleep", "sleep_now", "True"),
+            ("/start_to_sleep", "start_to_sleep", "sleep_now", "0")
+    )
+)
+def test_set_duplicate_start_to_sleep(client, auth, path, table_name, arg_name, value):
+    auth.login()
+    if value.lower() in ['0', 'false']:
+        response = client.post(f'/config{path}?{arg_name}={value}')
+        assert response.status_code == 403
+        r_dict = json.loads(response.data)
+        assert "Operation failed: Cannot wake up if you didn\'t sleep before" in r_dict['status']
+
+        response = client.post(f'/config{path}?{arg_name}=True')
+        assert response.status_code == 200
+
+        response = client.post(f'/config{path}?{arg_name}={value}')
+        assert response.status_code == 200
+        time.sleep(1)
+
+    response = client.post(f'/config{path}?{arg_name}={value}')
+    assert response.status_code == 200
+    time.sleep(1)
+    response = client.post(f'/config{path}?{arg_name}={value}')
+    assert response.status_code == 403
+    r_dict = json.loads(response.data)
+    assert "Operation failed: Already set this value" in r_dict['status']
+
+
+@pytest.mark.parametrize(
     ("path", "table_name"),
     (
             ("/temp", "temperature"),
@@ -263,7 +321,6 @@ def test_set_start_to_sleep_validations(client, auth, path, table_name, arg_name
             ("/start_to_sleep", "start_to_sleep"),
             ("/time_slept", "time_slept"),
             ("/pillow_angle", "pillow_angle"),
-
     ),
 )
 def test_delete(client, auth, app, path, table_name):  # tests DELETE
@@ -281,3 +338,65 @@ def test_delete(client, auth, app, path, table_name):  # tests DELETE
 def test_login_required(client, path):
     response = client.get("/config" + path)
     assert response.status_code == 403
+
+
+@pytest.mark.parametrize(
+    ("table_name", "arg_name", "value"),
+    (
+        ("temperature_system_levels", "temperature_system_level", ""),
+        ("temperature_system_levels", "temperature_system_level", -7),
+        ("temperature_system_levels", "temperature_system_level", 5),
+        ("temperature_system_levels", "temperature_system_level", "-11"),
+    )
+)
+def test_temperature_system_level(client, auth, table_name, arg_name, value):
+    auth.login()
+
+    response = client.get("config/temperature_system_level")
+    assert response.status_code == 200
+
+    response = client.post(f"config/temperature_system_level?{arg_name}={value}")
+    r_dict = json.loads(response.data)
+
+    if not value:
+        assert response.status_code == 403
+        assert f"{arg_name} is required" in r_dict['status']
+    elif int(value) < -6 or int(value) > 6:
+        assert response.status_code == 422
+        possible_values = list(range(-6, 7))
+        assert f"{arg_name} must be one of the following {possible_values}" in r_dict['status']
+    else:
+        assert response.status_code == 200
+        assert f"{arg_name} successfully set" in r_dict['status']
+
+
+@pytest.mark.parametrize(
+    ("table_name", "arg_name", "value"),
+    (
+        ("apnea", "apnea", ""),
+        ("apnea", "apnea", "abc"),
+        ("apnea", "apnea", 12),
+        ("apnea", "apnea", "Moderate"),
+        ("apnea", "apnea", "severe"),
+    )
+)
+def test_apnea(client, auth, table_name, arg_name, value):
+    auth.login()
+
+    response = client.get("config/apnea")
+    assert response.status_code == 200
+
+    response = client.post(f"config/apnea?{arg_name}={value}")
+    r_dict = json.loads(response.data)
+    possible_values = ["none", "mild", "moderate", "severe"]
+
+    if not value:
+        assert response.status_code == 403
+        assert f"{arg_name} is required" in r_dict['status']
+    elif str(value).lower() not in possible_values:
+        assert response.status_code == 422
+        assert f"{arg_name} must be one of the following {possible_values}"
+    else:
+        assert response.status_code == 200
+        assert f"{arg_name} successfully set" in r_dict['status']
+

@@ -14,11 +14,21 @@ DROP TABLE IF EXISTS heartrate;
 DROP TABLE IF EXISTS temperatures_recorded;
 DROP TABLE IF EXISTS temperature_system_levels;
 DROP TABLE IF EXISTS apnea;
+DROP TABLE IF EXISTS post;
 
 CREATE TABLE user(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL
+);
+
+CREATE TABLE post(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL,
+    author_id INTEGER,
+    FOREIGN KEY (author_id) REFERENCES user(id)
+
 );
 
 CREATE TABLE temperature (

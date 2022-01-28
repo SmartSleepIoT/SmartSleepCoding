@@ -203,6 +203,7 @@ def waking_mode():
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
 
+
 @bp.route("/temperature_system_level", methods=["GET", "POST"])
 @login_required
 def temperature_system_level():
@@ -224,33 +225,9 @@ def temperature_system_level():
         }), 200
     elif request.method == "POST":
         value = request.args.get(arg_name)
-        db = get_db()
-        possible_values = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
-        if not value:
-            return jsonify({'status': f"{arg_name} is required"}), 403
-        if int(value) not in possible_values:
-            return jsonify({'status': f"{arg_name} must be one of the following {possible_values}"}), 422
-        try:
-            value = int(value)
-            db.execute(
-                f"INSERT INTO {table_name} (value) VALUES (?)",
-                (value,)
-            )
-            db.commit()
-        except Exception as e:
-            return jsonify({'status': f"Operation failed: {e}"}), 403
-        committed_value = db.execute('SELECT *'
-                                     f' FROM {table_name}'
-                                     ' ORDER BY timestamp DESC').fetchone()
 
-        return jsonify({
-            'status': f'{arg_name} successfully set',
-            'data': {
-                'id': committed_value['id'],
-                'value': committed_value['value'],
-                'timestamp': committed_value['timestamp']
-            }
-        }), 200
+        return post_temperature_system_level(value)
+
 
 @bp.route("/apnea", methods=["GET", "POST"])
 @login_required
@@ -277,7 +254,7 @@ def apnea():
         possible_values = ["none", "mild", "moderate", "severe"]
         if not value:
             return jsonify({'status': f"{arg_name} is required"}), 403
-        if value not in possible_values:
+        if str(value).lower() not in possible_values:
             return jsonify({'status': f"{arg_name} must be one of the following {possible_values}"}), 422
         try:
             db.execute(
@@ -334,68 +311,37 @@ def post_pillow_angle(value):
         }
     }), 200
 
+
 def post_temperature_system_level(value):
     arg_name = "temperature_system_level"
     table_name = "temperature_system_levels"
     possible_values = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+
     if not value:
         return jsonify({'status': f"{arg_name} is required"}), 403
-    try:
-        if value != "0" and int(value) not in possible_values:
-            return jsonify({'status': f"Wrong angle format, must be an int number in {possible_values}"}), 422
-    except ValueError:
-        return jsonify({'status': "Wrong angle format, must be int number "}), 422
 
     value = int(value)
     db = get_db()
 
     try:
+        if int(value) not in possible_values:
+            return jsonify({'status': f"{arg_name} must be one of the following {possible_values}"}), 422
+
+        value = int(value)
         db.execute(
             f"INSERT INTO {table_name} (value) VALUES (?)",
             (value,)
         )
         db.commit()
-    except Exception as e:
-        return jsonify({'status': f"Operation failed: {e}"}), 403
-    committed_value = db.execute('SELECT *'
-                                 f' FROM {table_name}'
-                                 ' ORDER BY timestamp DESC').fetchone()
-    return jsonify({
-        'status': f'{arg_name} successfully set',
-        'data': {
-            'id': committed_value['id'],
-            'value': committed_value['value'],
-            'timestamp': committed_value['timestamp']
-        }
-    }), 200
-
-
-def post(value):
-    arg_name = "pillow_angle"
-    table_name = "pillow_angle"
-    if not value:
-        return jsonify({'status': f"{arg_name} is required"}), 403
-    try:
-        if value != "0" and not float(value):
-            return jsonify({'status': "Wrong angle format, must be float number "}), 422
     except ValueError:
-        return jsonify({'status': "Wrong angle format, must be float number "}), 422
-
-
-
-    db = get_db()
-
-    try:
-        db.execute(
-            f"INSERT INTO {table_name} (value) VALUES (?)",
-            (value,)
-        )
-        db.commit()
+        return jsonify({'status': "Wrong format, must be int number "}), 422
     except Exception as e:
         return jsonify({'status': f"Operation failed: {e}"}), 403
+
     committed_value = db.execute('SELECT *'
                                  f' FROM {table_name}'
                                  ' ORDER BY timestamp DESC').fetchone()
+
     return jsonify({
         'status': f'{arg_name} successfully set',
         'data': {
@@ -618,6 +564,7 @@ def start_to_sleep():
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
 
+
 @bp.route("/sound", methods=["POST"])
 @login_required
 def sound():
@@ -788,11 +735,11 @@ def create():
     return render_template("blog/create.html")
 
 
-@bp.route("/<int:id>/update", methods=("GET", "POST"))
+@bp.route("/<int:postid>/update", methods=("GET", "POST"))
 @login_required
-def update(id):
+def update(postid):
     """Update a post if the current user is the author."""
-    post = get_post(id)
+    post = get_post(postid)
 
     if request.method == "POST":
         title = request.form["title"]
@@ -807,7 +754,7 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                "UPDATE post SET title = ?, body = ? WHERE id = ?", (title, body, id)
+                "UPDATE post SET title = ?, body = ? WHERE id = ?", (title, body, postid)
             )
             db.commit()
             return redirect(url_for("blog.index"))
@@ -815,17 +762,17 @@ def update(id):
     return render_template("blog/update.html", post=post)
 
 
-@bp.route("/<int:id>/delete", methods=("POST",))
+@bp.route("/<int:postid>/delete", methods=("POST",))
 @login_required
-def delete(id):
+def delete(postid):
     """Delete a post.
 
     Ensures that the post exists and that the logged in user is the
     author of the post.
     """
-    get_post(id)
+    get_post(postid)
     db = get_db()
-    db.execute("DELETE FROM post WHERE id = ?", (id,))
+    db.execute("DELETE FROM post WHERE id = ?", (postid,))
     db.commit()
     return redirect(url_for("blog.index"))
 
