@@ -1,9 +1,7 @@
 import time
 
-import flask
 import pytest
 from flask import json
-from unittest.mock import Mock, patch
 
 from SmartSleep.db import get_db
 

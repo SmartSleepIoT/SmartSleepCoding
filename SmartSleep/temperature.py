@@ -21,8 +21,8 @@ def warmTemperature():
         return jsonify(msg), 404
 
     current_temperature_level = db.execute('SELECT value'
-                               ' FROM temperature_system_levels'
-                               ' ORDER BY timestamp DESC').fetchone()
+                                           ' FROM temperature_system_levels'
+                                           ' ORDER BY timestamp DESC').fetchone()
     if current_temperature_level is None:
         new_temperature_level = 1
     else:
