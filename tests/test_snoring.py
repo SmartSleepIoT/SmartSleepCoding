@@ -115,3 +115,4 @@ def test_lift_pillow(client, auth):
     if response.status_code == 200:
         response = client.get("/snoring/pillow-angle")
         assert response.status_code == 200
+

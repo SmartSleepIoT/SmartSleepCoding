@@ -39,16 +39,26 @@ class WakeUpScheduler:
         pubMQTT.publish(json.dumps(msg), "SmartSleep/WakeUp")
         self.set_time_slept()
 
-    def schedule_wake_up(self, h, min, mode, started_to_sleep_time):
+    def schedule_wake_up(self, interval, mode, started_to_sleep_time, optimal = False):
         try:
-            self.setter(h, min, mode, started_to_sleep_time)
-            self.scheduler.add_job(func=self.wake_up, trigger="cron", hour=h, minute=min, id='wake_up_user')
-            self.scheduler.start()
+            if optimal: 
+                start, end = interval
+                msg = {'start': start,
+                       'end': end, 
+                       'start_to_sleep': started_to_sleep_time}
+                pubMQTT.publish(json.dumps(msg), "SmartSleep/OptimalWakeup")
+                
+            else:
+                (h, min) = interval[0]
+                self.setter(h, min, mode, started_to_sleep_time)
+                self.scheduler.add_job(func=self.wake_up, trigger="cron", hour=h, minute=min, id='wake_up_user')
+                self.scheduler.start()
         except (apscheduler.schedulers.SchedulerAlreadyRunningError, apscheduler.jobstores.base.ConflictingIdError):
-            self.setter(h, min, mode, started_to_sleep_time)
-            self.scheduler.reschedule_job(trigger="cron", hour=h, minute=min, job_id='wake_up_user')
-            msg = {'message': "Enabling wake up mode"}, 200
-            pubMQTT.publish(json.dumps(msg), "SmartSleep/WakeUp")
+            if not optimal: 
+                self.setter(h, min, mode, started_to_sleep_time)
+                self.scheduler.reschedule_job(trigger="cron", hour=h, minute=min, job_id='wake_up_user')
+                msg = {'message': "Enabling wake up mode"}, 200
+                pubMQTT.publish(json.dumps(msg), "SmartSleep/WakeUp")
                 
     def delete_wake_up_schedule(self):
         try:

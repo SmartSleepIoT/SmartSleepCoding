@@ -15,11 +15,13 @@ DROP TABLE IF EXISTS temperatures_recorded;
 DROP TABLE IF EXISTS temperature_system_levels;
 DROP TABLE IF EXISTS apnea;
 DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS sleep_stage;
 
 CREATE TABLE user(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  age INTEGER
 );
 
 CREATE TABLE post(
@@ -78,7 +80,15 @@ CREATE TABLE heartrate (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     heartrate INTEGER NOT NULL,
     sleep INTEGER,
-    time TEXT,
+    time timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(sleep) REFERENCES start_to_sleep(id)
+);
+
+CREATE TABLE sleep_stage (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    stage TEXT CHECK (stage IN ('LIGHT','DEEP','REM')),
+    sleep INTEGER,
+    time timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(sleep) REFERENCES start_to_sleep(id)
 );
 

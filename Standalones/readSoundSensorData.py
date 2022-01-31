@@ -31,7 +31,7 @@ class ReadSensorsData:
         fails = 0
         totals = 0
 
-        r = self.session.post(self.sleep_end_point + f"sleep_now=True")
+        r = self.session.post(self.sleep_end_point + f"sleep_now=True&time=00:21:00")
         if r.status_code != 200:
             print('Couldn\'t set start_to_sleep')
 
