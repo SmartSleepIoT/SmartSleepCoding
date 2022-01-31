@@ -7,6 +7,7 @@ from SmartSleep import pubMQTT
 
 bp = Blueprint("temperature", __name__, url_prefix="/temperature")
 
+
 @bp.route("/warm-temperature", methods=["GET"])
 def warmTemperature():
     # see if user is sleeping
@@ -20,8 +21,8 @@ def warmTemperature():
         return jsonify(msg), 404
 
     current_temperature_level = db.execute('SELECT value'
-                               ' FROM temperature_system_levels'
-                               ' ORDER BY timestamp DESC').fetchone()
+                                           ' FROM temperature_system_levels'
+                                           ' ORDER BY timestamp DESC').fetchone()
     if current_temperature_level is None:
         new_temperature_level = 1
     else:
@@ -36,6 +37,7 @@ def warmTemperature():
         pubMQTT.publish(json.dumps(msg), "SmartSleep/TemperatureSensor")
 
         return jsonify(msg), 200
+
 
 @bp.route("/cool-temperature", methods=["GET"])
 def coolTemperature():

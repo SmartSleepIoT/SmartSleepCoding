@@ -1,4 +1,6 @@
-import requests, csv
+import csv
+import requests
+
 from SmartSleep import secrets
 
 header = {'Authorization': f'Bearer {secrets.access_token}'}
@@ -6,7 +8,7 @@ response = requests.get(f'https://api.fitbit.com/1/user/{secrets.user_id}/activi
 response = response['activities-heart-intraday']['dataset']
 
 f = open('SensorsData/Heartrate.csv', 'w')
-writer =  csv.writer(f)
+writer = csv.writer(f)
 csvHeader = ['time', 'heartrate']
 writer.writerow(csvHeader)
 for data in response:

@@ -33,13 +33,16 @@ def create_app(test_config=None):
         return "Hello, World!"
 
     # register the database commands
-    from SmartSleep import db, auth, blog, configuration, snoring, activity, temperature, userConfiguration
+
+    from SmartSleep import db, auth, blog, configuration, snoring, activity, temperature, userConfiguration, sleepQuality
+
     db.init_app(app)
     # apply the blueprints to the app
     app.register_blueprint(auth.bp)
     app.register_blueprint(blog.bp)
     app.register_blueprint(configuration.bp)
     app.register_blueprint(snoring.bp)
+    app.register_blueprint(sleepQuality.bp)
     app.register_blueprint(activity.bp)
     app.register_blueprint(temperature.bp)
     app.register_blueprint(userConfiguration.bp)

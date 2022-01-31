@@ -205,6 +205,7 @@ def waking_mode():
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
 
+
 @bp.route("/temperature_system_level", methods=["GET", "POST"])
 @login_required
 def temperature_system_level():
@@ -226,33 +227,9 @@ def temperature_system_level():
         }), 200
     elif request.method == "POST":
         value = request.args.get(arg_name)
-        db = get_db()
-        possible_values = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
-        if not value:
-            return jsonify({'status': f"{arg_name} is required"}), 403
-        if int(value) not in possible_values:
-            return jsonify({'status': f"{arg_name} must be one of the following {possible_values}"}), 422
-        try:
-            value = int(value)
-            db.execute(
-                f"INSERT INTO {table_name} (value) VALUES (?)",
-                (value,)
-            )
-            db.commit()
-        except Exception as e:
-            return jsonify({'status': f"Operation failed: {e}"}), 403
-        committed_value = db.execute('SELECT *'
-                                     f' FROM {table_name}'
-                                     ' ORDER BY timestamp DESC').fetchone()
 
-        return jsonify({
-            'status': f'{arg_name} successfully set',
-            'data': {
-                'id': committed_value['id'],
-                'value': committed_value['value'],
-                'timestamp': committed_value['timestamp']
-            }
-        }), 200
+        return post_temperature_system_level(value)
+
 
 @bp.route("/apnea", methods=["GET", "POST"])
 @login_required
@@ -279,7 +256,7 @@ def apnea():
         possible_values = ["none", "mild", "moderate", "severe"]
         if not value:
             return jsonify({'status': f"{arg_name} is required"}), 403
-        if value not in possible_values:
+        if str(value).lower() not in possible_values:
             return jsonify({'status': f"{arg_name} must be one of the following {possible_values}"}), 422
         try:
             db.execute(
@@ -314,8 +291,6 @@ def post_pillow_angle(value):
     except ValueError:
         return jsonify({'status': "Wrong angle format, must be float number "}), 422
 
-
-
     db = get_db()
 
     try:
@@ -337,69 +312,38 @@ def post_pillow_angle(value):
             'timestamp': committed_value['timestamp']
         }
     }), 200
+
 
 def post_temperature_system_level(value):
     arg_name = "temperature_system_level"
     table_name = "temperature_system_levels"
     possible_values = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
+
     if not value:
         return jsonify({'status': f"{arg_name} is required"}), 403
-    try:
-        if value != "0" and int(value) not in possible_values:
-            return jsonify({'status': f"Wrong angle format, must be an int number in {possible_values}"}), 422
-    except ValueError:
-        return jsonify({'status': "Wrong angle format, must be int number "}), 422
 
     value = int(value)
     db = get_db()
 
     try:
+        if int(value) not in possible_values:
+            return jsonify({'status': f"{arg_name} must be one of the following {possible_values}"}), 422
+
+        value = int(value)
         db.execute(
             f"INSERT INTO {table_name} (value) VALUES (?)",
             (value,)
         )
         db.commit()
-    except Exception as e:
-        return jsonify({'status': f"Operation failed: {e}"}), 403
-    committed_value = db.execute('SELECT *'
-                                 f' FROM {table_name}'
-                                 ' ORDER BY timestamp DESC').fetchone()
-    return jsonify({
-        'status': f'{arg_name} successfully set',
-        'data': {
-            'id': committed_value['id'],
-            'value': committed_value['value'],
-            'timestamp': committed_value['timestamp']
-        }
-    }), 200
-
-
-def post(value):
-    arg_name = "pillow_angle"
-    table_name = "pillow_angle"
-    if not value:
-        return jsonify({'status': f"{arg_name} is required"}), 403
-    try:
-        if value != "0" and not float(value):
-            return jsonify({'status': "Wrong angle format, must be float number "}), 422
     except ValueError:
-        return jsonify({'status': "Wrong angle format, must be float number "}), 422
-
-
-
-    db = get_db()
-
-    try:
-        db.execute(
-            f"INSERT INTO {table_name} (value) VALUES (?)",
-            (value,)
-        )
-        db.commit()
+        return jsonify({'status': "Wrong format, must be int number "}), 422
     except Exception as e:
         return jsonify({'status': f"Operation failed: {e}"}), 403
+
     committed_value = db.execute('SELECT *'
                                  f' FROM {table_name}'
                                  ' ORDER BY timestamp DESC').fetchone()
+
     return jsonify({
         'status': f'{arg_name} successfully set',
         'data': {
@@ -571,6 +515,49 @@ def start_to_sleep():
                 value = 0
 
         try:
+            # cannot set sleep value if the last value set was the same
+            last_value = db.execute('SELECT *'
+                                    f' FROM {table_name}'
+                                    f' ORDER BY timestamp DESC').fetchone()
+            if last_value is not None:
+                last_value = last_value['value']
+
+                if last_value == value:
+                    raise Exception('Already set this value')
+            elif value == 0:
+                raise Exception('Cannot wake up if you didn\'t sleep before')
+
+           
+
+            # if user sets start_to_sleep to 0 -> he woke up
+            # so automatically set time_slept
+            if value == 0:
+                # get the last timestamp when user went to sleep
+                last_started_sleeping = db.execute('SELECT *'
+                                                   f' FROM {table_name}'
+                                                   ' WHERE value = 1'
+                                                   ' ORDER BY timestamp DESC').fetchone()
+
+                # get the current timestamp when user woke up
+                last_wake_up = db.execute('SELECT *'
+                                          f' FROM {table_name}'
+                                          ' WHERE value = 0'
+                                          ' ORDER BY timestamp DESC').fetchone()
+
+                last_started_sleeping = last_started_sleeping['timestamp']
+                last_wake_up = last_wake_up['timestamp']
+
+                # calculate the time slept
+                time_slept = last_wake_up - last_started_sleeping
+                hours = time_slept.seconds // 3600 + time_slept.days * 24
+                minutes = time_slept.seconds // 60 % 60
+
+                db.execute(
+                    f"INSERT INTO time_slept (hours, minutes) VALUES (?, ?)",
+                    (hours, minutes)
+                )
+
+
             if time: 
                 db.execute(
                     f"INSERT INTO {table_name} (value, timestamp) VALUES (?, ?)",
@@ -584,6 +571,7 @@ def start_to_sleep():
             db.commit()
         except Exception as e:
             return jsonify({'status': f"Operation failed: {e}"}), 403
+
         committed_value = db.execute('SELECT *'
                                      f' FROM {table_name}'
                                      ' ORDER BY timestamp DESC').fetchone()
@@ -606,6 +594,7 @@ def start_to_sleep():
                                          ' ORDER BY timestamp DESC').fetchone()
         if current_value is None:
             return jsonify({'status': f'No {arg_name} ever set'}), 200
+
         return jsonify({
             'status': f'{arg_name} successfully retrieved',
             'data': {
@@ -614,11 +603,13 @@ def start_to_sleep():
                 'timestamp': current_value['timestamp']
             }
         }), 200
+
     if request.method == "DELETE":
         db = get_db()
         db.execute(f'DELETE FROM {table_name}')
         db.commit()
         return jsonify({'status': f'All values successfully deleted'}), 200
+
 
 @bp.route("/sound", methods=["POST"])
 @login_required
@@ -732,101 +723,62 @@ def post_hours_slept(value):
     }), 200
 
 
-def get_post(id, check_author=True):
-    """Get a post and its author by id.
 
-    Checks that the id exists and optionally that the current user is
-    the author.
-
-    :param id: id of post to get
-    :param check_author: require the current user to be the author
-    :return: the post with author information
-    :raise 404: if a post with the given id doesn't exist
-    :raise 403: if the current user isn't the author
-    """
-    post = (
-        get_db()
-            .execute(
-            "SELECT p.id, title, body, created, author_id, username"
-            " FROM post p JOIN user u ON p.author_id = u.id"
-            " WHERE p.id = ?",
-            (id,),
-        )
-            .fetchone()
-    )
-
-    if post is None:
-        abort(404, f"Post id {id} doesn't exist.")
-
-    if check_author and post["author_id"] != g.user["id"]:
-        abort(403)
-
-    return post
-
-
-@bp.route("/create", methods=("GET", "POST"))
-@login_required
-def create():
-    """Create a new post for the current user."""
-    if request.method == "POST":
-        title = request.form["title"]
-        body = request.form["body"]
-        error = None
-
-        if not title:
-            error = "Title is required."
-
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                "INSERT INTO post (title, body, author_id) VALUES (?, ?, ?)",
-                (title, body, g.user["id"]),
-            )
-            db.commit()
-            return redirect(url_for("blog.index"))
-
-    return render_template("blog/create.html")
-
-
-@bp.route("/<int:id>/update", methods=("GET", "POST"))
-@login_required
-def update(id):
-    """Update a post if the current user is the author."""
-    post = get_post(id)
-
-    if request.method == "POST":
-        title = request.form["title"]
-        body = request.form["body"]
-        error = None
-
-        if not title:
-            error = "Title is required."
-
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                "UPDATE post SET title = ?, body = ? WHERE id = ?", (title, body, id)
-            )
-            db.commit()
-            return redirect(url_for("blog.index"))
-
-    return render_template("blog/update.html", post=post)
-
-
-@bp.route("/<int:id>/delete", methods=("POST",))
-@login_required
-def delete(id):
-    """Delete a post.
-
-    Ensures that the post exists and that the logged in user is the
-    author of the post.
-    """
-    get_post(id)
+@bp.route('/snoring', methods=('GET', 'POST'))
+def snoring():
+    table_name = 'snore'
+    arg_name = 'snore_now'
     db = get_db()
-    db.execute("DELETE FROM post WHERE id = ?", (id,))
-    db.commit()
-    return redirect(url_for("blog.index"))
+
+    if request.method == 'GET':
+        current_value = db.execute('SELECT *'
+                                   f' FROM {table_name}'
+                                   ' ORDER BY timestamp DESC').fetchone()
+        if current_value is None:
+            return jsonify({'status': f'No {arg_name} ever set'}), 200
+
+        return jsonify({
+            'status': f'{arg_name} successfully retrieved',
+            'data': {
+                'id': current_value['id'],
+                'value': current_value['value'],
+                'timestamp': current_value['timestamp']
+            }
+        }), 200
+
+    if request.method == 'POST':
+        value = request.args.get(arg_name)
+
+        if not value:
+            return jsonify({'status': f"{arg_name} is required"}), 403
+        else:
+            val, msg = boolean_validation(value)
+            if not val:
+                return jsonify({'status': f"{msg}"}), 422
+
+            elif msg == "true":
+                value = 1
+            else:
+                value = 0
+
+        try:
+            db.execute(
+                f"INSERT INTO {table_name} (value) VALUES (?)",
+                (value,)
+            )
+            db.commit()
+        except Exception as e:
+            return jsonify({'status': f"Operation failed: {e}"}), 403
+
+        committed_value = db.execute('SELECT *'
+                                     f' FROM {table_name}'
+                                     ' ORDER BY timestamp DESC').fetchone()
+
+        return jsonify({
+            'status': f'{arg_name} successfully set',
+            'data': {
+                'id': committed_value['id'],
+                'value': committed_value['value'],
+                'timestamp': committed_value['timestamp']
+            }
+        }), 200

@@ -1,12 +1,4 @@
-import time
-
-import pytest
-from flask import g
-from flask import session
-import paho.mqtt.client as paho
-from SmartSleep.db import get_db
 from flask import json
-import runpy
 
 
 msg_nr = 0

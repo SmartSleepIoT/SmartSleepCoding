@@ -1,13 +1,8 @@
 import time
 from datetime import datetime, timedelta
 
-import pytest
-from flask import g
-from flask import session
 import paho.mqtt.client as paho
-from SmartSleep.db import get_db
 from flask import json
-import runpy
 
 
 msg_nr = 0
@@ -45,7 +40,6 @@ def test_snoring(client, auth):
     response = client.post(f"/config/wake_up_hour?wake_up_hour={wake_up_time}")
     assert response.status_code == 200
 
-    time.sleep(61)
+    time.sleep(6)
     client_mqtt.disconnect()
     client_mqtt.loop_stop()
-

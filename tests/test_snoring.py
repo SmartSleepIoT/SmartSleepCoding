@@ -1,12 +1,7 @@
 import time
 
-import pytest
-from flask import g
-from flask import session
 import paho.mqtt.client as paho
-from SmartSleep.db import get_db
 from flask import json
-import runpy
 
 
 msg_nr = 0
@@ -36,6 +31,8 @@ def test_snoring(client, auth):
     global messages
     messages = ['45.05', '45.05', '45.05', '45.05', 'Lifting up pillow position to 10',
                 'Lifted up pillow position to 10', '46.00']
+
+    # runpy.run_path('./Standalones/snoring.py')  # TO DO: remove this when script to load standalones when  app starts is made
 
     time.sleep(2)
 
@@ -73,6 +70,8 @@ def test_snoring_user_not_sleeping(client, auth):
     global messages
     messages = ['45.05', '45.05', '45.05', '45.05', '46.00']
 
+    # runpy.run_path('./Standalones/snoring.py')  # TO DO: remove this when script to load standalones when  app starts is made
+    
     time.sleep(2)
 
     client_mqtt = paho.Client("client-test-snoring")
@@ -81,7 +80,7 @@ def test_snoring_user_not_sleeping(client, auth):
     client_mqtt.loop_start()
     client_mqtt.subscribe("SmartSleep/SoundSensor")
     auth.login()
-    response = client.post(f"/config/start_to_sleep?sleep_now={False}")
+    response = client.post(f"/config/start_to_sleep?sleep_now={True}")
     assert response.status_code == 200
     response = client.post("/config/sound?sensor=45.05")
     assert response.status_code == 200
@@ -101,3 +100,19 @@ def test_snoring_user_not_sleeping(client, auth):
 
     client_mqtt.disconnect()
     client_mqtt.loop_stop()
+
+
+def test_lift_pillow(client, auth):
+    auth.login()
+
+    response = client.get("/snoring/pillow-angle")
+    r_dict = json.loads(response.data)
+
+    if "user is not sleeping" in r_dict['status']:
+        assert response.status_code == 404
+
+    response = client.post("/config/start_to_sleep?sleep_now=True")
+    if response.status_code == 200:
+        response = client.get("/snoring/pillow-angle")
+        assert response.status_code == 200
+

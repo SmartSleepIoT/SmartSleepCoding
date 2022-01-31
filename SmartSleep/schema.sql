@@ -3,24 +3,34 @@
 
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS temperature;
-DROP TABLE IF EXISTS hours_slept;
 DROP TABLE IF EXISTS wake_up_hour;
 DROP TABLE IF EXISTS waking_mode;
 DROP TABLE IF EXISTS start_to_sleep;
 DROP TABLE IF EXISTS sounds_recorded;
 DROP TABLE IF EXISTS pillow_angle;
 DROP TABLE IF EXISTS time_slept;
+DROP TABLE IF EXISTS snore;
 DROP TABLE IF EXISTS heartrate;
 DROP TABLE IF EXISTS temperatures_recorded;
 DROP TABLE IF EXISTS temperature_system_levels;
 DROP TABLE IF EXISTS apnea;
+DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS sleep_stage;
 
-CREATE TABLE user (
+CREATE TABLE user(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
   age INTEGER
+);
+
+CREATE TABLE post(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL,
+    author_id INTEGER,
+    FOREIGN KEY (author_id) REFERENCES user(id)
+
 );
 
 CREATE TABLE temperature (
@@ -41,22 +51,24 @@ CREATE TABLE time_slept(
     minutes INTEGER NOT NULL,
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE wake_up_hour(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     value TIME,
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE pillow_angle(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     value FLOAT CHECK(value < 90 and value >=0),
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE waking_mode(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   value TEXT CHECK( value IN ('L','V','S', 'LVS', 'LV', 'LS', 'VS') )   NOT NULL DEFAULT 'LS', -- L = Lights, V = Vibrations, S = Sounds, rest represent the possible combinations
   timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE start_to_sleep(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -83,6 +95,12 @@ CREATE TABLE sleep_stage (
 CREATE TABLE sounds_recorded(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     value REAL NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE snore(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    value INTEGER NOT NULL CHECK(value IN (0,1)),
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
