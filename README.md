@@ -48,8 +48,8 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
-        <li><a href="">Analisys document</a></li>
-        <li><a href="">Interpretation and prioritization of requirements</a> </li>
+        <li><a href="#analysis-document">Analisys document</a></li>
+        <li><a href="#interpretation-and-prioritization-of-requirements">Interpretation and prioritization of requirements</a> </li>
       </ul>
     </li>
     <li>
@@ -57,7 +57,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
-        <li><a href="">Run the project</a></li>
+        <li><a href="#run-the-project">Run the project</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -91,7 +91,7 @@ Major frameworks/libraries used to bootstrap SmartSleep project:
 ### Analysis document
 Visit it [here.](https://docs.google.com/document/d/1VP0sfX9SmfXIrkstNCi3iEgfoAUV0fd1uXmyn17H-WI/edit?usp=sharing)
 
-### Interpretation and prioritization of requirements:
+### Interpretation and prioritization of requirements
 * [labels & grouping](https://github.com/SmartSleepIoT/SmartSleepCoding/issues)
 * [planning poker & MoSCoW Prioritization](https://github.com/SmartSleepIoT/SmartSleepCoding/projects/1)
 
