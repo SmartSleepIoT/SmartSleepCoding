@@ -18,8 +18,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/SmartSleepIoT">
+    <img src="Images/LogoSample_ByTailorBrands.jpg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">SmartSleep API</h3>
@@ -75,7 +75,6 @@
 
 "Smart Sleep" helps its users to get the perfect sleep, so they can relax and be full of energy in the morning. It's not just a product, it's a lifestyle that helps users keep up with the challenges of modern times. It's easy to use, adjusting to each user preferences and needs in real time.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
@@ -86,8 +85,6 @@ Major frameworks/libraries used to bootstrap SmartSleep project:
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/)
 * [Python](https://www.python.org/)
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 ### Analysis document
 Visit it [here.](https://docs.google.com/document/d/1VP0sfX9SmfXIrkstNCi3iEgfoAUV0fd1uXmyn17H-WI/edit?usp=sharing)
 
@@ -95,6 +92,7 @@ Visit it [here.](https://docs.google.com/document/d/1VP0sfX9SmfXIrkstNCi3iEgfoAU
 * [labels & grouping](https://github.com/SmartSleepIoT/SmartSleepCoding/issues)
 * [planning poker & MoSCoW Prioritization](https://github.com/SmartSleepIoT/SmartSleepCoding/projects/1)
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
