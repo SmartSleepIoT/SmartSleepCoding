@@ -19,7 +19,8 @@ DROP TABLE IF EXISTS sleep_stage;
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  age INTEGER
 );
 
 CREATE TABLE temperature (

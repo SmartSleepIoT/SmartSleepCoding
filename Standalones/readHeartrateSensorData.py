@@ -8,7 +8,6 @@ import json
 from paho.mqtt import client as mqtt_client
 from util.constants import TOPIC
 from threading import Thread
-from datetime import datetime
 
 from util.functions import set_hour_and_minute
 
@@ -58,7 +57,7 @@ class ReadSensorsData:
     def post_heartbeat_data(self):
         fails = 0
         totals = 0
-        delay = 1 # for development only
+        delay = 1    # for development only
         print("Posting hearbeat sensor data to endpoint")
         csv_reader = csv.DictReader(self.heartb)
         next(csv_reader)
@@ -82,9 +81,8 @@ class ReadSensorsData:
                 print("the status is", status)
                 self.status = status
                 if status:
-                    self.thread = Thread(target = self.post_heartbeat_data)
+                    self.thread = Thread(target=self.post_heartbeat_data)
                     self.thread.start()
-                
 
         client.subscribe(TOPIC['START_TO_SLEEP'])
         client.on_message = on_message
@@ -94,6 +92,6 @@ class ReadSensorsData:
         client = self.connect_mqtt()
         self.handle_connection(client)
         client.loop_forever()
-        
+
 sensor = ReadSensorsData("Heartrate.csv")
 sensor.run()
