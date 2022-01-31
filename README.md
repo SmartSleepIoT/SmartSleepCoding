@@ -203,6 +203,7 @@ Resources used:
 * [Tailor Brands](https://studio.tailorbrands.com/brands/)
 * [README Template](https://github.com/othneildrew/Best-README-Template)
 * [Fitbit sensors data](https://www.fitbit.com/global/eu/home)
+* [Postman](https://www.postman.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
