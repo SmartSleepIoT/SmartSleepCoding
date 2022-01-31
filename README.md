@@ -19,7 +19,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/SmartSleepIoT">
-    <img src="Images/LogoSample_ByTailorBrands.jpg" alt="Logo" width="80" height="80">
+    <img src="Images/LogoSample_ByTailorBrands.jpg" alt="Logo" width="200" height="200">
   </a>
 
   <h3 align="center">SmartSleep API</h3>
