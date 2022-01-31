@@ -1,0 +1,367 @@
+openapi: 3.0.0
+info:
+  title: Configuration
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000
+paths:
+  /auth/register:
+    post:
+      tags:
+        - General
+      summary: Register
+      requestBody:
+        content: {}
+      parameters:
+        - name: username
+          in: query
+          schema:
+            type: string
+          example: Diana
+        - name: password
+          in: query
+          schema:
+            type: string
+          example: 12345D
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/login:
+    post:
+      tags:
+        - General
+      summary: Login
+      requestBody:
+        content: {}
+      parameters:
+        - name: username
+          in: query
+          schema:
+            type: string
+          example: Diana
+        - name: password
+          in: query
+          schema:
+            type: string
+          example: 12345D
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/logout:
+    get:
+      tags:
+        - General
+      summary: Logout
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /config:
+    get:
+      tags:
+        - General
+      summary: Get Config
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /config/temp:
+    get:
+      tags:
+        - General
+      summary: Get Temperature
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - General
+      summary: Set Temperature
+      requestBody:
+        content: {}
+      parameters:
+        - name: temperature
+          in: query
+          schema:
+            type: integer
+          example: '24'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - General
+      summary: Delete Temperature
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /config/wake_up_hour:
+    get:
+      tags:
+        - General
+      summary: Get Wake Up Hour
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - General
+      summary: Set Wake Up Hour
+      requestBody:
+        content: {}
+      parameters:
+        - name: wake_up_hour
+          in: query
+          schema:
+            type: string
+          example: '15:46'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - General
+      summary: Delete Wake Up Hour
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /config/waking_mode:
+    get:
+      tags:
+        - General
+      summary: Get Waking Mode
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - General
+      summary: Set Waking Mode
+      requestBody:
+        content: {}
+      parameters:
+        - name: waking_mode
+          in: query
+          schema:
+            type: string
+          example: L
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - General
+      summary: Delete Waking Mode
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /config/pillow_angle:
+    get:
+      tags:
+        - General
+      summary: Get Pillow Angle
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - General
+      summary: Set Pillow Angle
+      requestBody:
+        content: {}
+      parameters:
+        - name: pillow_angle
+          in: query
+          schema:
+            type: integer
+          example: '67'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - General
+      summary: Delete Pillow Angle
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /config/start_to_sleep:
+    post:
+      tags:
+        - General
+      summary: Set Sleep Now
+      description: User sets if he/she goes to sleep now
+      requestBody:
+        content: {}
+      parameters:
+        - name: sleep_now
+          in: query
+          schema:
+            type: string
+          description: Boolean value 1, 0, true, false
+          example: 'False'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - General
+      summary: Get Sleep Now
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - General
+      summary: Delete Sleep Now
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /config/sound:
+    post:
+      tags:
+        - General
+      summary: Set sound sensor
+      requestBody:
+        content: {}
+      parameters:
+        - name: sensor
+          in: query
+          schema:
+            type: number
+          example: '45.05'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /config/time_slept:
+    post:
+      tags:
+        - General
+      summary: Set Time Slept
+      requestBody:
+        content: {}
+      parameters:
+        - name: time
+          in: query
+          schema:
+            type: string
+          description: hh:mm - meaning numbers of hours and minutes slept
+          example: '10:20'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - General
+      summary: Get Time Slept
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - General
+      summary: Delete Time Slept
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /config/snoring:
+    get:
+      tags:
+        - General
+      summary: Get Snoring Now
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - General
+      summary: Set Snoring Now
+      requestBody:
+        content: {}
+      parameters:
+        - name: snore_now
+          in: query
+          schema:
+            type: string
+          example: 'True'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /sleep/all-time-slept:
+    get:
+      tags:
+        - General
+      summary: All Time Slept
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /sleep/all-snores:
+    get:
+      tags:
+        - General
+      summary: Get All Snores
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /sleep/all-sleep-intervals:
+    get:
+      tags:
+        - General
+      summary: All Sleep Intervals
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
