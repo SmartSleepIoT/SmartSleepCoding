@@ -186,7 +186,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Nedelcu Radu - raduN@gmail.com
+Nedelcu Radu - radu.ndlcu@gmail.com
 
 Project Link: [https://github.com/SmartSleepIoT](https://github.com/SmartSleepIoT)
 
