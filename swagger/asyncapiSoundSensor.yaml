@@ -1,0 +1,35 @@
+asyncapi: 2.3.0
+info:
+  title: Sound sensor service
+  version: 1.0.0
+  description: This service consumes sound sensor data
+servers:
+  production:
+    url: broker.emqx.io
+    protocol: mqtt
+    description: Paho MQTT broker
+channels:
+  SmartSleep/SoundSensor:
+    subscribe:
+      summary: consumes sound sensor data to termine breaths and snoring
+      operationId: acceptSoundSensorData
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ReadsSoundSensorData'
+          - $ref: '#/components/messages/LiftingPillowToSolveSnoring'
+components:
+  messages:
+    ReadsSoundSensorData:
+      payload:
+        type: object
+        properties:
+          db:
+            type: string
+            description: decibels mesured
+    LiftingPillowToSolveSnoring:
+      payload:
+        type: object
+        properties:
+          status:
+            type: string
+            description: notify about lifting pillow

@@ -1,0 +1,35 @@
+asyncapi: 2.3.0
+info:
+  title: Temperature sensor service
+  version: 1.0.0
+  description: This service consumes temperature sensor data
+servers:
+  production:
+    url: broker.emqx.io
+    protocol: mqtt
+    description: Paho MQTT broker
+channels:
+  SmartSleep/TemperatureSensor:
+    subscribe:
+      summary: consumes temperature sensor data and turns on/off the heating system
+      operationId: acceptTemperatureSensorData
+      message:
+        oneOf:
+          - $ref: '#/components/messages/TemperatureSensorData'
+          - $ref: '#/components/messages/ModifyTemperatureSystemLevel'
+components:
+  messages:
+    TemperatureSensorData:
+      payload:
+        type: object
+        properties:
+          C:
+            type: string
+            description: celsius degrees mesured
+    ModifyTemperatureSystemLevel:
+      payload:
+        type: object
+        properties:
+          status:
+            type: string
+            description: notify about setting temperature system level to new temperature

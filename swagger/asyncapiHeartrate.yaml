@@ -1,0 +1,31 @@
+asyncapi: 2.3.0
+info:
+  title: Heart-rate sensor service
+  version: 1.0.0
+  description: This service consumes heart-rate sensor data
+servers:
+  production:
+    url: broker.emqx.io
+    protocol: mqtt
+    description: Paho MQTT broker
+channels:
+  SmartSleep/Heartrate:
+    subscribe:
+      summary: >-
+        consumes heart-rate sensor data and determines optimal wake up time
+        interval
+      operationId: acceptHeartRateSensorData
+      message:
+        $ref: '#/components/messages/HeartRateSensorData'
+components:
+  messages:
+    HeartRateSensorData:
+      payload:
+        type: object
+        properties:
+          heartrate:
+            type: string
+            description: heartrate mesured
+          time:
+            type: string
+            description: time when heartrate is mesured

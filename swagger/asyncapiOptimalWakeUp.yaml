@@ -1,0 +1,32 @@
+asyncapi: 2.3.0
+info:
+  title: Optimal wake up service
+  version: 1.0.0
+  description: This service optimal wakes the user up
+servers:
+  production:
+    url: broker.emqx.io
+    protocol: mqtt
+    description: Paho MQTT broker
+channels:
+  SmartSleep/OptimalWakeUp:
+    publish:
+      summary: inform user about optimal waking up time
+      operationId: emitUserOptimalWakeUpSignals
+      message:
+        $ref: '#/components/messages/UserOptimalWakeUp'
+components:
+  messages:
+    UserOptimalWakeUp:
+      payload:
+        type: object
+        properties:
+          start:
+            type: string
+            description: when the user should have started to sleep
+          end:
+            type: string
+            description: when the user should have woke up
+          start_to_sleep_time:
+            type: string
+            description: when the user actually started to sleep

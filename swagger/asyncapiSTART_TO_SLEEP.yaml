@@ -1,0 +1,29 @@
+asyncapi: 2.3.0
+info:
+  title: START_TO_SLEEP service
+  version: 1.0.0
+  description: This service informs when user started to sleep
+servers:
+  production:
+    url: broker.emqx.io
+    protocol: mqtt
+    description: Paho MQTT broker
+channels:
+  SmartSleep/START_TO_SLEEP:
+    publish:
+      summary: informs when user started to sleep
+      operationId: emitUserStartedToSleep
+      message:
+        $ref: '#/components/messages/UserStartedToSleep'
+components:
+  messages:
+    UserStartedToSleep:
+      payload:
+        type: object
+        properties:
+          status:
+            type: boolean
+            description: 0/ 1 if user starts/stops to sleep
+          time:
+            type: string
+            description: time when user starts/stops to sleep
