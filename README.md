@@ -58,6 +58,7 @@
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
         <li><a href="#run-the-project">Run the project</a></li>
+        <li><a href="#usage">Usage</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -132,6 +133,55 @@ start-app.sh
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
+### Usage
+
+1. Create a new user account 
+    ```shell script
+    POST http://127.0.0.1:5000/auth/register?username=NAME&password=PASS
+    ```
+     ! Password must be _at least 6 characters long, containing at least one upper letter and a digit._
+
+2. Login 
+    ```shell script
+   POST http://127.0.0.1:5000/auth/login?username=NAME&password=PASS
+    ```
+
+3. Set up user preferences: 
+    - wake up mode
+      ```shell script
+       POST http://127.0.0.1:5000/config/waking_mode?waking_mode=L
+      ```
+      _waking_mode_ can be:
+      - L - light
+      - V - vibrations
+      - S - sound
+      - LVS  - all of the above together
+      - LV - light & vibrations
+      - LS - light & sound
+      - VS - vibrations & sound
+      
+    - desired temperature - in _Celsius_ degrees 
+        ```shell script
+       POST http://127.0.0.1:5000/config/temp?temperature=22
+       ```
+     You can see your preferences using ``GET`` and delete them using ``DELETE``    
+   
+4. Set is sleeping to true
+    ```shell script 
+    POST http://127.0.0.1:5000/config/start_to_sleep?sleep_now=True
+   ```
+
+5. Set an alarm
+    ```shell script
+   POST http://127.0.0.1:5000/config/wake_up_hour?wake_up_hour=09:45
+   ```
+   ! use 24-based hour format _HH:MM_
+   <br/>
+   You can get your next alarm time using ``GET`` and delete it using ``DELETE``
+
+6. Enjoy our _SmartSleep_ api - solving snoring, monitoring your sleep and get statistics for each night.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
