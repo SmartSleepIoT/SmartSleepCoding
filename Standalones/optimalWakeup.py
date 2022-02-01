@@ -26,7 +26,7 @@ class OptimalWakupScheduler:
     waking_start_hour = 0
     waking_end_hour = 0
     start_to_sleep_hour  =  0
-    
+    waking_mode = 'LS'
 
     def connect_mqtt(self) -> mqtt_client:
         def on_connect(client, userdata, flags, rc):
@@ -41,6 +41,20 @@ class OptimalWakupScheduler:
         client.connect(self.broker, self.port)
         return client
 
+    def trigger_wakeup(self,current_time, client: mqtt_client):
+        print("Wake up!")
+        time_slept = current_time - self.start_to_sleep_hour
+        msg = {'message': "Wake up the user",
+               'waking up mode': self.waking_mode,
+               'time': str(current_time)}, 200
+        client.publish(json.dumps(msg), "SmartSleep/WakeUp")
+        total_sec = time_slept.total_seconds()
+        h = int(total_sec // 3600)
+        min = int((total_sec % 3600) // 60)
+        r = self.session.post(f"http://127.0.0.1:5000/config/time_slept?time={h}:{min}")
+        if r.status_code == 200:
+            msg = {'message': f"User slept for {h} hours and {min} minutes"}, 200
+            client.publish(json.dumps(msg), "SmartSleep/WakeUp")
 
     def handleConnection(self, client: mqtt_client):
         def on_message(client, userdata, msg):
@@ -63,14 +77,14 @@ class OptimalWakupScheduler:
                     if time >= self.waking_end_hour - timedelta(hours = 0, minutes = 1):
                         wakeUp = True    
                     if wakeUp:
-                        self.session.post(f"http://127.0.0.1:5000/config/start_to_sleep?sleep_now=False&time={str(time).split()[1]}")
-                        print("Wake up!")
+                        self.trigger_wakeup(time,client)
                         self.requestOptimal = False
                     
             elif msg.topic == "SmartSleep/OptimalWakeup":
                 self.waking_start_hour = str_to_datetime(json.loads(msg.payload)['start'])
                 self.waking_end_hour = str_to_datetime(json.loads(msg.payload)['end'])
                 self.start_to_sleep_hour = str_to_datetime(json.loads(msg.payload)['start_to_sleep'])
+                self.waking_mode = json.loads(msg.payload)['mode']
                 self.requestOptimal = True
                 print("Optimal wakeup request was sent.")
                 
