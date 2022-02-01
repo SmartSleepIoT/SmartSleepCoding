@@ -416,7 +416,9 @@ def waking_interval():
             'status': f'wake up interval successfully set',
         }), 200
 
+
 @bp.route("/wake_up_hour", methods=["GET", "POST", "DELETE"])
+@login_required
 def waking_hour():
     """Get / Set wake_up_hour"""
     table_name = "wake_up_hour"
@@ -495,7 +497,7 @@ def start_to_sleep():
     """Get / Set start_to_sleep"""
     table_name = "start_to_sleep"
     arg_name = "sleep_now"
-    time_arg ="time"
+    time_arg = "time"
 
     if request.method == "POST":
         value = request.args.get(arg_name)
@@ -527,7 +529,16 @@ def start_to_sleep():
             elif value == 0:
                 raise Exception('Cannot wake up if you didn\'t sleep before')
 
-           
+            if time:
+                db.execute(
+                    f"INSERT INTO {table_name} (value, timestamp) VALUES (?, ?)",
+                    (value, set_hour_and_minute(time),)
+                )
+            else:
+                db.execute(
+                    f"INSERT INTO {table_name} (value) VALUES (?)",
+                    (value,)
+                )
 
             # if user sets start_to_sleep to 0 -> he woke up
             # so automatically set time_slept
@@ -555,18 +566,6 @@ def start_to_sleep():
                 db.execute(
                     f"INSERT INTO time_slept (hours, minutes) VALUES (?, ?)",
                     (hours, minutes)
-                )
-
-
-            if time: 
-                db.execute(
-                    f"INSERT INTO {table_name} (value, timestamp) VALUES (?, ?)",
-                    (value, set_hour_and_minute(time),)
-                )
-            else: 
-                db.execute(
-                    f"INSERT INTO {table_name} (value) VALUES (?)",
-                    (value,)
                 )
             db.commit()
         except Exception as e:
