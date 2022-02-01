@@ -6,6 +6,7 @@ from SmartSleep.auth import login_required
 from SmartSleep import pubMQTT
 
 from SmartSleep.db import get_db
+from util.functions import set_hour_and_minute
 
 bp = Blueprint('activity', __name__, url_prefix="/activity")
 
@@ -35,18 +36,17 @@ def set_heartrate():
             ' FROM start_to_sleep'
             ' ORDER BY id DESC'
         ).fetchone()['id']
-        
 
-        if time: 
+        if time:
             db.execute(
                 'INSERT INTO heartrate (heartrate, sleep, time) '
                 ' VALUES (?, ?, ?)',
-                (heartrate,current_sleep, time))
+                (heartrate, current_sleep, set_hour_and_minute(time)))
         else:
             db.execute(
                 'INSERT INTO heartrate (heartrate, sleep) '
                 'VALUES (?, ?)',
-                (heartrate, current_sleep) 
+                (heartrate, current_sleep)
             )
         db.commit()
     except ValueError as e:
@@ -70,7 +70,8 @@ def set_heartrate():
             'id': commited_value['id'],
             'heartrate': commited_value['heartrate'],
             'time': commited_value['time']
-         }}), 200
+        }}), 200
+
 
 @bp.route("/sleep_stage", methods=["POST"])
 @login_required
@@ -87,21 +88,21 @@ def set_sleep_stage():
     time = request.args.get(time_arg)
     try:
         current_sleep = db.execute(
-        'SELECT *'
-        ' FROM start_to_sleep'
-        ' ORDER BY id DESC'
+            'SELECT *'
+            ' FROM start_to_sleep'
+            ' ORDER BY id DESC'
         ).fetchone()['id']
-        
+
         db.execute(
             f"INSERT INTO {table_name} (stage, sleep, time) VALUES (?, ?, ?)",
-            (stage,current_sleep,time)
+            (stage, current_sleep, time)
         )
         db.commit()
     except Exception as e:
         return jsonify({'status': f"Operation failed: {e}"}), 403
     committed_value = db.execute('SELECT *'
-                                    f' FROM {table_name}'
-                                    ' ORDER BY time DESC').fetchone()
+                                 f' FROM {table_name}'
+                                 ' ORDER BY time DESC').fetchone()
     return jsonify({
         'status': f'{stage_arg} successfully set',
         'data': {
@@ -110,7 +111,8 @@ def set_sleep_stage():
             'time': committed_value['time']
         }
     }), 200
-    
+
+
 @bp.route("/sleep_stage", methods=["GET"])
 @login_required
 def get_sleep_stage():
@@ -120,11 +122,11 @@ def get_sleep_stage():
     arg_name = "stage"
     table_name = "sleep_stage"
     current_value = get_db().execute('SELECT *'
-                                        f' FROM {table_name}'
-                                        ' ORDER BY time DESC').fetchone()
+                                     f' FROM {table_name}'
+                                     ' ORDER BY time DESC').fetchone()
     if current_value is None:
         return jsonify({'status': f'No {arg_name} ever set'}), 200
-    
+
     print(jsonify({
         'status': f'{arg_name} successfully retrieved',
         'data': {
