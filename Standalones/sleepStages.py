@@ -122,8 +122,7 @@ class SleepStagesManager:
 
     def handle_connection(self, client: mqtt_client):
         def on_message(client, userdata, msg):
-            print("TOPIC", msg.topic)
-            if msg.topic == TOPIC['START_TO_SLEEP']:
+            if msg.topic == TOPIC['HEARTRATE'] and not self.sleepInitialized:
                 self.start_hour = str_to_datetime(json.loads(msg.payload)['time'])
                 self.init_sleep()
                 
@@ -143,7 +142,6 @@ class SleepStagesManager:
                 elif self.stage == SLEEP_STAGES['REM']:
                    self.on_stage_rem(current_heartbeat)
                 
-        client.subscribe(TOPIC['START_TO_SLEEP'])
         client.subscribe(TOPIC['HEARTRATE'])
         client.on_message = on_message
 
