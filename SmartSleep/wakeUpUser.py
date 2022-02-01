@@ -45,7 +45,8 @@ class WakeUpScheduler:
                 start, end = interval
                 msg = {'start': start,
                        'end': end, 
-                       'start_to_sleep': started_to_sleep_time}
+                       'start_to_sleep': started_to_sleep_time,
+                       'mode': mode}
                 pubMQTT.publish(json.dumps(msg), "SmartSleep/OptimalWakeup")
                 
             else:

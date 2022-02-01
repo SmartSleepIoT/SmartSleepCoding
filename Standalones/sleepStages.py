@@ -122,11 +122,14 @@ class SleepStagesManager:
 
     def handle_connection(self, client: mqtt_client):
         def on_message(client, userdata, msg):
-            print("TOPIC", msg.topic)
-            if msg.topic == TOPIC['START_TO_SLEEP']:
+            if msg.topic == TOPIC['HEARTRATE'] and not self.sleepInitialized:
+                current_time = json.loads(msg.payload)['time']
                 self.start_hour = str_to_datetime(json.loads(msg.payload)['time'])
                 self.init_sleep()
-                
+                response = self.session.post(f"http://127.0.0.1:5000/activity/sleep_stage?stage={SLEEP_STAGES['LIGHT']}&time={str(current_time)}")
+                if response.status_code  == 200:
+                        print("We succesfully set the initial stage!")
+    
             if msg.topic == TOPIC['HEARTRATE'] and self.sleepInitialized:
                 # we get the time elapsed and hearbeat as the next decision of changing stages depends on them
                 current_time = str_to_datetime(json.loads(msg.payload)['time'])
@@ -143,7 +146,6 @@ class SleepStagesManager:
                 elif self.stage == SLEEP_STAGES['REM']:
                    self.on_stage_rem(current_heartbeat)
                 
-        client.subscribe(TOPIC['START_TO_SLEEP'])
         client.subscribe(TOPIC['HEARTRATE'])
         client.on_message = on_message
 
