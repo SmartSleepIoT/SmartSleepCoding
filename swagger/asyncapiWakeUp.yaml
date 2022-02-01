@@ -1,0 +1,65 @@
+asyncapi: 2.3.0
+info:
+  title: Wake up service
+  version: 1.0.0
+  description: This service wakes the user up
+servers:
+  production:
+    url: broker.emqx.io
+    protocol: mqtt
+    description: Paho MQTT broker
+channels:
+  SmartSleep/WakeUp:
+    publish:
+      summary: >-
+        inform about succesfully setting/removing wake up scheduler, inform when
+        the allarm is on
+      operationId: emitUserWakeUpSignals
+      message:
+        oneOf:
+          - $ref: '#/components/messages/UserEnableDisableWakeUp'
+          - $ref: '#/components/messages/UserWakeUpMessage'
+          - $ref: '#/components/messages/UserTimeSleptMessage'
+components:
+  messages:
+    UserTimeSleptMessage:
+      payload:
+        type: object
+        properties:
+          message:
+            type: string
+            description: hours & minutes slept
+    UserEnableDisableWakeUp:
+      payload:
+        type: object
+        properties:
+          message:
+            type: string
+            value:
+              oneOf:
+                - Disabling wake up mode
+                - Enabling wake up mode
+                - Nothing to disable
+            description: Enabling/Disabling wake up mode confirmation
+    UserWakeUpMessage:
+      payload:
+        type: object
+        properties:
+          message:
+            type: string
+            value: Wake up the user
+          waking up mode:
+            type: string
+            value:
+              oneOf:
+                - L
+                - S
+                - V
+                - LVS
+                - LV
+                - LS
+                - VS
+            description: The waking up mode previously chosed by the user
+          time:
+            type: string
+            decription: current time
