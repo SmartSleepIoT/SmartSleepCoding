@@ -4,7 +4,7 @@ import pytest
 from flask import json
 
 from SmartSleep.db import get_db
-
+from SmartSleep.validation import deep_time_validation
 
 def test_current_config_empty(client, auth):
     auth.login()
@@ -398,3 +398,37 @@ def test_apnea(client, auth, table_name, arg_name, value):
         assert response.status_code == 200
         assert f"{arg_name} successfully set" in r_dict['status']
 
+@pytest.mark.parametrize(
+    ("interval_start", "interval_end"),
+    (
+            ("00:30:00", "00:50:00"),
+            ("sdfdsf", "ddsf"),
+            ("00:40:13", ""),
+            ("", "23:20:90"),
+            (-12, "2021-12-12 23:20:04")
+    )
+)
+def test_set_waking_interval(client, auth, interval_start, interval_end):
+    auth.login()
+    client.post("http://127.0.0.1:5000/config/start_to_sleep?sleep_now=True")
+    response = client.post(f'/config/wake_up_interval?interval_start={interval_start}&interval_end={interval_end}')
+    r_dict = json.loads(response.data)
+    if not interval_start:
+        assert response.status_code == 403
+        assert "interval_start is required" in r_dict['status']
+    elif not interval_end:
+        assert response.status_code == 403
+        assert "interval_end is required" in r_dict['status']
+    else:
+        is_valid, msg = deep_time_validation(interval_start)
+        if is_valid:
+            is_valid_end, msg = deep_time_validation(interval_end)
+            if is_valid_end:
+                assert response.status_code == 200
+                assert "wake up interval successfully set" in r_dict['status']
+            else:
+                assert response.status_code == 422
+                assert msg in r_dict['status']
+        else:
+            assert response.status_code == 422
+            assert msg in r_dict['status']

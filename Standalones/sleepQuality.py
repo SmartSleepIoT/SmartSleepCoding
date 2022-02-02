@@ -200,7 +200,7 @@ def get_heartrate_interval(start_time, end_time):
     end_time = datetime.strptime(end_time, '%a, %d %b %Y %H:%M:%S %Z')
 
     data = all_heartrates.json()['status']
-    heartrates = [(value, datetime.strptime(timestamp, '%a, %d %b %Y %H:%M:%S %Z'))
+    heartrates = [(value, datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S'))
                   for (value, sleep_id, timestamp) in data]
 
     heartrates_filtered = list(filter(filter_heartrates, heartrates))
