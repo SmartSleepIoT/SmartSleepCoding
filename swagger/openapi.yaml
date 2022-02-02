@@ -1,10 +1,2034 @@
 openapi: 3.0.0
 info:
-  title: Configuration
+  title: SmartSleep
   version: 1.0.0
 servers:
+  - url: http://localhost:5000
   - url: http://127.0.0.1:5000
 paths:
+  /config/wake_up_interval:
+    post:
+      tags:
+        - General
+      summary: Set Optimal Wake Up Interval
+      requestBody:
+        content: {}
+      parameters:
+        - name: interval_start
+          in: query
+          schema:
+            type: string
+          example: '00:30:00'
+        - name: interval_end
+          in: query
+          schema:
+            type: string
+          example: '00:50:00'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '47'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 11:55:17 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: wake up interval successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 13:23:35 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '65'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 13:26:15 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: Incorrect min format, hour minutes be between 00-59
+  /activity/heartrate:
+    post:
+      tags:
+        - General
+      summary: Set Heartrate
+      requestBody:
+        content: {}
+      parameters:
+        - name: heartrate
+          in: query
+          schema:
+            type: integer
+          example: '75'
+        - name: time
+          in: query
+          schema:
+            type: string
+          example: '10:02:00'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '116'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 11:54:31 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  heartrate: 75
+                  id: 34
+                  time: Wed, 02 Feb 2022 10:02:31 GMT
+                status: Heartrate successfully recorded
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 13:37:08 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '56'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 13:42:41 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: Incorrect time format try hour:min:seconds
+  /activity/sleep_stage:
+    get:
+      tags:
+        - General
+      summary: Get Sleep Stage
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '106'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 11:55:33 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  sleep: 1
+                  stage: LIGHT
+                  time: '2022-02-02 01:34:13'
+                status: stage successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:03:19 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+    post:
+      tags:
+        - General
+      summary: Set Sleep Stage
+      requestBody:
+        content: {}
+      parameters:
+        - name: stage
+          in: query
+          schema:
+            type: string
+          example: LIGHT
+        - name: time
+          in: query
+          schema:
+            type: string
+          example: '2021-01-02 00:34:00'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '110'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 13:59:49 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  sleep: 1
+                  stage: LIGHT
+                  time: Wed, 02 Feb 2022 00:22:32 GMT
+                status: stage successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:03:08 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '71'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:01:49 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: Incorrect datetime format try yyyy-mm-dd hour:min:seconds
+  /config:
+    get:
+      tags:
+        - General
+      summary: Get Config
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '149'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:02:26 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  temperature:
+                    value: 24
+                  wake_up_hour:
+                    value: '15:46'
+                  waking_mode:
+                    value: L
+                status: Configuration successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:03:39 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+  /config/temp:
+    get:
+      tags:
+        - General
+      summary: Get Temperature
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '121'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 11:55:52 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 1
+                  timestamp: Wed, 02 Feb 2022 11:55:48 GMT
+                  value: 24
+                status: temperature successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:03:47 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+    post:
+      tags:
+        - General
+      summary: Set Temperature
+      requestBody:
+        content: {}
+      parameters:
+        - name: temperature
+          in: query
+          schema:
+            type: integer
+          example: '24'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '115'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 11:56:04 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 2
+                  timestamp: Wed, 02 Feb 2022 11:56:04 GMT
+                  value: 24
+                status: temperature successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:03:58 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+    delete:
+      tags:
+        - General
+      summary: Delete Temperature
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '45'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 11:55:59 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: All values successfully deleted
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:05:30 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+  /config/wake_up_hour:
+    get:
+      tags:
+        - General
+      summary: Get Wake Up Hour
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '125'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 11:56:21 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 2
+                  timestamp: Wed, 02 Feb 2022 11:56:18 GMT
+                  value: '15:46'
+                status: wake_up_hour successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:05:38 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+    post:
+      tags:
+        - General
+      summary: Set Wake Up Hour
+      requestBody:
+        content: {}
+      parameters:
+        - name: wake_up_hour
+          in: query
+          schema:
+            type: string
+          example: '15:46'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '119'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 11:56:18 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 2
+                  timestamp: Wed, 02 Feb 2022 11:56:18 GMT
+                  value: '15:46'
+                status: wake_up_hour successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:05:47 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '65'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:06:57 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: Incorrect min format, minutes must be between 00-59
+    delete:
+      tags:
+        - General
+      summary: Delete Wake Up Hour
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '45'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 11:56:14 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: All values successfully deleted
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:05:53 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+  /config/waking_mode:
+    get:
+      tags:
+        - General
+      summary: Get Waking Mode
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '120'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:02:11 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 2
+                  timestamp: Wed, 02 Feb 2022 12:02:08 GMT
+                  value: L
+                status: waking_mode successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:07:26 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+    post:
+      tags:
+        - General
+      summary: Set Waking Mode
+      requestBody:
+        content: {}
+      parameters:
+        - name: waking_mode
+          in: query
+          schema:
+            type: string
+          example: L
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '114'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:02:08 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 2
+                  timestamp: Wed, 02 Feb 2022 12:02:08 GMT
+                  value: L
+                status: waking_mode successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:07:35 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '95'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:08:17 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: >-
+                  waking_mode must be one of the following ['L', 'V', 'S',
+                  'LVS', 'LV', 'LS', 'VS']
+    delete:
+      tags:
+        - General
+      summary: Delete Waking Mode
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '45'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:02:04 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: All values successfully deleted
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:08:51 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+  /config/pillow_angle:
+    get:
+      tags:
+        - General
+      summary: Get Pillow Angle
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '122'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:02:44 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 3
+                  timestamp: Wed, 02 Feb 2022 12:02:41 GMT
+                  value: 67
+                status: pillow_angle successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:08:58 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+    post:
+      tags:
+        - General
+      summary: Set Pillow Angle
+      requestBody:
+        content: {}
+      parameters:
+        - name: pillow_angle
+          in: query
+          schema:
+            type: integer
+          example: '67'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '116'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:02:41 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 3
+                  timestamp: Wed, 02 Feb 2022 12:02:41 GMT
+                  value: 67
+                status: pillow_angle successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:09:09 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '55'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:11:02 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: 'Wrong angle format, must be float number '
+    delete:
+      tags:
+        - General
+      summary: Delete Pillow Angle
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '45'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:02:38 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: All values successfully deleted
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:09:20 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+  /config/start_to_sleep:
+    post:
+      tags:
+        - General
+      summary: Set Sleep Now
+      description: User sets if he/she goes to sleep now
+      requestBody:
+        content: {}
+      parameters:
+        - name: sleep_now
+          in: query
+          schema:
+            type: string
+          description: Boolean value 1, 0, true, false
+          example: 'False'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '110'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:02:50 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 2
+                  timestamp: Wed, 02 Feb 2022 12:02:50 GMT
+                  value: 0
+                status: sleep_now successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:09:32 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '59'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:12:07 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: 'wrong value must be one of: true, false, 0, 1'
+    get:
+      tags:
+        - General
+      summary: Get Sleep Now
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '116'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:02:54 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 2
+                  timestamp: Wed, 02 Feb 2022 12:02:50 GMT
+                  value: 0
+                status: sleep_now successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:09:41 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+    delete:
+      tags:
+        - General
+      summary: Delete Sleep Now
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '45'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:03 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: All values successfully deleted
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:56:06 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+  /config/sound:
+    post:
+      tags:
+        - General
+      summary: Set sound sensor
+      requestBody:
+        content: {}
+      parameters:
+        - name: sensor
+          in: query
+          schema:
+            type: number
+          example: '45.05'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '126'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:09 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 533
+                  timestamp: Wed, 02 Feb 2022 12:03:09 GMT
+                  value: 10.234620263730926
+                status: sensor successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:56:16 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '55'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:58:02 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: 'Wrong angle format, must be float number '
+  /config/time_slept:
+    post:
+      tags:
+        - General
+      summary: Set Time Slept
+      requestBody:
+        content: {}
+      parameters:
+        - name: time
+          in: query
+          schema:
+            type: string
+          description: hh:mm - meaning numbers of hours and minutes slept
+          example: '10:20'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '131'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:44 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  hours slept: 10
+                  id: 3
+                  minutes slept: 20
+                  timestamp: Wed, 02 Feb 2022 12:03:44 GMT
+                status: time successfully set
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '65'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 14:58:30 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: Incorrect min format, minutes must be between 00-59
+    get:
+      tags:
+        - General
+      summary: Get Time Slept
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '137'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:17 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  hours slept: 10
+                  id: 2
+                  minutes slept: 20
+                  timestamp: Wed, 02 Feb 2022 12:03:13 GMT
+                status: time successfully retrieved
+    delete:
+      tags:
+        - General
+      summary: Delete Time Slept
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '45'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:20 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: All values successfully deleted
+  /config/snoring:
+    get:
+      tags:
+        - General
+      summary: Get Snoring Now
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '116'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:24 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 1
+                  timestamp: Wed, 02 Feb 2022 11:54:00 GMT
+                  value: 1
+                status: snore_now successfully retrieved
+    post:
+      tags:
+        - General
+      summary: Set Snoring Now
+      requestBody:
+        content: {}
+      parameters:
+        - name: snore_now
+          in: query
+          schema:
+            type: string
+          example: 'True'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '110'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:27 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 2
+                  timestamp: Wed, 02 Feb 2022 12:03:27 GMT
+                  value: 1
+                status: snore_now successfully set
+  /sleep/all-time-slept:
+    get:
+      tags:
+        - General
+      summary: Get All Time Slept
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '53'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:47 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status:
+                  - - 10
+                    - 20
+                    - Wed, 02 Feb 2022 12:03:44 GMT
+  /sleep/all-snores:
+    get:
+      tags:
+        - General
+      summary: Get All Snores
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '85'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:38 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status:
+                  - - 1
+                    - Wed, 02 Feb 2022 11:54:00 GMT
+                  - - 1
+                    - Wed, 02 Feb 2022 12:03:27 GMT
+  /sleep/all-sleep-intervals:
+    get:
+      tags:
+        - General
+      summary: Get All Sleep Intervals
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '14'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:03:56 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: []
   /auth/register:
     post:
       tags:
@@ -25,9 +2049,88 @@ paths:
           example: 12345D
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '43'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:23:59 GMT
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User registered successfully.
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '47'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:17:46 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User Diana is already registered.
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '61'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:34:38 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: Password must contain at least one upper letter
   /auth/login:
     post:
       tags:
@@ -48,9 +2151,65 @@ paths:
           example: 12345D
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '41'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Set-Cookie:
+              schema:
+                type: string
+                example: >-
+                  session=eyJ1c2VyX2lkIjoyfQ.Yfp58A.mPMTtlAse1k-Iuld0G_SSody9jE;
+                  HttpOnly; Path=/
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:32:48 GMT
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User logged in successfully
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '33'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:32:04 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: Incorrect password.
   /auth/logout:
     get:
       tags:
@@ -58,310 +2217,677 @@ paths:
       summary: Logout
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '42'
+            Set-Cookie:
+              schema:
+                type: string
+                example: >-
+                  session=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0;
+                  Path=/
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:04:25 GMT
           content:
-            application/json: {}
-  /config:
-    get:
-      tags:
-        - General
-      summary: Get Config
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /config/temp:
-    get:
-      tags:
-        - General
-      summary: Get Temperature
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User logged out successfully
+  /config/temperature_system_level:
     post:
       tags:
         - General
-      summary: Set Temperature
+      summary: Post Temperature System Level
       requestBody:
         content: {}
       parameters:
-        - name: temperature
+        - name: temperature_system_level
           in: query
           schema:
             type: integer
-          example: '24'
+          example: '2'
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '125'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 15:43:00 GMT
           content:
-            application/json: {}
-    delete:
-      tags:
-        - General
-      summary: Delete Temperature
-      responses:
-        '200':
-          description: Successful response
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 1
+                  timestamp: Wed, 02 Feb 2022 15:43:00 GMT
+                  value: 2
+                status: temperature_system_level successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 15:42:17 GMT
           content:
-            application/json: {}
-  /config/wake_up_hour:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
     get:
       tags:
         - General
-      summary: Get Wake Up Hour
+      summary: Get Temperature System Level
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '131'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:19:34 GMT
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 1
+                  timestamp: Wed, 02 Feb 2022 12:18:39 GMT
+                  value: 2
+                status: temperature_system_level successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 15:42:03 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+  /config/apnea:
+    get:
+      tags:
+        - General
+      summary: Get Apnea
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '53'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 12:20:30 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                example-0:
+                  summary: Get Apnea
+                  value:
+                    status: The user has not been tested for apnea.
+                example-1:
+                  summary: Get Apnea
+                  value:
+                    data:
+                      id: 1
+                      timestamp: Wed, 02 Feb 2022 16:56:24 GMT
+                      value: moderate
+                    status: apnea successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 15:42:40 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
     post:
       tags:
         - General
-      summary: Set Wake Up Hour
+      summary: Set Apnea
       requestBody:
         content: {}
       parameters:
-        - name: wake_up_hour
+        - name: apnea
           in: query
           schema:
             type: string
-          example: '15:46'
+          example: moderate
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '115'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:56:24 GMT
           content:
-            application/json: {}
-    delete:
-      tags:
-        - General
-      summary: Delete Wake Up Hour
-      responses:
-        '200':
-          description: Successful response
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 1
+                  timestamp: Wed, 02 Feb 2022 16:56:24 GMT
+                  value: moderate
+                status: apnea successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:56:00 GMT
           content:
-            application/json: {}
-  /config/waking_mode:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+        '422':
+          description: UNPROCESSABLE ENTITY
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '87'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:56:37 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: >-
+                  apnea must be one of the following ['none', 'mild',
+                  'moderate', 'severe']
+  /sleep/all-apneas:
     get:
       tags:
         - General
-      summary: Get Waking Mode
+      summary: Get All Apneas
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '58'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:57:00 GMT
           content:
-            application/json: {}
-    post:
-      tags:
-        - General
-      summary: Set Waking Mode
-      requestBody:
-        content: {}
-      parameters:
-        - name: waking_mode
-          in: query
-          schema:
-            type: string
-          example: L
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-    delete:
-      tags:
-        - General
-      summary: Delete Waking Mode
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /config/pillow_angle:
+            application/json:
+              schema:
+                type: object
+              example:
+                status:
+                  - - moderate
+                    - Wed, 02 Feb 2022 16:56:24 GMT
+  /sleep/all-heartrates:
     get:
       tags:
         - General
-      summary: Get Pillow Angle
+      summary: Get All Heartrates
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '477'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 15:57:13 GMT
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                status:
+                  - - 78
+                    - 1
+                    - '2022-02-02 00:22:57'
+                  - - 78
+                    - 1
+                    - '2022-02-02 00:23:58'
+                  - - 81
+                    - 1
+                    - '2022-02-02 00:24:59'
+                  - - 78
+                    - 1
+                    - '2022-02-02 00:25:00'
+                  - - 76
+                    - 1
+                    - '2022-02-02 00:26:01'
+                  - - 76
+                    - 1
+                    - '2022-02-02 00:27:02'
+                  - - 77
+                    - 1
+                    - '2022-02-02 00:28:03'
+                  - - 78
+                    - 1
+                    - '2022-02-02 00:29:04'
+                  - - 79
+                    - 1
+                    - '2022-02-02 00:30:05'
+                  - - 79
+                    - 1
+                    - '2022-02-02 00:31:06'
+                  - - 79
+                    - 1
+                    - '2022-02-02 00:32:07'
+                  - - 79
+                    - 1
+                    - '2022-02-02 00:33:08'
+                  - - 79
+                    - 1
+                    - '2022-02-02 00:34:09'
+                  - - 80
+                    - 1
+                    - '2022-02-02 00:35:10'
+                  - - 78
+                    - 1
+                    - '2022-02-02 00:36:11'
+                  - - 80
+                    - 1
+                    - '2022-02-02 00:37:12'
+  /user/age:
+    get:
+      tags:
+        - General
+      summary: Get User's Age
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '88'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:43:53 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  age: 20
+                  userid: 2
+                  username: Diana
+                status: age successfully retrieved
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:43:17 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
     post:
       tags:
         - General
-      summary: Set Pillow Angle
+      summary: Set User's Age
       requestBody:
         content: {}
       parameters:
-        - name: pillow_angle
+        - name: age
           in: query
           schema:
             type: integer
-          example: '67'
+          example: '20'
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '63'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:43:37 GMT
           content:
-            application/json: {}
-    delete:
-      tags:
-        - General
-      summary: Delete Pillow Angle
-      responses:
-        '200':
-          description: Successful response
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  age: 20
+                  userid: 2
+                status: age successfully set
+        '403':
+          description: FORBIDDEN
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '39'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:42:56 GMT
           content:
-            application/json: {}
-  /config/start_to_sleep:
-    post:
-      tags:
-        - General
-      summary: Set Sleep Now
-      description: User sets if he/she goes to sleep now
-      requestBody:
-        content: {}
-      parameters:
-        - name: sleep_now
-          in: query
-          schema:
-            type: string
-          description: Boolean value 1, 0, true, false
-          example: 'False'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                status: User is not authenticated
+  /temperature/warm-temperature:
     get:
       tags:
         - General
-      summary: Get Sleep Now
+      summary: Get Warm Temperature
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '51'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:45:30 GMT
           content:
-            application/json: {}
-    delete:
-      tags:
-        - General
-      summary: Delete Sleep Now
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /config/sound:
-    post:
-      tags:
-        - General
-      summary: Set sound sensor
-      requestBody:
-        content: {}
-      parameters:
-        - name: sensor
-          in: query
-          schema:
-            type: number
-          example: '45.05'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /config/time_slept:
-    post:
-      tags:
-        - General
-      summary: Set Time Slept
-      requestBody:
-        content: {}
-      parameters:
-        - name: time
-          in: query
-          schema:
-            type: string
-          description: hh:mm - meaning numbers of hours and minutes slept
-          example: '10:20'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                status: New temperature system level set to 1
+  /temperature/cool-temperature:
     get:
       tags:
         - General
-      summary: Get Time Slept
+      summary: Get Cool Temperature
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '54'
+            Vary:
+              schema:
+                type: string
+                example: Cookie
+            Server:
+              schema:
+                type: number
+                example: Werkzeug/2.0.2 Python/3.10.0
+            Date:
+              schema:
+                type: string
+                example: Wed, 02 Feb 2022 16:52:39 GMT
           content:
-            application/json: {}
-    delete:
-      tags:
-        - General
-      summary: Delete Time Slept
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /config/snoring:
-    get:
-      tags:
-        - General
-      summary: Get Snoring Now
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-    post:
-      tags:
-        - General
-      summary: Set Snoring Now
-      requestBody:
-        content: {}
-      parameters:
-        - name: snore_now
-          in: query
-          schema:
-            type: string
-          example: 'True'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /sleep/all-time-slept:
-    get:
-      tags:
-        - General
-      summary: All Time Slept
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /sleep/all-snores:
-    get:
-      tags:
-        - General
-      summary: Get All Snores
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
-  /sleep/all-sleep-intervals:
-    get:
-      tags:
-        - General
-      summary: All Sleep Intervals
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                status: New temperature system level set to -3.0

@@ -1,0 +1,23 @@
+{
+  "SwaggerSpecFilePath": [
+    "C:\\Users\\mira\\source\\repos\\SmartSleepCoding\\swagger\\openapi.yaml"
+  ],
+  "GrammarOutputDirectoryPath": "C:\\Users\\mira\\source\\repos\\SmartSleepCoding\\restler\\Compile",
+  "CustomDictionaryFilePath": "C:\\Users\\mira\\source\\repos\\SmartSleepCoding\\restler\\Compile\\defaultDict.json",
+  "IncludeOptionalParameters": true,
+  "UseHeaderExamples": true,
+  "UsePathExamples": false,
+  "UseQueryExamples": true,
+  "UseBodyExamples": true,
+  "UseAllExamplePayloads": false,
+  "DiscoverExamples": false,
+  "ExamplesDirectory": "",
+  "DataFuzzing": true,
+  "ReadOnlyFuzz": false,
+  "ResolveQueryDependencies": true,
+  "ResolveBodyDependencies": true,
+  "ResolveHeaderDependencies": false,
+  "UseRefreshableToken": true,
+  "AllowGetProducers": false,
+  "TrackFuzzedParameterNames": false
+}

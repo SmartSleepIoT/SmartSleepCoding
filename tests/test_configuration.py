@@ -258,7 +258,7 @@ def test_set_time_validations(client, auth, path, table_name, arg_name, value):
     elif value == 10 or value == "10":
         assert "Incorrect time format try hour:min" in r_dict["status"]
     elif value == "12:61":
-        assert "Incorrect min format, hour minutes be between 00-59" in r_dict["status"]
+        assert "Incorrect min format, minutes must be between 00-59" in r_dict["status"]
 
 
 @pytest.mark.parametrize(

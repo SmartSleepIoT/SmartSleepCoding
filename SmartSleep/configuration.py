@@ -14,7 +14,7 @@ from datetime import datetime
 from SmartSleep.auth import login_required
 from SmartSleep.db import get_db
 from SmartSleep.wakeUpUser import WakeUpScheduler
-from SmartSleep.validation import time_validation, boolean_validation
+from SmartSleep.validation import time_validation, boolean_validation, deep_time_validation
 from SmartSleep import pubMQTT
 from util.constants import TOPIC
 from util.functions import set_hour_and_minute
@@ -385,6 +385,7 @@ def pillow_angle():
 
 
 @bp.route("/wake_up_interval", methods=["POST"])
+@login_required
 def waking_interval():
     """
     Set wake up interval
@@ -395,10 +396,10 @@ def waking_interval():
         return jsonify({'status': "interval_start is required"}), 403
     if not end:
         return jsonify({'status': "interval_end is required"}), 403
-    start_time, msg = time_validation(start)
+    start_time, msg = deep_time_validation(start)
     if not start_time:
                 return jsonify({'status': f"{msg}"}), 422
-    end_time, msg = time_validation(end)
+    end_time, msg = deep_time_validation(end)
     if not end_time:
                 return jsonify({'status': f"{msg}"}), 422
     

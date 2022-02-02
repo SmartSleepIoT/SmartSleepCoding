@@ -1,0 +1,314 @@
+[
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/auth/login",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "username"
+        },
+        "ContainerName": "login",
+        "PathContainerName": "login",
+        "CandidateTypeNames": [
+          "login"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "username",
+        "ProducerParameterName": "username",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/auth/login",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "password"
+        },
+        "ContainerName": "login",
+        "PathContainerName": "login",
+        "CandidateTypeNames": [
+          "login"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "password",
+        "ProducerParameterName": "password",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/auth/register",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "username"
+        },
+        "ContainerName": "register",
+        "PathContainerName": "register",
+        "CandidateTypeNames": [
+          "register"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "username",
+        "ProducerParameterName": "username",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/auth/register",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "password"
+        },
+        "ContainerName": "register",
+        "PathContainerName": "register",
+        "CandidateTypeNames": [
+          "register"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "password",
+        "ProducerParameterName": "password",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/config/pillow_angle",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "pillow_angle"
+        },
+        "ContainerName": "pillow_angle",
+        "PathContainerName": "pillow_angle",
+        "CandidateTypeNames": [
+          "pillow__angle"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "pillow_angle",
+        "ProducerParameterName": "angle",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/config/snoring",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "snore_now"
+        },
+        "ContainerName": "snoring",
+        "PathContainerName": "snoring",
+        "CandidateTypeNames": [
+          "snoring"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "snore_now",
+        "ProducerParameterName": "now",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/config/sound",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "sensor"
+        },
+        "ContainerName": "sound",
+        "PathContainerName": "sound",
+        "CandidateTypeNames": [
+          "sound"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "sensor",
+        "ProducerParameterName": "sensor",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/config/start_to_sleep",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "sleep_now"
+        },
+        "ContainerName": "start_to_sleep",
+        "PathContainerName": "start_to_sleep",
+        "CandidateTypeNames": [
+          "start__to__sleep"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "sleep_now",
+        "ProducerParameterName": "now",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/config/temp",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "temperature"
+        },
+        "ContainerName": "temp",
+        "PathContainerName": "temp",
+        "CandidateTypeNames": [
+          "temp"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "temperature",
+        "ProducerParameterName": "temperature",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/config/time_slept",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "time"
+        },
+        "ContainerName": "time_slept",
+        "PathContainerName": "time_slept",
+        "CandidateTypeNames": [
+          "time__slept"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "time",
+        "ProducerParameterName": "time",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/config/wake_up_hour",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "wake_up_hour"
+        },
+        "ContainerName": "wake_up_hour",
+        "PathContainerName": "wake_up_hour",
+        "CandidateTypeNames": [
+          "wake__up__hour"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "wake_up_hour",
+        "ProducerParameterName": "hour",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  },
+  {
+    "consumer": {
+      "id": {
+        "RequestId": {
+          "endpoint": "/config/waking_mode",
+          "method": "Post"
+        },
+        "ResourceReference": {
+          "QueryResource": "waking_mode"
+        },
+        "ContainerName": "waking_mode",
+        "PathContainerName": "waking_mode",
+        "CandidateTypeNames": [
+          "waking__mode"
+        ],
+        "AccessPathParts": {
+          "path": []
+        },
+        "ResourceName": "waking_mode",
+        "ProducerParameterName": "mode",
+        "IsNestedBodyResource": false,
+        "PrimitiveType": "String"
+      },
+      "parameterKind": "Query"
+    }
+  }
+]

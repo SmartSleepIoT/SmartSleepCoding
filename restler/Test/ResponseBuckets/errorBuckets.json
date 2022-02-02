@@ -1,0 +1,149 @@
+{
+  "403": {
+    "b2e0dc1a-3b0f-42d7-8dcd-910f2f1c7592": [
+      {
+        "request": {
+          "RequestData": {
+            "method": "POST",
+            "path": "/auth/login",
+            "query": "password=fuzzstring&username=fuzzstring",
+            "body": ""
+          }
+        },
+        "response": {
+          "ResponseData": {
+            "code": 403,
+            "codeDescription": "FORBIDDEN",
+            "content": "{\"status\":\"Incorrect username.\"}\n",
+            "isFailure": true,
+            "isBug": false
+          }
+        }
+      }
+    ]
+  },
+  "422": {
+    "12e74a7f-77b9-436a-8346-bce2a9136139": [
+      {
+        "request": {
+          "RequestData": {
+            "method": "POST",
+            "path": "/config/wake_up_hour",
+            "query": "wake_up_hour=fuzzstring",
+            "body": ""
+          }
+        },
+        "response": {
+          "ResponseData": {
+            "code": 422,
+            "codeDescription": "UNPROCESSABLE ENTITY",
+            "content": "{\"status\":\"Incorrect time format try hour:min\"}\n",
+            "isFailure": true,
+            "isBug": false
+          }
+        }
+      },
+      {
+        "request": {
+          "RequestData": {
+            "method": "POST",
+            "path": "/config/time_slept",
+            "query": "time=fuzzstring",
+            "body": ""
+          }
+        },
+        "response": {
+          "ResponseData": {
+            "code": 422,
+            "codeDescription": "UNPROCESSABLE ENTITY",
+            "content": "{\"status\":\"Incorrect time format try hour:min\"}\n",
+            "isFailure": true,
+            "isBug": false
+          }
+        }
+      }
+    ],
+    "6c04d171-351d-4e53-b518-4f9b8af98515": [
+      {
+        "request": {
+          "RequestData": {
+            "method": "POST",
+            "path": "/config/snoring",
+            "query": "snore_now=fuzzstring",
+            "body": ""
+          }
+        },
+        "response": {
+          "ResponseData": {
+            "code": 422,
+            "codeDescription": "UNPROCESSABLE ENTITY",
+            "content": "{\"status\":\"wrong value must be one of: true, false, 0, 1\"}\n",
+            "isFailure": true,
+            "isBug": false
+          }
+        }
+      },
+      {
+        "request": {
+          "RequestData": {
+            "method": "POST",
+            "path": "/config/start_to_sleep",
+            "query": "sleep_now=fuzzstring",
+            "body": ""
+          }
+        },
+        "response": {
+          "ResponseData": {
+            "code": 422,
+            "codeDescription": "UNPROCESSABLE ENTITY",
+            "content": "{\"status\":\"wrong value must be one of: true, false, 0, 1\"}\n",
+            "isFailure": true,
+            "isBug": false
+          }
+        }
+      }
+    ],
+    "8a863548-eb50-4bd1-9382-66f28f3b70ed": [
+      {
+        "request": {
+          "RequestData": {
+            "method": "POST",
+            "path": "/auth/register",
+            "query": "password=fuzzstring&username=fuzzstring",
+            "body": ""
+          }
+        },
+        "response": {
+          "ResponseData": {
+            "code": 422,
+            "codeDescription": "UNPROCESSABLE ENTITY",
+            "content": "{\"status\":\"Password must contain at least one upper letter\"}\n",
+            "isFailure": true,
+            "isBug": false
+          }
+        }
+      }
+    ],
+    "d14cbd5b-d298-4b18-b2fb-ebcf1995c382": [
+      {
+        "request": {
+          "RequestData": {
+            "method": "POST",
+            "path": "/config/waking_mode",
+            "query": "waking_mode=fuzzstring",
+            "body": ""
+          }
+        },
+        "response": {
+          "ResponseData": {
+            "code": 422,
+            "codeDescription": "UNPROCESSABLE ENTITY",
+            "content": "{\"status\":\"waking_mode must be one of the following [\\'L\\', \\'V\\', \\'S\\', \\'LVS\\', \\'LV\\', \\'LS\\', \\'VS\\']\"}\n",
+            "isFailure": true,
+            "isBug": false
+          }
+        }
+      }
+    ]
+  }
+}

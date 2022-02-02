@@ -83,19 +83,11 @@ def get_heartrates():
                                     ' ORDER BY sleep, time').fetchall()
 
         for i in range(len(all_heartrates)):
-            start_sleep_time = db.execute(f"SELECT timestamp"
-                                          " FROM start_to_sleep"
-                                          " WHERE id = ?", (all_heartrates[i]['sleep'],)
-                                          ).fetchone()
-
-            heartrate_time = datetime.strptime(all_heartrates[i]['time'], '%M:%S:%y')
-
-            timestamp = start_sleep_time['timestamp'] + timedelta(minutes=heartrate_time.minute, seconds=heartrate_time.second)
-
+            heartrate_time = all_heartrates[i]['time']
             heartrates.append(
                 (all_heartrates[i]['heartrate'],
                  all_heartrates[i]['sleep'],
-                 timestamp
+                 str(heartrate_time)
                  ),
             )
 

@@ -15,8 +15,8 @@ def warmTemperature():
     sleep = db.execute('SELECT value'
                        ' FROM start_to_sleep'
                        ' ORDER BY timestamp DESC').fetchone()
-
-    if sleep is None or sleep is False:
+    
+    if sleep is None or sleep['value'] is False:
         msg = {'status': "user is not sleeping"}
         return jsonify(msg), 404
 
@@ -47,7 +47,7 @@ def coolTemperature():
                        ' FROM start_to_sleep'
                        ' ORDER BY timestamp DESC').fetchone()
 
-    if sleep is None or sleep is False:
+    if sleep is None or sleep['value'] is False:
         msg = {'status': "user is not sleeping"}
         return jsonify(msg), 404
 
