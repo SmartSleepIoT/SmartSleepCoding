@@ -1,0 +1,1011 @@
+{
+    "121f59696b68fa6a6aa24306e3f9b59c97642d53_1": {
+        "verb": "POST",
+        "endpoint": "/config/sound",
+        "verb_endpoint": "POST /config/sound",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 0,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:23",
+            "request_verb": "POST",
+            "request_uri": "/config/sound?sensor=1.23",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 111",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:23 GMT"
+            ],
+            "response_body": "{\"data\":{\"id\":15,\"timestamp\":\"Wed, 02 Feb 2022 17:31:23 GMT\",\"value\":1.23},\"status\":\"sensor successfully set\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "1503a103a33337084a9f0b6d0284af45771daf41_1": {
+        "verb": "GET",
+        "endpoint": "/config",
+        "verb_endpoint": "GET /config",
+        "valid": 0,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "308",
+        "status_text": "PERMANENT REDIRECT",
+        "error_message": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>Redirecting...</title>\n<h1>Redirecting...</h1>\n<p>You should be redirected automatically to target URL: <a href=\"http://127.0.0.1:5000/config/\">http://127.0.0.1:5000/config/</a>. If not click the link.",
+        "request_order": 1,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:23",
+            "request_verb": "GET",
+            "request_uri": "/config",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "308",
+            "response_status_text": "PERMANENT REDIRECT",
+            "response_headers": [
+                "Content-Type: text/html; charset=utf-8",
+                "Content-Length: 264",
+                "Location: http://127.0.0.1:5000/config/",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:23 GMT"
+            ],
+            "response_body": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n<title>Redirecting...</title>\n<h1>Redirecting...</h1>\n<p>You should be redirected automatically to target URL: <a href=\"http://127.0.0.1:5000/config/\">http://127.0.0.1:5000/config/</a>. If not click the link."
+        },
+        "tracked_parameters": {}
+    },
+    "1746c3523c931b55523c5d238df53129df602806_1": {
+        "verb": "POST",
+        "endpoint": "/config/pillow_angle",
+        "verb_endpoint": "POST /config/pillow_angle",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 2,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:23",
+            "request_verb": "POST",
+            "request_uri": "/config/pillow_angle?pillow_angle=1",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 115",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:23 GMT"
+            ],
+            "response_body": "{\"data\":{\"id\":2,\"timestamp\":\"Wed, 02 Feb 2022 17:31:23 GMT\",\"value\":1.0},\"status\":\"pillow_angle successfully set\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "215f42819d35593ea504aaa6e20a4f4580b9e2d3_1": {
+        "verb": "POST",
+        "endpoint": "/auth/register",
+        "verb_endpoint": "POST /auth/register",
+        "valid": 0,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "422",
+        "status_text": "UNPROCESSABLE ENTITY",
+        "error_message": "{\"status\":\"Password must contain at least one upper letter\"}\n",
+        "request_order": 3,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:23",
+            "request_verb": "POST",
+            "request_uri": "/auth/register?username=fuzzstring&password=fuzzstring",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "422",
+            "response_status_text": "UNPROCESSABLE ENTITY",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 61",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:23 GMT"
+            ],
+            "response_body": "{\"status\":\"Password must contain at least one upper letter\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "28bdf1754721d0f56e27cebe2418a5379fc6202f_1": {
+        "verb": "GET",
+        "endpoint": "/sleep/all-time-slept",
+        "verb_endpoint": "GET /sleep/all-time-slept",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 4,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:23",
+            "request_verb": "GET",
+            "request_uri": "/sleep/all-time-slept",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 14",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:23 GMT"
+            ],
+            "response_body": "{\"status\":[]}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "2d941210f7058d57d72918c91cd4a3243444e06e_1": {
+        "verb": "POST",
+        "endpoint": "/config/waking_mode",
+        "verb_endpoint": "POST /config/waking_mode",
+        "valid": 0,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "422",
+        "status_text": "UNPROCESSABLE ENTITY",
+        "error_message": "{\"status\":\"waking_mode must be one of the following ['L', 'V', 'S', 'LVS', 'LV', 'LS', 'VS']\"}\n",
+        "request_order": 5,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "POST",
+            "request_uri": "/config/waking_mode?waking_mode=fuzzstring",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "422",
+            "response_status_text": "UNPROCESSABLE ENTITY",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 95",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"waking_mode must be one of the following ['L', 'V', 'S', 'LVS', 'LV', 'LS', 'VS']\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "30f40b13aafadd882bf6a6e66e724be5f63fcf0f_1": {
+        "verb": "POST",
+        "endpoint": "/config/temp",
+        "verb_endpoint": "POST /config/temp",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 6,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "POST",
+            "request_uri": "/config/temp?temperature=1",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 114",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"data\":{\"id\":1,\"timestamp\":\"Wed, 02 Feb 2022 17:31:24 GMT\",\"value\":1.0},\"status\":\"temperature successfully set\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "3ec1b0e1cf53fe79a19aba927b432940954d2cff_1": {
+        "verb": "DELETE",
+        "endpoint": "/config/waking_mode",
+        "verb_endpoint": "DELETE /config/waking_mode",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 7,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "DELETE",
+            "request_uri": "/config/waking_mode",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 45",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"All values successfully deleted\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "4c22a77b625b5b500738477b9131e4cfce4adeb0_1": {
+        "verb": "GET",
+        "endpoint": "/sleep/all-snores",
+        "verb_endpoint": "GET /sleep/all-snores",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 8,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "GET",
+            "request_uri": "/sleep/all-snores",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 49",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":[[1,\"Wed, 02 Feb 2022 17:31:13 GMT\"]]}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "5ffab5b0a693ce498d5a4a01167ee864ab983419_1": {
+        "verb": "GET",
+        "endpoint": "/auth/logout",
+        "verb_endpoint": "GET /auth/logout",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 9,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "GET",
+            "request_uri": "/auth/logout",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 42",
+                "Set-Cookie: session=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; Path=/",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"User logged out successfully\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "67deaa17190067be57f964de4bc644e1d37c9896_1": {
+        "verb": "GET",
+        "endpoint": "/sleep/all-sleep-intervals",
+        "verb_endpoint": "GET /sleep/all-sleep-intervals",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 10,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "GET",
+            "request_uri": "/sleep/all-sleep-intervals",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 14",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":[]}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "6b397174b5204b1b870809f686e3bdcbbb22da73_1": {
+        "verb": "DELETE",
+        "endpoint": "/config/temp",
+        "verb_endpoint": "DELETE /config/temp",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 11,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "DELETE",
+            "request_uri": "/config/temp",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 45",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"All values successfully deleted\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "6c215968a44e1c92421722e9a356c30eccf58219_1": {
+        "verb": "DELETE",
+        "endpoint": "/config/time_slept",
+        "verb_endpoint": "DELETE /config/time_slept",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 12,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "DELETE",
+            "request_uri": "/config/time_slept",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 45",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"All values successfully deleted\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "7b94c2568ad86162e6139e991b92673b4c4e7516_1": {
+        "verb": "DELETE",
+        "endpoint": "/config/start_to_sleep",
+        "verb_endpoint": "DELETE /config/start_to_sleep",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 13,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "DELETE",
+            "request_uri": "/config/start_to_sleep",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 45",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"All values successfully deleted\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "87399568d2de7ccdd6c4ad5fb7c46826de14e1c2_1": {
+        "verb": "GET",
+        "endpoint": "/config/time_slept",
+        "verb_endpoint": "GET /config/time_slept",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 14,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "GET",
+            "request_uri": "/config/time_slept",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 30",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"No time ever set\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "8925de84a702b1cd221a33465131c63daeff7b9f_1": {
+        "verb": "POST",
+        "endpoint": "/config/start_to_sleep",
+        "verb_endpoint": "POST /config/start_to_sleep",
+        "valid": 0,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "422",
+        "status_text": "UNPROCESSABLE ENTITY",
+        "error_message": "{\"status\":\"wrong value must be one of: true, false, 0, 1\"}\n",
+        "request_order": 15,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "POST",
+            "request_uri": "/config/start_to_sleep?sleep_now=fuzzstring",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "422",
+            "response_status_text": "UNPROCESSABLE ENTITY",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 59",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"wrong value must be one of: true, false, 0, 1\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "9132fad888850286dc768d2da791d36358a74971_1": {
+        "verb": "POST",
+        "endpoint": "/auth/login",
+        "verb_endpoint": "POST /auth/login",
+        "valid": 0,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "403",
+        "status_text": "FORBIDDEN",
+        "error_message": "{\"status\":\"Incorrect username.\"}\n",
+        "request_order": 16,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "POST",
+            "request_uri": "/auth/login?username=fuzzstring&password=fuzzstring",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "403",
+            "response_status_text": "FORBIDDEN",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 33",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"Incorrect username.\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "92145bd9f082685b128598c1b0a4ae83f0fc1a69_1": {
+        "verb": "POST",
+        "endpoint": "/config/time_slept",
+        "verb_endpoint": "POST /config/time_slept",
+        "valid": 0,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "422",
+        "status_text": "UNPROCESSABLE ENTITY",
+        "error_message": "{\"status\":\"Incorrect time format try hour:min\"}\n",
+        "request_order": 17,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "POST",
+            "request_uri": "/config/time_slept?time=fuzzstring",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "422",
+            "response_status_text": "UNPROCESSABLE ENTITY",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 48",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"Incorrect time format try hour:min\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "9236a9cb157b962a06c5837cb441bec9eca960d5_1": {
+        "verb": "POST",
+        "endpoint": "/config/snoring",
+        "verb_endpoint": "POST /config/snoring",
+        "valid": 0,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "422",
+        "status_text": "UNPROCESSABLE ENTITY",
+        "error_message": "{\"status\":\"wrong value must be one of: true, false, 0, 1\"}\n",
+        "request_order": 18,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "POST",
+            "request_uri": "/config/snoring?snore_now=fuzzstring",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "422",
+            "response_status_text": "UNPROCESSABLE ENTITY",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 59",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"wrong value must be one of: true, false, 0, 1\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "94048864a33835924b2f5994d1ffca8b1f780b39_1": {
+        "verb": "DELETE",
+        "endpoint": "/config/wake_up_hour",
+        "verb_endpoint": "DELETE /config/wake_up_hour",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 19,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "DELETE",
+            "request_uri": "/config/wake_up_hour",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 45",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"All values successfully deleted\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "960388ce17723f7bd01dba44b4a847ef187a5768_1": {
+        "verb": "POST",
+        "endpoint": "/config/wake_up_hour",
+        "verb_endpoint": "POST /config/wake_up_hour",
+        "valid": 0,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "422",
+        "status_text": "UNPROCESSABLE ENTITY",
+        "error_message": "{\"status\":\"Incorrect time format try hour:min\"}\n",
+        "request_order": 20,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "POST",
+            "request_uri": "/config/wake_up_hour?wake_up_hour=fuzzstring",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "422",
+            "response_status_text": "UNPROCESSABLE ENTITY",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 48",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"Incorrect time format try hour:min\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "a0947c3c0005970696eee06f6e66e7c9e7b48b15_1": {
+        "verb": "GET",
+        "endpoint": "/config/start_to_sleep",
+        "verb_endpoint": "GET /config/start_to_sleep",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 21,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "GET",
+            "request_uri": "/config/start_to_sleep",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 35",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"No sleep_now ever set\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "ae0cadace904d563dd259f17b4cae7d63d7dd93e_1": {
+        "verb": "GET",
+        "endpoint": "/config/temp",
+        "verb_endpoint": "GET /config/temp",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 22,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "GET",
+            "request_uri": "/config/temp",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 37",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"No temperature ever set\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "ae678209c83029fc95fc58904139da5ff5427ac1_1": {
+        "verb": "GET",
+        "endpoint": "/config/wake_up_hour",
+        "verb_endpoint": "GET /config/wake_up_hour",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 23,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "GET",
+            "request_uri": "/config/wake_up_hour",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 38",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"No wake_up_hour ever set\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "b78544e097f33724ac4152ba2b7cbc21ff772aab_1": {
+        "verb": "GET",
+        "endpoint": "/config/waking_mode",
+        "verb_endpoint": "GET /config/waking_mode",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 24,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:24",
+            "request_verb": "GET",
+            "request_uri": "/config/waking_mode",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 37",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:24 GMT"
+            ],
+            "response_body": "{\"status\":\"No waking_mode ever set\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "bcbaf6805b781ee8617bd5a461f87a3b4ddc57ec_1": {
+        "verb": "GET",
+        "endpoint": "/config/pillow_angle",
+        "verb_endpoint": "GET /config/pillow_angle",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 25,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:25",
+            "request_verb": "GET",
+            "request_uri": "/config/pillow_angle",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 121",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:25 GMT"
+            ],
+            "response_body": "{\"data\":{\"id\":2,\"timestamp\":\"Wed, 02 Feb 2022 17:31:23 GMT\",\"value\":1.0},\"status\":\"pillow_angle successfully retrieved\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "e452e93c41534d3a7223174f9d2c4d9a66b93ece_1": {
+        "verb": "GET",
+        "endpoint": "/config/snoring",
+        "verb_endpoint": "GET /config/snoring",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 26,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:25",
+            "request_verb": "GET",
+            "request_uri": "/config/snoring",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 116",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:25 GMT"
+            ],
+            "response_body": "{\"data\":{\"id\":1,\"timestamp\":\"Wed, 02 Feb 2022 17:31:13 GMT\",\"value\":1},\"status\":\"snore_now successfully retrieved\"}\n"
+        },
+        "tracked_parameters": {}
+    },
+    "f8541c3ec93b05d036140adfe1ecc3e5c4e2b045_1": {
+        "verb": "DELETE",
+        "endpoint": "/config/pillow_angle",
+        "verb_endpoint": "DELETE /config/pillow_angle",
+        "valid": 1,
+        "matching_prefix": "None",
+        "invalid_due_to_sequence_failure": 0,
+        "invalid_due_to_resource_failure": 0,
+        "invalid_due_to_parser_failure": 0,
+        "invalid_due_to_500": 0,
+        "status_code": "200",
+        "status_text": "OK",
+        "error_message": null,
+        "request_order": 27,
+        "sample_request": {
+            "request_sent_timestamp": null,
+            "response_received_timestamp": "2022-02-02 17:31:25",
+            "request_verb": "DELETE",
+            "request_uri": "/config/pillow_angle",
+            "request_headers": [
+                "Accept: application/json",
+                "Host: 127.0.0.1:5000"
+            ],
+            "request_body": null,
+            "response_status_code": "200",
+            "response_status_text": "OK",
+            "response_headers": [
+                "Content-Type: application/json",
+                "Content-Length: 45",
+                "Server: Werkzeug/2.0.2 Python/3.10.0",
+                "Date: Wed, 02 Feb 2022 17:31:25 GMT"
+            ],
+            "response_body": "{\"status\":\"All values successfully deleted\"}\n"
+        },
+        "tracked_parameters": {}
+    }}

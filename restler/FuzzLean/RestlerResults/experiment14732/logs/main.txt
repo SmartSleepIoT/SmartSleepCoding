@@ -1,0 +1,601 @@
+Setting fuzzing schemes: directed-smoke-test
+2022-02-02 19:32:55.601: Going to fuzz a set with 28 requests
+2022-02-02 19:32:55.601: Request-0: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-1: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-2: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-3: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-4: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-5: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-6: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-7: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-8: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-9: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-10: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-11: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-12: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-13: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-14: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-15: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-16: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-17: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-18: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-19: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-20: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-21: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-22: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-23: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-24: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-25: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-26: Value Combinations: 1
+2022-02-02 19:32:55.601: Request-27: Value Combinations: 1
+2022-02-02 19:32:55.601: Avg. Value Combinations per Request: 1
+2022-02-02 19:32:55.601: Median Value Combinations per Request: 1.0
+2022-02-02 19:32:55.601: Min Value Combinations per Request: 1
+2022-02-02 19:32:55.601: Max Value Combinations per Request: 1
+2022-02-02 19:32:55.601: Total dependencies: 0
+
+2022-02-02 19:32:55.612: Generation: 1 / Sequences Collection Size: 28 
+(After directed-smoke-test Extend)
+
+Rendering request 0 from scratch
+
+2022-02-02 19:32:55.708: Request 0
+2022-02-02 19:32:55.708: Endpoint - /config/sound
+2022-02-02 19:32:55.708: Hex Def - 121f59696b68fa6a6aa24306e3f9b59c97642d53
+2022-02-02 19:32:55.708: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:55.708: Rendering VALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'sound'
+		- restler_static_string: '?'
+		- restler_static_string: 'sensor='
+		- restler_fuzzable_number: '1.23'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 1 from scratch
+
+2022-02-02 19:32:55.828: Request 1
+2022-02-02 19:32:55.828: Endpoint - /config
+2022-02-02 19:32:55.828: Hex Def - 1503a103a33337084a9f0b6d0284af45771daf41
+2022-02-02 19:32:55.828: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:55.828: Rendering INVALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 2 from scratch
+
+2022-02-02 19:32:55.916: Request 2
+2022-02-02 19:32:55.916: Endpoint - /config/pillow_angle
+2022-02-02 19:32:55.916: Hex Def - 1746c3523c931b55523c5d238df53129df602806
+2022-02-02 19:32:55.916: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:55.916: Rendering VALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'pillow_angle'
+		- restler_static_string: '?'
+		- restler_static_string: 'pillow_angle='
+		- restler_fuzzable_int: '1'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 3 from scratch
+
+2022-02-02 19:32:56.052: Request 3
+2022-02-02 19:32:56.052: Endpoint - /auth/register
+2022-02-02 19:32:56.052: Hex Def - 215f42819d35593ea504aaa6e20a4f4580b9e2d3
+2022-02-02 19:32:56.052: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.052: Rendering INVALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'auth'
+		- restler_static_string: '/'
+		- restler_static_string: 'register'
+		- restler_static_string: '?'
+		- restler_static_string: 'username='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: '&'
+		- restler_static_string: 'password='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 4 from scratch
+
+2022-02-02 19:32:56.132: Request 4
+2022-02-02 19:32:56.132: Endpoint - /sleep/all-time-slept
+2022-02-02 19:32:56.132: Hex Def - 28bdf1754721d0f56e27cebe2418a5379fc6202f
+2022-02-02 19:32:56.132: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.140: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'sleep'
+		- restler_static_string: '/'
+		- restler_static_string: 'all-time-slept'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 5 from scratch
+
+2022-02-02 19:32:56.268: Request 5
+2022-02-02 19:32:56.268: Endpoint - /config/waking_mode
+2022-02-02 19:32:56.268: Hex Def - 2d941210f7058d57d72918c91cd4a3243444e06e
+2022-02-02 19:32:56.268: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.268: Rendering INVALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'waking_mode'
+		- restler_static_string: '?'
+		- restler_static_string: 'waking_mode='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 6 from scratch
+
+2022-02-02 19:32:56.372: Request 6
+2022-02-02 19:32:56.372: Endpoint - /config/temp
+2022-02-02 19:32:56.372: Hex Def - 30f40b13aafadd882bf6a6e66e724be5f63fcf0f
+2022-02-02 19:32:56.372: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.372: Rendering VALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'temp'
+		- restler_static_string: '?'
+		- restler_static_string: 'temperature='
+		- restler_fuzzable_int: '1'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 7 from scratch
+
+2022-02-02 19:32:56.468: Request 7
+2022-02-02 19:32:56.468: Endpoint - /config/waking_mode
+2022-02-02 19:32:56.468: Hex Def - 3ec1b0e1cf53fe79a19aba927b432940954d2cff
+2022-02-02 19:32:56.468: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.468: Rendering VALID
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'waking_mode'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 8 from scratch
+
+2022-02-02 19:32:56.556: Request 8
+2022-02-02 19:32:56.556: Endpoint - /sleep/all-snores
+2022-02-02 19:32:56.556: Hex Def - 4c22a77b625b5b500738477b9131e4cfce4adeb0
+2022-02-02 19:32:56.556: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.556: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'sleep'
+		- restler_static_string: '/'
+		- restler_static_string: 'all-snores'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 9 from scratch
+
+2022-02-02 19:32:56.652: Request 9
+2022-02-02 19:32:56.652: Endpoint - /auth/logout
+2022-02-02 19:32:56.652: Hex Def - 5ffab5b0a693ce498d5a4a01167ee864ab983419
+2022-02-02 19:32:56.652: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.652: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'auth'
+		- restler_static_string: '/'
+		- restler_static_string: 'logout'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 10 from scratch
+
+2022-02-02 19:32:56.748: Request 10
+2022-02-02 19:32:56.748: Endpoint - /sleep/all-sleep-intervals
+2022-02-02 19:32:56.748: Hex Def - 67deaa17190067be57f964de4bc644e1d37c9896
+2022-02-02 19:32:56.748: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.748: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'sleep'
+		- restler_static_string: '/'
+		- restler_static_string: 'all-sleep-intervals'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 11 from scratch
+
+2022-02-02 19:32:56.852: Request 11
+2022-02-02 19:32:56.852: Endpoint - /config/temp
+2022-02-02 19:32:56.852: Hex Def - 6b397174b5204b1b870809f686e3bdcbbb22da73
+2022-02-02 19:32:56.852: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.852: Rendering VALID
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'temp'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 12 from scratch
+
+2022-02-02 19:32:56.940: Request 12
+2022-02-02 19:32:56.940: Endpoint - /config/time_slept
+2022-02-02 19:32:56.940: Hex Def - 6c215968a44e1c92421722e9a356c30eccf58219
+2022-02-02 19:32:56.940: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:56.940: Rendering VALID
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'time_slept'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 13 from scratch
+
+2022-02-02 19:32:57.036: Request 13
+2022-02-02 19:32:57.036: Endpoint - /config/start_to_sleep
+2022-02-02 19:32:57.036: Hex Def - 7b94c2568ad86162e6139e991b92673b4c4e7516
+2022-02-02 19:32:57.036: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:57.036: Rendering VALID
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'start_to_sleep'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 14 from scratch
+
+2022-02-02 19:32:57.113: Request 14
+2022-02-02 19:32:57.113: Endpoint - /config/time_slept
+2022-02-02 19:32:57.113: Hex Def - 87399568d2de7ccdd6c4ad5fb7c46826de14e1c2
+2022-02-02 19:32:57.113: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:57.113: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'time_slept'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 15 from scratch
+
+2022-02-02 19:32:57.280: Request 15
+2022-02-02 19:32:57.280: Endpoint - /config/start_to_sleep
+2022-02-02 19:32:57.280: Hex Def - 8925de84a702b1cd221a33465131c63daeff7b9f
+2022-02-02 19:32:57.280: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:57.280: Rendering INVALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'start_to_sleep'
+		- restler_static_string: '?'
+		- restler_static_string: 'sleep_now='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 16 from scratch
+
+2022-02-02 19:32:57.414: Request 16
+2022-02-02 19:32:57.414: Endpoint - /auth/login
+2022-02-02 19:32:57.414: Hex Def - 9132fad888850286dc768d2da791d36358a74971
+2022-02-02 19:32:57.414: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:57.414: Rendering INVALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'auth'
+		- restler_static_string: '/'
+		- restler_static_string: 'login'
+		- restler_static_string: '?'
+		- restler_static_string: 'username='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: '&'
+		- restler_static_string: 'password='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 17 from scratch
+
+2022-02-02 19:32:57.541: Request 17
+2022-02-02 19:32:57.541: Endpoint - /config/time_slept
+2022-02-02 19:32:57.541: Hex Def - 92145bd9f082685b128598c1b0a4ae83f0fc1a69
+2022-02-02 19:32:57.541: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:57.541: Rendering INVALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'time_slept'
+		- restler_static_string: '?'
+		- restler_static_string: 'time='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 18 from scratch
+
+2022-02-02 19:32:57.678: Request 18
+2022-02-02 19:32:57.678: Endpoint - /config/snoring
+2022-02-02 19:32:57.678: Hex Def - 9236a9cb157b962a06c5837cb441bec9eca960d5
+2022-02-02 19:32:57.678: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:57.678: Rendering INVALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'snoring'
+		- restler_static_string: '?'
+		- restler_static_string: 'snore_now='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 19 from scratch
+
+2022-02-02 19:32:57.785: Request 19
+2022-02-02 19:32:57.785: Endpoint - /config/wake_up_hour
+2022-02-02 19:32:57.785: Hex Def - 94048864a33835924b2f5994d1ffca8b1f780b39
+2022-02-02 19:32:57.785: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:57.785: Rendering VALID
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'wake_up_hour'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 20 from scratch
+
+2022-02-02 19:32:57.938: Request 20
+2022-02-02 19:32:57.938: Endpoint - /config/wake_up_hour
+2022-02-02 19:32:57.938: Hex Def - 960388ce17723f7bd01dba44b4a847ef187a5768
+2022-02-02 19:32:57.938: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:57.938: Rendering INVALID
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'wake_up_hour'
+		- restler_static_string: '?'
+		- restler_static_string: 'wake_up_hour='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 21 from scratch
+
+2022-02-02 19:32:58.058: Request 21
+2022-02-02 19:32:58.058: Endpoint - /config/start_to_sleep
+2022-02-02 19:32:58.058: Hex Def - a0947c3c0005970696eee06f6e66e7c9e7b48b15
+2022-02-02 19:32:58.058: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:58.058: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'start_to_sleep'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 22 from scratch
+
+2022-02-02 19:32:58.178: Request 22
+2022-02-02 19:32:58.178: Endpoint - /config/temp
+2022-02-02 19:32:58.178: Hex Def - ae0cadace904d563dd259f17b4cae7d63d7dd93e
+2022-02-02 19:32:58.178: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:58.178: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'temp'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 23 from scratch
+
+2022-02-02 19:32:58.294: Request 23
+2022-02-02 19:32:58.294: Endpoint - /config/wake_up_hour
+2022-02-02 19:32:58.294: Hex Def - ae678209c83029fc95fc58904139da5ff5427ac1
+2022-02-02 19:32:58.294: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:58.294: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'wake_up_hour'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 24 from scratch
+
+2022-02-02 19:32:58.416: Request 24
+2022-02-02 19:32:58.416: Endpoint - /config/waking_mode
+2022-02-02 19:32:58.416: Hex Def - b78544e097f33724ac4152ba2b7cbc21ff772aab
+2022-02-02 19:32:58.416: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:58.416: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'waking_mode'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 25 from scratch
+
+2022-02-02 19:32:58.535: Request 25
+2022-02-02 19:32:58.535: Endpoint - /config/pillow_angle
+2022-02-02 19:32:58.535: Hex Def - bcbaf6805b781ee8617bd5a461f87a3b4ddc57ec
+2022-02-02 19:32:58.535: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:58.535: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'pillow_angle'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 26 from scratch
+
+2022-02-02 19:32:58.650: Request 26
+2022-02-02 19:32:58.650: Endpoint - /config/snoring
+2022-02-02 19:32:58.650: Hex Def - e452e93c41534d3a7223174f9d2c4d9a66b93ece
+2022-02-02 19:32:58.650: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:58.650: Rendering VALID
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'snoring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+Rendering request 27 from scratch
+
+2022-02-02 19:32:58.773: Request 27
+2022-02-02 19:32:58.773: Endpoint - /config/pillow_angle
+2022-02-02 19:32:58.773: Hex Def - f8541c3ec93b05d036140adfe1ecc3e5c4e2b045
+2022-02-02 19:32:58.773: Sequence length that satisfies dependencies: 1
+2022-02-02 19:32:58.773: Rendering VALID
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'pillow_angle'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 19:32:58.781: Generation: 1 / Sequences Collection Size: 20 
+(After directed-smoke-test Render)
+
+2022-02-02 19:32:58.789: Final Swagger spec coverage: 20 / 28
+2022-02-02 19:32:58.789: Rendered requests: 28 / 28
+2022-02-02 19:32:58.789: Rendered requests with "valid" status codes: 20 / 28
+2022-02-02 19:32:58.789: Num fully valid requests (no resource creation failures): 20
+2022-02-02 19:32:58.789: Num requests not rendered due to invalid sequence re-renders: 0
+2022-02-02 19:32:58.789: Num invalid requests caused by failed resource creations: 0
+2022-02-02 19:32:58.789: Total Creations of Dyn Objects: 0
+2022-02-02 19:32:58.789: Total Requests Sent: {'gc': 0, 'main_driver': 28, 'LeakageRuleChecker': 0, 'ResourceHierarchyChecker': 0, 'UseAfterFreeChecker': 0, 'InvalidDynamicObjectChecker': 0, 'PayloadBodyChecker': 0, 'ExamplesChecker': 0}
+2022-02-02 19:32:58.789: Bug Buckets: {}
+
+Testing completed -- below are the final stats:
+
+2022-02-02 19:32:58.797: Final Swagger spec coverage: 20 / 28
+2022-02-02 19:32:58.797: Rendered requests: 28 / 28
+2022-02-02 19:32:58.797: Rendered requests with "valid" status codes: 20 / 28
+2022-02-02 19:32:58.797: Num fully valid requests (no resource creation failures): 20
+2022-02-02 19:32:58.797: Num requests not rendered due to invalid sequence re-renders: 0
+2022-02-02 19:32:58.797: Num invalid requests caused by failed resource creations: 0
+2022-02-02 19:32:58.797: Total Creations of Dyn Objects: 0
+2022-02-02 19:32:58.797: Total Requests Sent: {'gc': 0, 'main_driver': 28, 'LeakageRuleChecker': 0, 'ResourceHierarchyChecker': 0, 'UseAfterFreeChecker': 0, 'InvalidDynamicObjectChecker': 0, 'PayloadBodyChecker': 0, 'ExamplesChecker': 0}
+2022-02-02 19:32:58.797: Bug Buckets: {}

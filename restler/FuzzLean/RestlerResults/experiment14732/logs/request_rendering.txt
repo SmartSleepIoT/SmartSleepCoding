@@ -1,9 +1,9 @@
 
-2022-02-02 03:57:03.809: Generation-1
-2022-02-02 03:57:03.809: 	Rendered requests: 28 / 28
-2022-02-02 03:57:03.809: 	Rendered requests with "valid" status codes: 20 / 28
-2022-02-02 03:57:03.809: 	Rendered requests determined to be fully valid (no resource creation failures): 20 / 28
-2022-02-02 03:57:03.809: List of failing requests:
+2022-02-02 19:32:58.797: Generation-1
+2022-02-02 19:32:58.797: 	Rendered requests: 28 / 28
+2022-02-02 19:32:58.797: 	Rendered requests with "valid" status codes: 20 / 28
+2022-02-02 19:32:58.797: 	Rendered requests determined to be fully valid (no resource creation failures): 20 / 28
+2022-02-02 19:32:58.797: List of failing requests:
 	Request: 1
 		- restler_static_string: 'GET '
 		- restler_static_string: ''
@@ -128,6 +128,6 @@
 -------------------------
 
 
-2022-02-02 03:57:03.810: 	Never Rendered requests:
+2022-02-02 19:32:58.797: 	Never Rendered requests:
 -------------------------
 
