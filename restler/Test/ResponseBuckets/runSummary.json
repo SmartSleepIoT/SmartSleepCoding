@@ -1,0 +1,15 @@
+{
+  "failedRequestsCount": 7,
+  "bugCount": 0,
+  "codeCounts": {
+    "403": 1,
+    "422": 6
+  },
+  "errorBuckets": {
+    "(403, 1fb09806-2bb5-4c7a-8fd9-64caa321b352)": 1,
+    "(422, 1f121a28-a0c7-4136-915b-cb885af5d675)": 1,
+    "(422, 20a112ed-f1df-4543-88c8-bdfa97703cf3)": 1,
+    "(422, 39826dbb-b850-4e81-ac4c-cd6c0f51719b)": 2,
+    "(422, d9c4a7ce-0a4e-4ef2-a510-55513b224865)": 2
+  }
+}

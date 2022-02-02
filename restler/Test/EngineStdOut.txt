@@ -1,0 +1,4 @@
+Initializing: Garbage collection every 30 seconds.
+2022-02-02 03:57:03.015: Generation: 1 
+Terminating garbage collection. Waiting for max 300 seconds.
+Done.

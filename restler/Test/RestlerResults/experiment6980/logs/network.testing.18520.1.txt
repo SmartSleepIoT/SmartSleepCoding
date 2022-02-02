@@ -1,0 +1,622 @@
+
+Generation-1: Rendering Sequence-1
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 121f59696b68fa6a6aa24306e3f9b59c97642d53
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'sound'
+		- restler_static_string: '?'
+		- restler_static_string: 'sensor='
+		- restler_fuzzable_number: '1.23'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.028: Sending: 'POST /config/sound?sensor=1.23 HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.039: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 125\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"data":{"id":738,"timestamp":"Wed, 02 Feb 2022 01:57:03 GMT","value":4.995928808773116},"status":"sensor successfully set"}\n'
+
+
+Generation-1: Rendering Sequence-2
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 1503a103a33337084a9f0b6d0284af45771daf41
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.085: Sending: 'GET /config HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.090: Received: 'HTTP/1.0 308 PERMANENT REDIRECT\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: 264\r\nLocation: http://127.0.0.1:5000/config/\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>Redirecting...</title>\n<h1>Redirecting...</h1>\n<p>You should be redirected automatically to target URL: <a href="http://127.0.0.1:5000/config/">http://127.0.0.1:5000/config/</a>. If not click the link.'
+
+
+Generation-1: Rendering Sequence-3
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 1746c3523c931b55523c5d238df53129df602806
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'pillow_angle'
+		- restler_static_string: '?'
+		- restler_static_string: 'pillow_angle='
+		- restler_fuzzable_int: '1'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.110: Sending: 'POST /config/pillow_angle?pillow_angle=1 HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.120: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 115\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"data":{"id":3,"timestamp":"Wed, 02 Feb 2022 01:57:03 GMT","value":1.0},"status":"pillow_angle successfully set"}\n'
+
+
+Generation-1: Rendering Sequence-4
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 215f42819d35593ea504aaa6e20a4f4580b9e2d3
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'auth'
+		- restler_static_string: '/'
+		- restler_static_string: 'register'
+		- restler_static_string: '?'
+		- restler_static_string: 'username='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: '&'
+		- restler_static_string: 'password='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.137: Sending: 'POST /auth/register?username=fuzzstring&password=fuzzstring HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.141: Received: 'HTTP/1.0 422 UNPROCESSABLE ENTITY\r\nContent-Type: application/json\r\nContent-Length: 61\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"Password must contain at least one upper letter"}\n'
+
+
+Generation-1: Rendering Sequence-5
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 28bdf1754721d0f56e27cebe2418a5379fc6202f
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'sleep'
+		- restler_static_string: '/'
+		- restler_static_string: 'all-time-slept'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.159: Sending: 'GET /sleep/all-time-slept HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.164: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 14\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":[]}\n'
+
+
+Generation-1: Rendering Sequence-6
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 2d941210f7058d57d72918c91cd4a3243444e06e
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'waking_mode'
+		- restler_static_string: '?'
+		- restler_static_string: 'waking_mode='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.182: Sending: 'POST /config/waking_mode?waking_mode=fuzzstring HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.187: Received: 'HTTP/1.0 422 UNPROCESSABLE ENTITY\r\nContent-Type: application/json\r\nContent-Length: 95\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"waking_mode must be one of the following [\'L\', \'V\', \'S\', \'LVS\', \'LV\', \'LS\', \'VS\']"}\n'
+
+
+Generation-1: Rendering Sequence-7
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 30f40b13aafadd882bf6a6e66e724be5f63fcf0f
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'temp'
+		- restler_static_string: '?'
+		- restler_static_string: 'temperature='
+		- restler_fuzzable_int: '1'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.204: Sending: 'POST /config/temp?temperature=1 HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.214: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 114\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"data":{"id":2,"timestamp":"Wed, 02 Feb 2022 01:57:03 GMT","value":1.0},"status":"temperature successfully set"}\n'
+
+
+Generation-1: Rendering Sequence-8
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 3ec1b0e1cf53fe79a19aba927b432940954d2cff
+
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'waking_mode'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.232: Sending: 'DELETE /config/waking_mode HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.242: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 45\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"All values successfully deleted"}\n'
+
+
+Generation-1: Rendering Sequence-9
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 4c22a77b625b5b500738477b9131e4cfce4adeb0
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'sleep'
+		- restler_static_string: '/'
+		- restler_static_string: 'all-snores'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.260: Sending: 'GET /sleep/all-snores HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.266: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 49\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":[[1,"Wed, 02 Feb 2022 01:44:31 GMT"]]}\n'
+
+
+Generation-1: Rendering Sequence-10
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 5ffab5b0a693ce498d5a4a01167ee864ab983419
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'auth'
+		- restler_static_string: '/'
+		- restler_static_string: 'logout'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.285: Sending: 'GET /auth/logout HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.289: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 42\r\nSet-Cookie: session=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; Path=/\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"User logged out successfully"}\n'
+
+
+Generation-1: Rendering Sequence-11
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 67deaa17190067be57f964de4bc644e1d37c9896
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'sleep'
+		- restler_static_string: '/'
+		- restler_static_string: 'all-sleep-intervals'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.309: Sending: 'GET /sleep/all-sleep-intervals HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.315: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 14\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":[]}\n'
+
+
+Generation-1: Rendering Sequence-12
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 6b397174b5204b1b870809f686e3bdcbbb22da73
+
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'temp'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.334: Sending: 'DELETE /config/temp HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.343: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 45\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"All values successfully deleted"}\n'
+
+
+Generation-1: Rendering Sequence-13
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 6c215968a44e1c92421722e9a356c30eccf58219
+
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'time_slept'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.362: Sending: 'DELETE /config/time_slept HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.372: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 45\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"All values successfully deleted"}\n'
+
+
+Generation-1: Rendering Sequence-14
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 7b94c2568ad86162e6139e991b92673b4c4e7516
+
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'start_to_sleep'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.390: Sending: 'DELETE /config/start_to_sleep HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.400: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 45\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"All values successfully deleted"}\n'
+
+
+Generation-1: Rendering Sequence-15
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 87399568d2de7ccdd6c4ad5fb7c46826de14e1c2
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'time_slept'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.420: Sending: 'GET /config/time_slept HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.425: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 30\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"No time ever set"}\n'
+
+
+Generation-1: Rendering Sequence-16
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 8925de84a702b1cd221a33465131c63daeff7b9f
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'start_to_sleep'
+		- restler_static_string: '?'
+		- restler_static_string: 'sleep_now='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.446: Sending: 'POST /config/start_to_sleep?sleep_now=fuzzstring HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.452: Received: 'HTTP/1.0 422 UNPROCESSABLE ENTITY\r\nContent-Type: application/json\r\nContent-Length: 59\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"wrong value must be one of: true, false, 0, 1"}\n'
+
+
+Generation-1: Rendering Sequence-17
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 9132fad888850286dc768d2da791d36358a74971
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'auth'
+		- restler_static_string: '/'
+		- restler_static_string: 'login'
+		- restler_static_string: '?'
+		- restler_static_string: 'username='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: '&'
+		- restler_static_string: 'password='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.473: Sending: 'POST /auth/login?username=fuzzstring&password=fuzzstring HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.480: Received: 'HTTP/1.0 403 FORBIDDEN\r\nContent-Type: application/json\r\nContent-Length: 33\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"Incorrect username."}\n'
+
+
+Generation-1: Rendering Sequence-18
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 92145bd9f082685b128598c1b0a4ae83f0fc1a69
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'time_slept'
+		- restler_static_string: '?'
+		- restler_static_string: 'time='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.502: Sending: 'POST /config/time_slept?time=fuzzstring HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.508: Received: 'HTTP/1.0 422 UNPROCESSABLE ENTITY\r\nContent-Type: application/json\r\nContent-Length: 48\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"Incorrect time format try hour:min"}\n'
+
+
+Generation-1: Rendering Sequence-19
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 9236a9cb157b962a06c5837cb441bec9eca960d5
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'snoring'
+		- restler_static_string: '?'
+		- restler_static_string: 'snore_now='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.530: Sending: 'POST /config/snoring?snore_now=fuzzstring HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.536: Received: 'HTTP/1.0 422 UNPROCESSABLE ENTITY\r\nContent-Type: application/json\r\nContent-Length: 59\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"wrong value must be one of: true, false, 0, 1"}\n'
+
+
+Generation-1: Rendering Sequence-20
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 94048864a33835924b2f5994d1ffca8b1f780b39
+
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'wake_up_hour'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.558: Sending: 'DELETE /config/wake_up_hour HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.568: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 45\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"All values successfully deleted"}\n'
+
+
+Generation-1: Rendering Sequence-21
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: 960388ce17723f7bd01dba44b4a847ef187a5768
+
+		- restler_static_string: 'POST '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'wake_up_hour'
+		- restler_static_string: '?'
+		- restler_static_string: 'wake_up_hour='
+		- restler_fuzzable_string: 'fuzzstring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.592: Sending: 'POST /config/wake_up_hour?wake_up_hour=fuzzstring HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.598: Received: 'HTTP/1.0 422 UNPROCESSABLE ENTITY\r\nContent-Type: application/json\r\nContent-Length: 48\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"Incorrect time format try hour:min"}\n'
+
+
+Generation-1: Rendering Sequence-22
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: a0947c3c0005970696eee06f6e66e7c9e7b48b15
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'start_to_sleep'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.619: Sending: 'GET /config/start_to_sleep HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.625: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 35\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"No sleep_now ever set"}\n'
+
+
+Generation-1: Rendering Sequence-23
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: ae0cadace904d563dd259f17b4cae7d63d7dd93e
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'temp'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.649: Sending: 'GET /config/temp HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.655: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 37\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"No temperature ever set"}\n'
+
+
+Generation-1: Rendering Sequence-24
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: ae678209c83029fc95fc58904139da5ff5427ac1
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'wake_up_hour'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.676: Sending: 'GET /config/wake_up_hour HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.683: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 38\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"No wake_up_hour ever set"}\n'
+
+
+Generation-1: Rendering Sequence-25
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: b78544e097f33724ac4152ba2b7cbc21ff772aab
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'waking_mode'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.704: Sending: 'GET /config/waking_mode HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.709: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 37\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"No waking_mode ever set"}\n'
+
+
+Generation-1: Rendering Sequence-26
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: bcbaf6805b781ee8617bd5a461f87a3b4ddc57ec
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'pillow_angle'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.731: Sending: 'GET /config/pillow_angle HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.737: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 121\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"data":{"id":3,"timestamp":"Wed, 02 Feb 2022 01:57:03 GMT","value":1.0},"status":"pillow_angle successfully retrieved"}\n'
+
+
+Generation-1: Rendering Sequence-27
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: e452e93c41534d3a7223174f9d2c4d9a66b93ece
+
+		- restler_static_string: 'GET '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'snoring'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.757: Sending: 'GET /config/snoring HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.763: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 116\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"data":{"id":1,"timestamp":"Wed, 02 Feb 2022 01:44:31 GMT","value":1},"status":"snore_now successfully retrieved"}\n'
+
+
+Generation-1: Rendering Sequence-28
+
+	Request: 1 (Remaining candidate combinations: 1)
+	Request hash: f8541c3ec93b05d036140adfe1ecc3e5c4e2b045
+
+		- restler_static_string: 'DELETE '
+		- restler_static_string: ''
+		- restler_static_string: '/'
+		- restler_static_string: 'config'
+		- restler_static_string: '/'
+		- restler_static_string: 'pillow_angle'
+		- restler_static_string: ' HTTP/1.1\r\n'
+		- restler_static_string: 'Accept: application/json\r\n'
+		- restler_static_string: 'Host: 127.0.0.1:5000\r\n'
+		- restler_static_string: '\r\n'
+
+2022-02-02 03:57:03.786: Sending: 'DELETE /config/pillow_angle HTTP/1.1\r\nAccept: application/json\r\nHost: 127.0.0.1:5000\r\nContent-Length: 0\r\nUser-Agent: restler/8.3.0\r\n\r\n'
+
+2022-02-02 03:57:03.796: Received: 'HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nContent-Length: 45\r\nServer: Werkzeug/2.0.2 Python/3.10.0\r\nDate: Wed, 02 Feb 2022 01:57:03 GMT\r\n\r\n{"status":"All values successfully deleted"}\n'
+
