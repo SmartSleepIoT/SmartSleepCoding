@@ -4,7 +4,7 @@ from flask import (
 )
 from SmartSleep.auth import login_required
 from SmartSleep import pubMQTT
-
+from SmartSleep.validation import deep_time_validation, deep_datetime_validation
 from SmartSleep.db import get_db
 from util.functions import set_hour_and_minute
 
@@ -23,7 +23,9 @@ def set_heartrate():
         return jsonify({'status': 'heartrate is required.'}), 403
     if not time:
         return jsonify({'status': 'time is required.'}), 403
-
+    is_valid, msg = deep_time_validation(time)
+    if not is_valid:
+        return jsonify({'status': f"{msg}"}), 422
     db = get_db()
 
     try:
@@ -86,6 +88,11 @@ def set_sleep_stage():
     if not stage:
         return jsonify({'status': f"{stage_arg} is required"}), 403
     time = request.args.get(time_arg)
+    if not time:
+        return jsonify({'status': f"{time_arg} is required"}), 403
+    is_valid, msg = deep_datetime_validation(time)
+    if not is_valid:
+        return jsonify({'status': f"{msg}"}), 422
     try:
         current_sleep = db.execute(
             'SELECT *'
