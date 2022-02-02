@@ -12,7 +12,7 @@ def time_validation(time):
     return True, ""
 
 def deep_time_validation(time):
-    if time.count(":") !=2:
+    if not isinstance(time, str) or time.count(":") !=2:
         return False, "Incorrect time format try hour:min:seconds"
     hour, min, seconds = time.split(":")
     if int(hour) not in range(0, 24):
@@ -24,7 +24,7 @@ def deep_time_validation(time):
     return True, ""
     
 def date_validation(date):
-    if date.count("-") !=2:
+    if not isinstance(date, str) or date.count("-") !=2:
         return False, "Incorrect time format try yyyy-mm-dd"
     year, month, day = date.split("-")
     if int(year) not in range(1970, 2023):
